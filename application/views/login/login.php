@@ -35,7 +35,7 @@
                 <!-- end login-header -->
                 <!-- begin login-content -->
                 <div class="login-content">
-                    <form action="../login/login_user" class="margin-bottom-0" data-parsley-validate="true" id="frm_login">
+                    <form action="login/login_user" class="margin-bottom-0" data-parsley-validate="true" id="frm_login">
                         <div class="form-group m-b-15">
                             <input type="text" name="email" class="form-control form-control-lg" placeholder="Direccion de Email" required data-parsley-type="email" />
                         </div>
