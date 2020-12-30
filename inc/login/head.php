@@ -9,6 +9,6 @@
 	
 	<!-- ================== BEGIN BASE CSS STYLE ================== -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-	<link href="../assets/login/css/app.min.css?<?php echo time();?>" rel="stylesheet" />
+	<link href="assets/login/css/app.min.css?<?php echo time();?>" rel="stylesheet" />
 	<!-- ================== END BASE CSS STYLE ================== -->
 </head>

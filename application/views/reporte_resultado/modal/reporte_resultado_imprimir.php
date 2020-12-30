@@ -1,9 +1,9 @@
 <?php
-/*echo "<pre>";
-print_r($info);
+echo "<pre>";
+print_r($resultado);
 echo "</pre>";
 
-*/
+
 
 ?>
 <style>
@@ -40,6 +40,7 @@ echo "</pre>";
                 <span class="font-weight-bold">Genero :</span><span>Masculino</span>
 
             </div>
+
             <div class="col-md-6">
                 <span class="font-weight-bolder">Fecha Entrada #</span></span>&nbsp;<span>29/12/2020</span><br>
                 <span class="font-weight-bolder">Fecha Salida #</span></span>&nbsp;<span>30/12/2020</span><br>
@@ -49,8 +50,14 @@ echo "</pre>";
             </div>
 
         </div>
+        <?php foreach($resultado as $value){ 
+            if($value['TIENE_PARAMETROS']){
+
+        ?>
+            
+
         <div class="row">
-        <h4>Orina</h4>
+        <h4><?php echo $value['NOMBRE_ANALISIS'];?></h4>
             <div class="table-responsive">
                 <table id="tblAnalisis" class="table table-borderless" style="width:100%;">
                  
@@ -62,29 +69,26 @@ echo "</pre>";
                         </tr>
                    
                     <tbody>
+                        <?php foreach($value["PARAMETROS"] as $value_p){ ?>
                         <tr>
-                            <td width="8%" class="text-rap" class="text-center"><span class="font-weight-bolder">p.h</span></td>
-                            <td width="8%" class="text-rap" class="text-center">30</td>
-                            <td width="8%" class="text-rap" class="text-center">mg</td>
-                            <td width="8%" class="text-rap" class="text-center">30-50</td>
+                            <td width="8%" class="text-rap" class="text-center"><span class="font-weight-bolder"><?php echo $value_p['nombre'];?></span></td>
+                            <td width="8%" class="text-rap" class="text-center"><?php echo $value_p['valor'];?></td>
+                            <td width="8%" class="text-rap" class="text-center"><?php echo $value_p['medida'];?></td>
+                            <td width="8%" class="text-rap" class="text-center"><?php echo $value_p['referencia'];?></td>
                         </tr>
-                        <tr>
-                            <td width="8%" class="text-rap" class="text-center"><span class="font-weight-bolder">r.h</span></td>
-                            <td width="8%" class="text-rap" class="text-center">75</td>
-                            <td width="8%" class="text-rap" class="text-center">kg</td>
-                            <td width="8%" class="text-rap" class="text-center">120-150</td>
-                        </tr>
+                        <?php } ?>
+                        
                     <tbody>
                 </table>
             </div>
             <div class="comentario">
                 <h5>Observacion</h5>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus facilis tenetur vero? Totam quaerat amet molestias aspernatur at? Iusto cupiditate earum eligendi nulla necessitatibus adipisci, provident numquam, excepturi consequatur aliquid dolore reiciendis minus optio sequi doloremque eius nihil officia, est laborum sed reprehenderit rerum asperiores dolor a. Dolores incidunt quidem similique iusto quis saepe labore unde delectus architecto. Voluptatibus, a?</p>
+                <p><?php echo $value['COMENTARIO'];?></p>
             </div>
         </div>
-
+            <?php }else{ ?>
         <div class="row">
-        <h4>Magnesio</h4>
+        <h4><?php echo $value['NOMBRE_ANALISIS'];?></h4>
             <div class="table-responsive">
                 <table id="tblAnalisis" class="table table-borderless" style="width:100%;">
                  
@@ -109,9 +113,13 @@ echo "</pre>";
             </div>
             <div class="comentario">
                 <h5>Observacion</h5>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus facilis tenetur vero? Totam quaerat amet molestias aspernatur at? Iusto cupiditate earum eligendi nulla necessitatibus adipisci, provident numquam, excepturi consequatur aliquid dolore reiciendis minus optio sequi doloremque eius nihil officia, est laborum sed reprehenderit rerum asperiores dolor a. Dolores incidunt quidem similique iusto quis saepe labore unde delectus architecto. Voluptatibus, a?</p>
+                <p><?php echo $value['COMENTARIO'];?></p>
             </div>
         </div>
+            <?php }  
+        }
+        ?>
+
 
 
 

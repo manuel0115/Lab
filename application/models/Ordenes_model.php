@@ -268,8 +268,8 @@ class Ordenes_model extends CI_Model
                     ('$idUltimoAnalisisResultado','" . 
                     $value_r['id_parametro'] . 
                     "','" . $value_r["valor"] . 
-                    "','" . $value_r["medida"] . 
-                    "','" . $value_r["referencia"] . "'),";
+                    "','" . $value_r["referncia"] . 
+                    "','" . $value_r["medida"] . "'),";
                 }
 
                 $queryParametroResultado =$queryParametroResultado .";";
