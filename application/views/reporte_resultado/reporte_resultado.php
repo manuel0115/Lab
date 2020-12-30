@@ -13,7 +13,7 @@
 
 <!-- end breadcrumb -->
 <!-- begin page-header -->
-<h1 class="page-header">Reportes <small> > Resultados </small></h1>
+<h1 class="page-header">Reportes <small> > Reporte de resultados </small></h1>
 <!-- end page-header -->
 <!-- begin panel -->
 <div class="panel panel-inverse">
