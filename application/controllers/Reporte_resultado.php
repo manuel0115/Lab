@@ -37,7 +37,8 @@ class Reporte_resultado extends CI_Controller
                     "ID_ANALISIS_RESULTADO"=>$value["ID_ANALISIS_RESULTADO"],
                     "NOMBRE_ANALISIS"=>$value["NOMBRE_ANALISIS"],
                     "TIENE_PARAMETROS"=>$value["TIENE_PARAMETROS"],
-                    "PARAMETROS"=>[["nombre"=>$value["NOMBRE_PARAMETRO"],"valor"=>$value["VALOR"]]]
+                    "PARAMETROS"=>[["nombre"=>$value["NOMBRE_PARAMETRO"],"valor"=>$value["VALOR"]]],
+                    "COMENTARIO"=>$value["COMENTARIO"]
                 ];
             }else{
                 if(!$this->in_multi_array($value["ID_ANALISIS_RESULTADO"],$formulario)){
@@ -47,7 +48,8 @@ class Reporte_resultado extends CI_Controller
                         "ID_ANALISIS_RESULTADO"=>$value["ID_ANALISIS_RESULTADO"],
                         "NOMBRE_ANALISIS"=>$value["NOMBRE_ANALISIS"],
                         "TIENE_PARAMETROS"=>$value["TIENE_PARAMETROS"],
-                        "PARAMETROS"=>$parametros
+                        "PARAMETROS"=>$parametros,
+                        "COMENTARIO"=>$value["COMENTARIO"]
                     ];
                 }else{
                     $clave=$this->bucarKey($value["ID_ANALISIS_RESULTADO"],$formulario);
