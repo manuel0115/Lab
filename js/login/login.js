@@ -1,24 +1,29 @@
 $('#frm_login').parsley();
 $("#btn_inicio_de_sesion").on('click', function (e) {
+
+    
+
     e.preventDefault();
 
     var validation = $('#frm_login').parsley().validate();
     if (validation) {
+        $("#btn_inicio_de_sesion").html('<span class="spinner-border spinner-border-sm"></span>  Cargado ...');
+        $("#btn_inicio_de_sesion").addClass('disabled');
         var url = $('#frm_login').attr('action');
 
         var datos = $('#frm_login').serialize();
         $.post(url, datos, function (data) {
-            if (data == 0) {
-                swal("Usuario y/o Contraseña Incorrectos",{
-                    closeOnClickOutside: true,
-                    button:false,
-                    icon:"error"
-                });
+            $("#btn_inicio_de_sesion").html('Iniciar Sesion');
+            $("#btn_inicio_de_sesion").removeClass('disabled');
+            console.log(data);
+            if (!data.mensaje == 0) {
+                let mensaje =$(".contenedor-mensaje").children(".alert").removeClass("d-none");
+                
                 
             } else {
                 
                 
-                window.location='/inicio';
+                window.location='inicio_admin';
             }
         }, 'json');
     }

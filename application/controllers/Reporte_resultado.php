@@ -28,6 +28,7 @@ class Reporte_resultado extends CI_Controller
     {  
         $id = base64_decode(base64_decode(base64_decode($id)));
         $parametros= $this->Reporte_resultado_model->getModalresultados($id);
+       $data["info_resulatdo"]=$this->Reporte_resultado_model->getInfoResultados($id);
         
         $formulario= array();
         

@@ -69,15 +69,29 @@ class Reporte_resultado_model extends CI_Model
     }
     
 
-    public function insertar_analisis($obj)
+    public function getInfoResultados($id)
     {
-        $query = "INSERT INTO ANALISIS (NOMBRE,ID_AREA_ANALITICA,CREADO_POR,MODIFICADO_POR,CREADO_EN,MODIFICADO_EN,ACTIVO)VALUES('$obj->analisis','$obj->area','$this->user_id','$this->user_id',NOW(),NOW(),TRUE);";
+        $query = "SELECT O.ID AS NUMERO_ORDEN,
+        O.ID_PACIENTE AS NUMERO_PACIENTE,
+        P.CEDULA AS PACIENTE_CEDULA,
+        UPPER(CONCAT(P.NOMBRE,' ',P.APELLIDOS)) AS NOMBRE_PACIENTE,
+        YEAR(CURDATE())-YEAR(P.FECHA_NACIMIENTO) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(P.FECHA_NACIMIENTO,'%m-%d'), 0 , -1 ) AS EDAD,
+        P.GENERO AS GENERO,
+        O.CREADO_EN AS FECHA_ENTRADA,
+        NOW() AS FECHA_SALIDA,
+        ' ' AS MEDICO,
+        C.NOMBRE AS COBERTURA
+        FROM ORDEN AS O 
+        JOIN PACIENTES AS P ON P.ID = O.ID_PACIENTE
+        JOIN COBERTURA AS C ON P.COBERTURA = C.ID WHERE O.ID= '$id';";
 
         $resultado = $this->db->query($query);
 
+        $resultado = $resultado->result_array();
+
         
 
-        log_message('ERROR','insertar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR','getInfoResultados \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
