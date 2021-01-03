@@ -73,6 +73,8 @@ class Reporte_resultado extends CI_Controller
         //die("s");*/
 
         $data["resultado"] = $formulario;
+        $data["datos_organizacion"] = $this->session->get_userdata();
+        
 
         $this->load->view("reporte_resultado/modal/reporte_resultado_imprimir", $data);
     }
