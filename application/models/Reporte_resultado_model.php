@@ -50,12 +50,15 @@ class Reporte_resultado_model extends CI_Model
         ar.COMENTARIO,
         r.ID as ID_RESULTADO,
         a.PARAMETROS AS TIENE_PARAMETROS ,
-        a.NOMBRE AS NOMBRE_ANALISIS
+        a.NOMBRE AS NOMBRE_ANALISIS,
+        arn.ID as id_area_analitica,
+        arn.NOMBRE as nombre_araea_analitica
         from PARAMEROS_TEMPORAL_RESULATDO as ptr 
         join ANALISIS_RESULTADO as ar on ptr.ID_ANALSIS_RESULTADO = ar.ID
         JOIN RESULTADO AS r on ar.ID_RESULTADO = r.ID 
         JOIN ANALISIS AS a ON ar.ID_ANALISIS= a.id
         JOIN PARAMETROS AS p on ptr.ID_PARAMETRO=p.ID
+        JOIN  AREA_ANALITICA AS arn on a.ID_AREA_ANALITICA = arn.ID
         WHERE r.ID ='$resultado'
         ";
 
