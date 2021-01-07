@@ -2,138 +2,273 @@
 echo "<pre>";
 print_r($resultado);
 echo "</pre>";
-
-
-
 ?>
-<style>
-    .ui-autocomplete {
-        z-index: 2147483647;
-    }
 
-    input[readonly] {
-        background-color: #fff !important;
-    }
-</style>
 <div class="modal-header">
     <!--<h4 class="modal-title"><?php echo (is_array($datos_evento)) ? "Modificar analisis" : "Agregar analsis"; ?></h4>-->
     <h4 class="modal-title">Imprimir Reporte de Resultado</h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-md-12">
-                <img src="data/img/reporte_logo/lara_1.jpeg" class="mx-auto d-block" alt="" style="width:250px;">
-            </div>
-        </div>
-
-        <div class="row pt-3 pb-3 pl-3 mb-3" style="border-top:double black;border-bottom:double black;">
-
-            <div class="col-md-6">
-                <span class="font-weight-bolder">Orden #</span>&nbsp;<span>252540</span><br>
-                <span class="font-weight-bold">Paciente #</span>&nbsp;<span>2525</span><br>
-                <span class="font-weight-bold">Nombre </span>&nbsp;<span>Emmenuel Guzman</span><br>
-                <span class="font-weight-bold">Cedula o Pasaporte:</span>&nbsp;<span>00119194306</span><br>
-                <span class="font-weight-bold">Edad :</span>&nbsp;<span>28 años</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="font-weight-bold">Genero :</span><span>Masculino</span>
-
-            </div>
-
-            <div class="col-md-6">
-                <span class="font-weight-bolder">Fecha Entrada #</span></span>&nbsp;<span>29/12/2020</span><br>
-                <span class="font-weight-bolder">Fecha Salida #</span></span>&nbsp;<span>30/12/2020</span><br>
-                <span class="font-weight-bolder">Medico</span></span>&nbsp;<span>JOSEFINA ISABEL GUZMAN</span><br>
-                <span class="font-weight-bolder">Cobertura</span></span>&nbsp;<span>PRIVADA</span><br>
-                <span class="font-weight-bolder">Procedencia</span></span>&nbsp;<span>NEGFOCIADORA VALLE DEL JUNCO SR</span><br>
-            </div>
-
-        </div>
-        <?php foreach($resultado as $value){ 
-            if($value['TIENE_PARAMETROS']){
-
-        ?>
-            
-
-        <div class="row">
-        <h4><?php echo $value['NOMBRE_ANALISIS'];?></h4>
-            <div class="table-responsive">
-                <table id="tblAnalisis" class="table table-borderless" style="width:100%;">
-                 
-                        <tr>
-                            <th width="8%" class="text-rap" class="text-center">&nbsp;</th>
-                            <th width="8%" class="text-rap" class="text-center">Resultado</th>
-                            <th width="8%" class="text-rap" class="text-center">unidad de mediad </th>
-                            <th width="8%" class="text-rap" class="text-center">valor der referecnia</th>
-                        </tr>
-                   
-                    <tbody>
-                        <?php foreach($value["PARAMETROS"] as $value_p){ ?>
-                        <tr>
-                            <td width="8%" class="text-rap" class="text-center"><span class="font-weight-bolder"><?php echo $value_p['nombre'];?></span></td>
-                            <td width="8%" class="text-rap" class="text-center"><?php echo $value_p['valor'];?></td>
-                            <td width="8%" class="text-rap" class="text-center"><?php echo $value_p['medida'];?></td>
-                            <td width="8%" class="text-rap" class="text-center"><?php echo $value_p['referencia'];?></td>
-                        </tr>
-                        <?php } ?>
-                        
-                    <tbody>
-                </table>
-            </div>
-            <div class="comentario">
-                <h5>Observacion</h5>
-                <p><?php echo $value['COMENTARIO'];?></p>
-            </div>
-        </div>
-            <?php }else{ ?>
-        <div class="row">
-        <h4><?php echo $value['NOMBRE_ANALISIS'];?></h4>
-            <div class="table-responsive">
-                <table id="tblAnalisis" class="table table-borderless" style="width:100%;">
-                 
-                        <tr>
-                            <th width="8%" class="text-rap" class="text-center">&nbsp;</th>
-                            <th width="8%" class="text-rap" class="text-center">&nbsp;</th>
-                            <th width="8%" class="text-rap" class="text-center">&nbsp;</th>
-                            <th width="8%" class="text-rap" class="text-center">&nbsp;</th>
-                        </tr>
-                   
-                    <tbody>
-                        <tr>
-                            <td width="8%" class="text-rap" class="text-center">Resultado:</td>
-                            <td width="8%" class="text-rap" class="text-center"><span class="font-weight-bolder">POSITIVO</span></td>
-                            <td width="8%" class="text-rap" class="text-center">&nbsp;</td>
-                            <td width="8%" class="text-rap" class="text-center">&nbsp;</td>
-                           
-                        </tr>
-                       
-                    <tbody>
-                </table>
-            </div>
-            <div class="comentario">
-                <h5>Observacion</h5>
-                <p><?php echo $value['COMENTARIO'];?></p>
-            </div>
-        </div>
-            <?php }  
+    <style>
+        .ui-autocomplete {
+            z-index: 2147483647;
         }
-        ?>
+
+        input[readonly] {
+            background-color: #fff !important;
+        }
+        table,th,td{
+            text-align: left;
+        }
+    </style>
 
 
 
-
+    <div style="height:100px;text-align:center"> 
+        <div>
+            <img src="data/img/reporte_logo/lara_1.jpeg" class="mx-auto d-block" alt="" style="width:250px;">
+        </div>
+    </div>
+    
+    <div style="border-top:double black;border-bottom:double black; display: flex"> 
+        
+        
+        <table style="width:100%">
+            <thead>
+                <th style="width:50%;font-weight: normal;"> <span style="font-weight:bold">Orden:</span>&nbsp;<span><?php echo $info_resulatdo[0]["NUMERO_ORDEN"]; ?></span></th>
+                                <th style="width:50%;font-weight: normal;"> <span style="font-weight:bold">Fecha Entrada :</span></span>&nbsp;<span><?php
+                echo $info_resulatdo[0]
+                ["FECHA_ENTRADA"]
+                ?></span></th>
+            </thead>
+           
+            <tr>
+                <td><span style="font-weight:bold">Paciente #:</span>&nbsp;<span><?php
+                
+                echo $info_resulatdo[0]
+                ["NUMERO_PACIENTE"]
+                ?></span></td>
+                <td>
+                    <span style="font-weight:bold">Fecha Salida :</span></span>&nbsp;<span><?php
+                echo $info_resulatdo[0]
+                ["FECHA_SALIDA"]
+                ?></span>
+                </td>
+                
+            </tr>
+            
+            <tr>
+                <td><span style="font-weight:bold">Paciente:</span>&nbsp;<span><?php
+                echo $info_resulatdo[0]
+                ["NOMBRE_PACIENTE"]
+                ?></span></td>
+                <td>
+                    <span style="font-weight:bold">Fecha Salida :</span></span>&nbsp;<span><?php
+                echo $info_resulatdo[0]
+                ["MEDICO"]
+                ?></span>
+                </td>
+            </tr>
+            <tr>
+                  <td><span style="font-weight:bold">Cedula:</span>&nbsp;<span><?php
+                echo $info_resulatdo[0]
+                ["PACIENTE_CEDULA"]
+                ?></span></td>
+                <td>
+                    <span style="font-weight:bold">Cobertura :</span></span>&nbsp;<span><?php
+                echo $info_resulatdo[0]
+                ["COBERTURA"]
+                ?></span>
+                </td>
+            </tr>
+            <tr>
+                  <td><span style="font-weight:bold">Edad:</span>&nbsp;<span><?php echo $info_resulatdo[0]["EDAD"] . "años"
+                    ?></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="font-weight:bold">Genero:</span><span><?php echo $info_resulatdo[0]["GENERO"] ?></span></td>
+                <td>
+                    <span style="font-weight:bold">Procedencia :</span></span>&nbsp;<span><?php
+                echo $info_resulatdo[0]
+                ["PROCEDENCIA"]
+                ?></span>
+                </td>
+            </tr>
+        </table>
     </div>
 
+    
+    <div class="reporte-body">
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th width="24%">&nbsp;&nbsp;</th>
+                    <th>Resultado</th>
+                    <th>Unidad</th>
+                    <th>Referencia</th>
+                <tr>
+            </thead>
 
-    <div class="modal-footer">
-        <a href="javascript:;" class="btn btn-success" id="btn_guardar_analisis">Guardar Cambios <i class="fa fa-save"></i></a>
-        <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Cancelar <i class="fa fa-times"></i></a>
+            <tbody>
+                <tr>
+                    <th width="24%">&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                <tr>
+
+
+
+                    <?php
+                    $area_Analitica = "";
+
+
+                    foreach ($resultado as $value) {
+                        if ($value["TIENE_PARAMETROS"]) {
+                            ?>
+                        <tr style="border-bottom:5px solid #c2c2c2">
+                            <th width="24%" style="font-size:15px"><?php echo $value['NOMBRE_ANALISIS']; ?></th>
+                            <th>&nbsp;</th>
+                            <th><?php echo $value['NOMBRE_AREA']; ?></th>
+                            <th>&nbsp;</th>
+                        <tr>
+                            <?php foreach ($value["PARAMETROS"] as $value_r) { ?>
+                            <tr>
+                                <th width="24%"><?php echo $value_r['nombre']; ?></th>
+                                <th><?php echo $value_r['valor']; ?></th>
+                                <th><?php echo $value_r['medida']; ?></th>
+                                <th><?php echo $value_r['referencia']; ?></th>
+                            <tr>
+
+                            <?php } ?>
+                            <?php if ($value['COMENTARIO']) { ?>        
+                            <tr>
+                                <th COLSPAN="4">
+                                    <br><span>Observacion</span><br>
+                                    <?php echo $value['COMENTARIO']; ?>
+                                </th>
+                            </tr>
+                        <?php } ?>      
+                        <tr>
+                            <th width="24%">&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        <tr>
+
+                        <?php } else { ?>
+                        <tr  style="border-bottom:0.5px solid #c2c2c2">
+                            <th width="24%">&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th><?php echo $value['NOMBRE_AREA']; ?></th>
+                            <th>&nbsp;</th>
+                        </tr>
+                            <?php foreach ($value["PARAMETROS"] AS $value_r) { ?>
+                            <tr>
+                                <th width="24%"><?php echo $value['NOMBRE_ANALISIS']; ?></th>
+                                <th><?php echo ($value_r['valor'] === "TRUE") ? "POSITIVO" : "NEGATIVO"; ?></th>
+                                <th><?php echo $value_r['medida']; ?></th>
+                                <th><?php echo $value_r['referencia']; ?></th>
+                            </tr>
+                            <?php } ?>
+                            <?php if ($value['COMENTARIO']) { ?>        
+                            <tr>
+                                <th COLSPAN="4">
+                                    <br><span>Observacion</span><br>
+                                    <?php echo $value['COMENTARIO']; ?>
+                                </th>
+                            </tr>
+                        <?php } ?>
+                        <tr>
+                            <th width="24%">&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        <tr>
+
+
+                        <?php } ?>
+                    <?php } ?>
+
+            </tbody>
+        </table>
+
+        <div class="row">
+
+
+            <div class="col-md-3 offset-md-9 mt-3">
+                <p class="font-weight-bolder text-center" style="border-top:1px solid black">
+                    <?php echo "Firma Encargada"; ?>
+
+                </p>
+
+            </div>
+
+
+
+
+        </div>
+        <div class="row mb-3 mt-3" style="border-top:1px solid black" >
+
+            <div class="col-md-4 mt-2">
+                <img src="data/img/sistema/logo/labotech-logo-temp.png" width="60px">
+                <span>Labotech</span>
+
+            </div>
+            <div class="col-md-8 mt-3">
+                <p class="font-weight-bolder text-center">
+                    <?php
+                    echo "C/" . $datos_organizacion["CALLE"] . 'NO.' . $datos_organizacion["NUMERO"] . ',' .
+                    $datos_organizacion["SECTOR"] . ',' . $datos_organizacion["PROVINCIA"] . ',' . $datos_organizacion["PAIS"] . ',Telefono:' . $datos_organizacion["TELEFONOS_SUCURSALES"] . ',RNC' . $datos_organizacion["RNC"] . ',Correo:' . $datos_organizacion["CORREO_LABORATORIO"];
+                    ?>
+                </p>
+
+            </div>
+        </div>
     </div>
-
-    <script>
-        var $frm_modficar_agregar_analisis = $("#frm_modficar_agregar_analisis");
+</div>
 
 
-        //console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
-    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<div class="modal-footer">
+    <a href="javascript:;" class="btn btn-success"  data-id-resultado="<?php echo $id_resultado; ?>" id="btn_imprimir_analisis">Imprimir Analisis <i class="fa fa-print"></i></a>
+    <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Cancelar <i class="fa fa-times"></i></a>
+</div>
+
+<script>
+    var $frm_modficar_agregar_analisis = $("#frm_modficar_agregar_analisis");
+
+
+    //console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+</script>

@@ -22,6 +22,14 @@
             <!-- end news-feed -->
             <!-- begin right-content -->
             <div class="right-content">
+                <div class="contenedor-mensaje">
+                    <div class="alert alert-danger d-none fade show m-b-10">
+                        Usuario o contraseña incorrecta
+                    </div>
+
+                </div>
+
+
                 <!-- begin login-header -->
                 <div class="login-header">
                     <div class="brand">
@@ -44,12 +52,12 @@
                         </div>
 
                         <div class="login-buttons">
-                            <input type="button" value="Iniciar Sesion" class="btn btn-success btn-block btn-lg" id="btn_inicio_de_sesion" />
-
+                            
+                            <a href="javascript:;" class="btn btn-success btn-block btn-lg" id="btn_inicio_de_sesion" >Iniciar Sesion</a>
                         </div>
                         <div class="m-t-20 m-b-40 p-b-40 text-inverse">
                             ¿Olvidaste tu Contraseña? haz click <a href="registrarse">aqui</a><br>
-                            
+
                         </div>
                         <hr />
                         <p class="text-center text-grey-darker mb-0">

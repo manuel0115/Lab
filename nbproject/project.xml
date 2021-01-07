@@ -3,7 +3,12 @@
     <type>org.netbeans.modules.php.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/php-project/1">
-            <name>ufeji</name>
+            <name>lab_lara</name>
         </data>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>foreach</word>
+            <word>img</word>
+            <word>td</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>

@@ -50,12 +50,15 @@ class Reporte_resultado_model extends CI_Model
         ar.COMENTARIO,
         r.ID as ID_RESULTADO,
         a.PARAMETROS AS TIENE_PARAMETROS ,
-        a.NOMBRE AS NOMBRE_ANALISIS
+        a.NOMBRE AS NOMBRE_ANALISIS,
+        arn.ID as id_area_analitica,
+        arn.NOMBRE as nombre_araea_analitica
         from PARAMEROS_TEMPORAL_RESULATDO as ptr 
         join ANALISIS_RESULTADO as ar on ptr.ID_ANALSIS_RESULTADO = ar.ID
         JOIN RESULTADO AS r on ar.ID_RESULTADO = r.ID 
         JOIN ANALISIS AS a ON ar.ID_ANALISIS= a.id
         JOIN PARAMETROS AS p on ptr.ID_PARAMETRO=p.ID
+        JOIN  AREA_ANALITICA AS arn on a.ID_AREA_ANALITICA = arn.ID
         WHERE r.ID ='$resultado'
         ";
 
@@ -69,15 +72,29 @@ class Reporte_resultado_model extends CI_Model
     }
     
 
-    public function insertar_analisis($obj)
+    public function getInfoResultados($id)
     {
-        $query = "INSERT INTO ANALISIS (NOMBRE,ID_AREA_ANALITICA,CREADO_POR,MODIFICADO_POR,CREADO_EN,MODIFICADO_EN,ACTIVO)VALUES('$obj->analisis','$obj->area','$this->user_id','$this->user_id',NOW(),NOW(),TRUE);";
+        $query = "SELECT O.ID AS NUMERO_ORDEN,
+        O.ID_PACIENTE AS NUMERO_PACIENTE,
+        P.CEDULA AS PACIENTE_CEDULA,
+        UPPER(CONCAT(P.NOMBRE,' ',P.APELLIDOS)) AS NOMBRE_PACIENTE,
+        YEAR(CURDATE())-YEAR(P.FECHA_NACIMIENTO) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(P.FECHA_NACIMIENTO,'%m-%d'), 0 , -1 ) AS EDAD,
+        P.GENERO AS GENERO,
+        O.CREADO_EN AS FECHA_ENTRADA,
+        NOW() AS FECHA_SALIDA,
+        ' ' AS MEDICO,
+        C.NOMBRE AS COBERTURA
+        FROM ORDEN AS O 
+        JOIN PACIENTES AS P ON P.ID = O.ID_PACIENTE
+        JOIN COBERTURA AS C ON P.COBERTURA = C.ID WHERE O.ID= '$id';";
 
         $resultado = $this->db->query($query);
 
+        $resultado = $resultado->result_array();
+
         
 
-        log_message('ERROR','insertar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR','getInfoResultados \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
