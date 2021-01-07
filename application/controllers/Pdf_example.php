@@ -8,10 +8,18 @@ class Pdf_example extends CI_Controller {
 
     function index() {
         //$contentString=$this->input->post('resultado');
-          $contentString='<h1 style="text-decoration:none;background-color:#CC0000;color:black;">Demonstrating pdf with php</h1>
+
+
+          $stylePdf="<style>". file_get_contents("assets/templates/bs4.css")."</style>";
+          
+          $contentString='<h1>Demonstrating pdf with php <a class="btn btn-primary">el boronr</a></h1>
 <p>In this simple example i show how to generate pdf documents using TCPDF</p>';
+          
+                    echo $stylePdf.$contentString;
+
         
-        $this->load->library('Pdf');
+      /*  $this->load->library('Pdf');
+
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator("Wael Salah");
         $pdf->SetAuthor('Wael Salah');
@@ -37,7 +45,10 @@ class Pdf_example extends CI_Controller {
                   $contentString
 EOD;
         $pdf->writeHTML($html);
-        $pdf->Output('test.pdf', 'I');
+
+
+        $pdf->Output('test.pdf', 'I');*/
+
     }
 
 }

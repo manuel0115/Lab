@@ -132,7 +132,10 @@ var tblAnalisis = $("#tblAnalisis").DataTable({
   });
  
 $(".modal_imprimir_resultado").on("click","#btn_imprimir_analisis",function(){
-    window.open('Pdf_example', "_blank") || window.location.replace('Pdf_example');
+
+    let id=btoa(btoa(btoa($(this).attr("data-id-resultado"))));
+    window.open('reporte_resultado/imprimir_resultado/'+id, "_blank") || window.location.replace('reporte_resultado/imprimir_resultado/'+id);
+
 })
   
   

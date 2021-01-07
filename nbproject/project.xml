@@ -6,7 +6,11 @@
             <name>lab_lara</name>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+
+            <word>foreach</word>
             <word>img</word>
+            <word>td</word>
+
         </spellchecker-wordlist>
     </configuration>
 </project>

@@ -1,0 +1,23 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 4, 2021, 6:23:54 AM
+    Author     : manuel
+*/
+
+
+.contendor-logo{
+    border:1px  solid  black;
+}
+
+h1{
+    color:red;
+}
+
+.contendor-logo .contededor-imagen{
+    background-color: red;
+    height: 100px;
+}
