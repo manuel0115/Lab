@@ -32,6 +32,7 @@ class Login extends CI_Controller {
 
     public function login_user() {
 
+        $codigo= 13;
 
         $this->load->library('form_validation');
 
@@ -65,13 +66,14 @@ class Login extends CI_Controller {
 
 
 
-                //die('a');
-                die("aqui");
+               
                
                $resultado = $this->login_model->loginUsuario($obj);
                 
-                
-                if ($resultado > 0) {
+               
+
+                if ($resultado) {
+                    $
 
                     $datos_usuarios = array();
 
@@ -82,11 +84,12 @@ class Login extends CI_Controller {
                     
 
                     $this->session->set_userdata($datos_usuarios);
+                    $codigo= 0;
                 }
 
 
 
-                echo json_encode($resultado);
+                echo json_encode(array("mensaje"=>$codigo));
                 
             }
         }

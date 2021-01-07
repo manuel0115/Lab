@@ -1,6 +1,6 @@
 <?php
 echo "<pre>";
-print_r($resultado);
+print_r($info_resulatdo);
 echo "</pre>";
 
 
@@ -29,24 +29,24 @@ echo "</pre>";
             </div>
         </div>
 
-        <div class="row pt-3 pb-3 pl-3 mb-3" style="border-top:double black;border-bottom:double black;">
+        <div class="row pt-3 pb-3 pl-0 mb-3" style="border-top:double black;border-bottom:double black;">
 
-            <div class="col-md-6">
-                <span class="font-weight-bolder">Orden #</span>&nbsp;<span>252540</span><br>
-                <span class="font-weight-bold">Paciente #</span>&nbsp;<span>2525</span><br>
-                <span class="font-weight-bold">Nombre </span>&nbsp;<span>Emmenuel Guzman</span><br>
-                <span class="font-weight-bold">Cedula o Pasaporte:</span>&nbsp;<span>00119194306</span><br>
-                <span class="font-weight-bold">Edad :</span>&nbsp;<span>28 años</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="font-weight-bold">Genero :</span><span>Masculino</span>
+            <div class="col-md-8">
+                <span class="font-weight-bolder">Orden:</span>&nbsp;<span><?php echo $info_resulatdo[0]["NUMERO_ORDEN"]?></span><br>
+                <span class="font-weight-bold">Paciente:</span>&nbsp;<span><?php echo $info_resulatdo[0]["NUMERO_PACIENTE"]?></span><br>
+                <span class="font-weight-bold">Nombre</span>&nbsp;<span><?php echo $info_resulatdo[0]["PACIENTE_CEDULA"]?><br>
+                <span class="font-weight-bold">Cedula o Pasaporte:</span>&nbsp;<span><?php echo $info_resulatdo[0]["PACIENTE_CEDULA"]?></span><br>
+                <span class="font-weight-bold">Edad:</span>&nbsp;<span><?php echo $info_resulatdo[0]["EDAD"]."años"?></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="font-weight-bold">Genero:</span><span><?php echo $info_resulatdo[0]["GENERO"]?></span>
 
             </div>
 
-            <div class="col-md-6">
-                <span class="font-weight-bolder">Fecha Entrada #</span></span>&nbsp;<span>29/12/2020</span><br>
-                <span class="font-weight-bolder">Fecha Salida #</span></span>&nbsp;<span>30/12/2020</span><br>
-                <span class="font-weight-bolder">Medico</span></span>&nbsp;<span>JOSEFINA ISABEL GUZMAN</span><br>
-                <span class="font-weight-bolder">Cobertura</span></span>&nbsp;<span>PRIVADA</span><br>
-                <span class="font-weight-bolder">Procedencia</span></span>&nbsp;<span>NEGFOCIADORA VALLE DEL JUNCO SR</span><br>
+            <div class="col-md-4">
+                <span class="font-weight-bolder">Fecha Entrada :</span></span>&nbsp;<span><?php echo $info_resulatdo[0]["FECHA_ENTRADA"]?></span><br>
+                <span class="font-weight-bolder">Fecha Salida :</span></span>&nbsp;<span><?php echo $info_resulatdo[0]["FECHA_SALIDA"]?></span><br>
+                <span class="font-weight-bolder">Medico:</span></span>&nbsp;<span><?php echo $info_resulatdo[0]["MEDICO"]?></span><br>
+                <span class="font-weight-bolder">Cobertura:</span></span>&nbsp;<span><?php echo $info_resulatdo[0]["COBERTURA"]?></span><br>
+                <span class="font-weight-bolder">Procedencia:</span></span>&nbsp;<span><?php echo $info_resulatdo[0]["MEDICO"]?></span><br>
             </div>
 
         </div>
