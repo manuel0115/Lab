@@ -55,7 +55,7 @@ class Area_analitica extends CI_Controller
 
         $config = array(
             array(
-                "field" => "area",
+                "field" => "area[]",
                 "label" => "Area analitica",
                 "rules" => "required"
             )
@@ -78,6 +78,10 @@ class Area_analitica extends CI_Controller
 
                 
                
+                /*echo "<pre>";
+                print_r($obj);
+                echo "</pre>";
+                die();*/
 
                 if ($obj->id_area > 0) {
                     $resultado = $this->Area_analitica_model->modificar_area($obj);

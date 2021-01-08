@@ -45,7 +45,15 @@ class Area_analitica_model extends CI_Model
 
     public function insertar_area($obj)
     {
-        $query = "INSERT INTO AREA_ANALITICA (NOMBRE,CREADO_POR,CREADO_EN,MODIFICADO_POR,MODIFICADO_EN,ESTADO)VALUES('$obj->area','$this->user_id',NOW(),'$this->user_id',NOW(),TRUE);";
+        $query = "INSERT INTO AREA_ANALITICA (NOMBRE,CREADO_POR,CREADO_EN,MODIFICADO_POR,MODIFICADO_EN,ESTADO)VALUES";
+        
+        foreach($obj->area as $value){
+            $query .= "('$value','$this->user_id',NOW(),'$this->user_id',NOW(),TRUE),";
+        }
+        
+        $query .= ";";
+
+        $query =str_replace("),;",");",$query);
 
         $resultado = $this->db->query($query);
 
