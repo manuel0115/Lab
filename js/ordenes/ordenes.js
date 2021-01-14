@@ -1,4 +1,4 @@
-var tblAnalisis = $("#tblAnalisis").DataTable({
+var tblordenes = $("#tblAnalisis").DataTable({
   ajax: "ordenes/cargarDatosOrdenes",
   type: "POST",
   columns: [
@@ -122,8 +122,8 @@ $(".modal_usuarios .modal-content").on(
   function () {
     
 
-    var url = $frm_modficar_agregar_orden.attr("action");
-    var datos = $frm_modficar_agregar_orden.serializeArray();
+    let url = $frm_modficar_agregar_orden.attr("action");
+    let datos = $frm_modficar_agregar_orden.serializeArray();
 
     
     var validation = $frm_modficar_agregar_orden.parsley().validate();
@@ -139,7 +139,7 @@ $(".modal_usuarios .modal-content").on(
               icon: "success",
             });
 
-            tblAnalisis.ajax.reload();
+            tblordenes.ajax.reload();
             $(".modal_usuarios").modal("hide");
           } else {
             swal({
@@ -155,25 +155,9 @@ $(".modal_usuarios .modal-content").on(
   }
 );
 
-/*function getIds(element) {
-  let ids = [];
 
-  element.each(function (index) {
-    ids.push($(this).attr("data-id"));
-  });
 
-  return ids;
-}
 
-/*function llenarDatosPaciente($cedula) {
-  $cedula = btoa($cedula);
- 
-  
-}*/
-
-//*******************generador de resultados ************************ */
-
-let datos= [];
 
 $(".modal_resultado").on("click","#btn_guardar_resultado",()=>{
 
@@ -277,7 +261,7 @@ $(".modal_resultado").on("click","#btn_guardar_resultado",()=>{
             icon: "success",
           });
 
-          tblAnalisis.ajax.reload();
+          tblordenes.ajax.reload();
           $(".modal_usuarios").modal("hide");
         } else {
           swal({

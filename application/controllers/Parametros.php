@@ -57,13 +57,9 @@ class Parametros extends CI_Controller
 
 
         $config = array(
+            
             array(
-                "field" => "analisis",
-                "label" => "Analisis",
-                "rules" => "required"
-            ),
-            array(
-                "field" => "parametro",
+                "field" => "parametro[]",
                 "label" => "parametro",
                 "rules" => "required"
             )

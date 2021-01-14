@@ -14,18 +14,19 @@
 class Parametros_model extends CI_Model
 {
 
+    private $user_id = 1;
 
 
 
     public function tablaParametros()
     {
-        $query = "SELECT P.ID,P.NOMBRE as NOMBRE, A.NOMBRE AS ANALISIS FROM PARAMETROS AS P JOIN ANALISIS AS A ON (P.ID_ANALISIS = A.ID);";
+        $query = "SELECT P.ID,P.NOMBRE as NOMBRE FROM PARAMETROS AS P;";
 
         $resultado = $this->db->query($query);
 
         $resultado = $resultado->result_array();
 
-        log_message('ERROR','cargar_menus \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR', 'cargar_menus \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
@@ -38,39 +39,45 @@ class Parametros_model extends CI_Model
 
         $resultado = $resultado->result_array();
 
-        log_message('ERROR','cargar_menus \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR', 'cargar_menus \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
 
-    
+
 
     public function guardarParametro($obj)
-    {   
-        $user_id= 1;
+    {
+        $user_id = 1;
 
         $query = "INSERT INTO PARAMETROS (
         `NOMBRE`,
-        `ID_ANALISIS`,
         `CREADO_POR`,
         `MODIFICADO_POR`,
         `ACTIVO`,
         `CREADO_EN`,
-        `MODIFICADO_EN`) VALUE('$obj->parametro','$obj->ID_ANALISIS',$user_id,$user_id,TRUE,NOW(),NOW());";
+        `MODIFICADO_EN`) VALUE";
 
+        foreach ($obj->parametro as $value) {
+            $query .= "('$value','$this->user_id','$this->user_id',TRUE,NOW(),NOW()),";
+        }
+
+        $query .=";";
+        
+        $query = str_replace("),;",");",$query);
 
         $resultado = $this->db->query($query);
 
-        
 
-        log_message('ERROR','cargar_menus \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        log_message('ERROR', 'cargar_menus \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
 
     public function actualizarParametro($obj)
-    {   
-        $user_id= 1;
+    {
+        $user_id = 1;
         $query = "UPDATE `PARAMETROS`
         SET
         
@@ -82,9 +89,9 @@ class Parametros_model extends CI_Model
 
         $resultado = $this->db->query($query);
 
-        
 
-        log_message('ERROR','cargar_menus \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        log_message('ERROR', 'cargar_menus \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
@@ -101,7 +108,7 @@ class Parametros_model extends CI_Model
 
         return array("ssss","sdsdsdsd");
     }*/
-/*
+    /*
     public function getDataEvento($id)
     {
         $query = "SELECT E.ID,

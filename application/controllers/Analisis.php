@@ -57,7 +57,7 @@ class Analisis extends CI_Controller
                 "rules" => "required"
             ),
             array(
-                "field" => "analisis",
+                "field" => "analisis[]",
                 "label" => "Nombre",
                 "rules" => "required"
             )
@@ -77,11 +77,13 @@ class Analisis extends CI_Controller
                 foreach ($this->input->post() as $key => $value) {
                     $obj->$key = $value;
                 }
+/*
+                echo "<pre>";
+                print_r($obj);
+                echo "</pre>";
 
-
-                /*   print_r($obj);
-                die();*/
-
+                die();
+*/
 
 
                 if ($obj->id_analisis > 0) {

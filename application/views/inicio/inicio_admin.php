@@ -107,6 +107,12 @@
                                     <span>parametros</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="configuracion_analisis/configuracion" data-toggle="ajax">
+                                    <i class="fas fa-poll"></i>
+                                    <span>configuracion analisis</span>
+                                </a>
+                            </li>
 
 
                         </ul>
@@ -123,6 +129,12 @@
                         <a href="reporte_resultado" data-toggle="ajax">
                             <i class="fas fa-poll"></i>
                             <span>Reporte resultado</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="redes_sociales" data-toggle="ajax">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>Redes sociales</span>
                         </a>
                     </li>
 

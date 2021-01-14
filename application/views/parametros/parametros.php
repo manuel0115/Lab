@@ -5,6 +5,7 @@
 <link href="assets/admin/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
+<link href="assets/admin/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
 
 <!-- ================== END PAGE LEVEL STYLE ================== -->
 
@@ -28,7 +29,6 @@
             <thead>
                 <tr>
                     <th width="8%" class="text-rap" class="text-center">ID</th>
-                    <th width="8%" class="text-rap" class="text-center">Nombre</th>
                     <th width="8%" class="text-rap" class="text-center">Analisis</th>
                     <th width="8%" class="text-rap" class="text-center">Opciones</th>
                 </tr>
@@ -70,6 +70,7 @@
             $.getScript('assets/admin/plugins/jquery.maskedinput/src/jquery.maskedinput.js'),
             $.getScript('assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js'),
             $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
+            $.getScript('assets/admin/plugins/tag-it/js/tag-it.min.js'),
             $.Deferred(function(deferred) {
                 $(deferred.resolve);
             })

@@ -31,9 +31,7 @@ echo "</pre>";*/
             <?php }else{ ?>    
                 <div class="col-md-10 col-sm-10">
                     <ul id="myTags" class="primary">
-                        <!-- Existing list items will be pre-added to the tags -->
-                        <li>Tag1</li>
-                        <li>Tag2</li>
+                        
                     </ul>
                 </div>
             <?php } ?>    

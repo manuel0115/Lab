@@ -99,25 +99,7 @@ class Reporte_resultado_model extends CI_Model
         return $resultado;
     }
 
-    public function modificar_analisis($obj)
-    {
-        $query = "UPDATE `ANALISIS`
-        SET
-        `NOMBRE` = '$obj->analisis',
-        `ID_AREA_ANALITICA` = '$obj->area',
-        `MODIFICADO_POR` = '$this->user_id',
-        `MODIFICADO_EN` = NOW(),
-        `ACTIVO` = TRUE
-        WHERE `ID` = '$obj->id_analisis';";
-
-        $resultado = $this->db->query($query);
-
-        
-
-        log_message('ERROR','modificar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
-
-        return $resultado;
-    }
+    
 
 
    

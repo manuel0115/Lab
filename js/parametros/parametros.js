@@ -1,13 +1,12 @@
 
 
-var tblAnalisis= $("#tblAnalisis").DataTable({
+var tblparametros= $("#tblAnalisis").DataTable({
     ajax: "parametros/tablaParametros",
     type: "POST",
     columns: [
     
       { data: "ID", className: "text-center", orderable: false },
       { data: "NOMBRE", className: "text-center", orderable: false },
-      { data: "ANALISIS", className: "text-center", orderable: false },
       { data: null, className: "text-center", orderable: false }
    
    
@@ -16,7 +15,7 @@ var tblAnalisis= $("#tblAnalisis").DataTable({
       
       
       {
-        aTargets: [3],
+        aTargets: [2],
         mRender: function (data, type, full) {
           return (
             '<a href="javascript:void(0);" id="' +
@@ -83,7 +82,7 @@ $(".modal_usuarios .modal-content").on("click","#btn_guardar",function(){
                   icon: "success",
                 });
 
-                tblAnalisis.ajax.reload();
+                tblparametros.ajax.reload();
                 $(".modal_usuarios").modal("hide");
               } else {
                 swal({

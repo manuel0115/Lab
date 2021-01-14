@@ -14,6 +14,8 @@
 class Analisis_model extends CI_Model
 {
 
+    public $user_id=1;
+
     public function cargarDatosTablaAreaAnalisis()
     {
         $query = "SELECT A.ID,A.NOMBRE,AA.NOMBRE AS AREA FROM ANALISIS AS A INNER JOIN AREA_ANALITICA AS AA ON (A.ID_AREA_ANALITICA= AA.ID);";
@@ -22,14 +24,14 @@ class Analisis_model extends CI_Model
 
         $resultado = $resultado->result_array();
 
-        log_message('ERROR','cargar_menus \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR', 'cargar_menus \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
 
 
 
-    
+
 
     public function getModalAnalisis($id)
     {
@@ -39,21 +41,29 @@ class Analisis_model extends CI_Model
 
         $resultado = $resultado->result_array();
 
-        log_message('ERROR','modificar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR', 'modificar_analisis \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
-    
+
 
     public function insertar_analisis($obj)
     {
-        $query = "INSERT INTO ANALISIS (NOMBRE,ID_AREA_ANALITICA,CREADO_POR,MODIFICADO_POR,CREADO_EN,MODIFICADO_EN,ACTIVO)VALUES('$obj->analisis','$obj->area','$this->user_id','$this->user_id',NOW(),NOW(),TRUE);";
+        $query = "INSERT INTO ANALISIS (NOMBRE,ID_AREA_ANALITICA,CREADO_POR,MODIFICADO_POR,CREADO_EN,MODIFICADO_EN,ACTIVO)VALUES";
+
+        foreach ($obj->analisis as $value) {
+
+            $query .= "('$value','$obj->area','$this->user_id','$this->user_id',NOW(),NOW(),TRUE),";
+        }
+
+        $query .= ";";
+        $query = str_replace("),;", ");", $query);
 
         $resultado = $this->db->query($query);
 
-        
 
-        log_message('ERROR','insertar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        log_message('ERROR', 'insertar_analisis \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
@@ -71,14 +81,10 @@ class Analisis_model extends CI_Model
 
         $resultado = $this->db->query($query);
 
-        
 
-        log_message('ERROR','modificar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        log_message('ERROR', 'modificar_analisis \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
-
-
-   
-    
 }

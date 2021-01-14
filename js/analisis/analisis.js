@@ -1,5 +1,5 @@
 
-var tblAnalisis = $("#tblAnalisis").DataTable({
+var tablaAnalisis = $("#tblAnalisis").DataTable({
   ajax: "analisis/cargarDatosAnalisis",
   type: "POST",
   columns: [
@@ -69,7 +69,7 @@ $(".modal_usuarios .modal-content").on("click","#btn_guardar_analisis",function(
             title: "Petfecto!",
             icon: "success",
           });
-          tblAnalisis.ajax.reload();
+          tablaAnalisis.ajax.reload();
           $(".modal_usuarios").modal("hide");
         } else {
           swal({

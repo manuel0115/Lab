@@ -1,5 +1,5 @@
 
-var tblAnalisis = $("#tblAnalisis").DataTable({
+var tblReporteResultado = $("#tblAnalisis").DataTable({
     ajax: "reporte_resultado/tablaReporteResultado",
     type: "POST",
     columns: [
@@ -82,7 +82,7 @@ var tblAnalisis = $("#tblAnalisis").DataTable({
               title: "Petfecto!",
               icon: "success",
             });
-            tblAnalisis.ajax.reload();
+            tblReporteResultado.ajax.reload();
             $(".modal_usuarios").modal("hide");
           } else {
             swal({

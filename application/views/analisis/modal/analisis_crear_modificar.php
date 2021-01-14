@@ -30,7 +30,7 @@ Array
     }
 </style>
 <div class="modal-header">
-    <h4 class="modal-title"><?php echo (is_array($datos_evento)) ? "Modificar analisis" : "Agregar analsis"; ?></h4>
+    <h4 class="modal-title"><?php echo ($info[0]["ID"]) ? "Modificar analisis" : "Agregar analsis"; ?></h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body">
@@ -51,13 +51,23 @@ Array
 
         <div class="form-group row m-b-15">
             <label class="col-md-2 col-sm-4 col-form-label" for="fullname">Nombre <stron style="color:red"> *</stron></label>
-            <div class="col-md-10 col-sm-10">
-                <input class="form-control" type="text" id="analisis" name="analisis" required value='<?php echo $info[0]["NOMBRE"] ?>' />
-                <input type="hidden" id="id_analisis" name="id_analisis" value='<?php echo $info[0]["ID"] ?>' />
-            </div>
+
+            <?php if($info[0]["ID"]){ ?>
+                <div class="col-md-10 col-sm-10">
+                    <input class="form-control" type="text" id="analisis" name="analisis" required value='<?php echo $info[0]["NOMBRE"] ?>' />
+                    <input type="hidden" id="id_analisis" name="id_analisis" value='<?php echo $info[0]["ID"] ?>' />
+                </div>
+            <?php }else{ ?> 
+                <div class="col-md-10 col-sm-10">
+                    <ul id="myTags" class="primary">
+                        
+                    </ul>
+                </div>
+            <?php } ?>    
         </div>
 
-
+       
+            
 
 
 
@@ -74,5 +84,7 @@ Array
     var $frm_modficar_agregar_analisis = $("#frm_modficar_agregar_analisis");
 
 
-    //console.log(moment().format('MMMM Do YYYY, h:mm:ss a'));
+    $("#myTags").tagit({
+        fieldName: "analisis[]"
+    });
 </script>

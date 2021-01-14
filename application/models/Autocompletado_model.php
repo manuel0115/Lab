@@ -41,5 +41,27 @@ class Autocompletado_model extends CI_Model
         return $filas;
     }
 
+    public function getParametros($param)
+    {
+        $query = "SELECT ID,NOMBRE AS PARAMETRO FROM PARAMETROS WHERE NOMBRE LIKE '%$param%';";
+
+        $resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();
+
+        log_message('ERROR', "completadoRecetas\n " . $query . "\n<pre>" . print_r($resultado, TRUE) . "</pre>");
+
+        foreach ($resultado as $value) {
+            $fila["label"] = $value['NOMBRE'];
+            $fila["value"] = $value['PARAMETRO'];
+            $fila["ID"] = $value['ID'];
+           
+
+            $filas[] = $fila;
+        }
+
+
+        return $filas;
+    }
    
 }

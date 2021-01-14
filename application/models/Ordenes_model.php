@@ -159,9 +159,18 @@ class Ordenes_model extends CI_Model
 
     public function buscarParametrosResulatdo($analisis)
     {
-        $query = "SELECT A.ID AS ID_ANALISIS,A.NOMBRE NOMBRE_ANALISIS,A.PARAMETROS,CONCAT(P.ID,'-',P.NOMBRE) AS NOMBRE_PARAMETRO FROM ANALISIS AS A 
-        LEFT JOIN PARAMETROS AS P ON P.ID_ANALISIS = A.ID
-        WHERE A.ID IN($analisis)";
+        $query = "SELECT 
+        CONCAT(CP.ID_PARAMETRO,'-',P.NOMBRE),
+        CP.ORDEN_PARAMETRO AS ORDEN_PARAMETRO,
+        A.NOMBRE AS NOMBRE_ANALISIS,
+        CA.ID_ANALISIS AS ID_ANALISIS
+        FROM CONFIGURACION_PAREMETROS AS CP 
+        JOIN CONFIGURACION_ANALISIS AS CA ON CP.ID_CONFIGURACION_ANALISISIS	 = CA.ID
+        JOIN ANALISIS AS A ON A.ID=CA.ID_ANALISIS 
+        JOIN PARAMETROS AS P ON CP.ID_PARAMETRO = P.ID
+        WHERE CA.ID_ANALISIS IN($analisis)";
+
+        
 
         $resultado = $this->db->query($query);
 
