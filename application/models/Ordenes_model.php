@@ -95,7 +95,7 @@ class Ordenes_model extends CI_Model
     {
         $user_id = 1;
 
-        $query = "UPDATE `lab_lara`.`ORDEN`
+        $query = "UPDATE ORDEN
         SET
         
         `ID_PACIENTE` = '$obj->id_paciente',
@@ -160,7 +160,7 @@ class Ordenes_model extends CI_Model
     public function buscarParametrosResulatdo($analisis)
     {
         $query = "SELECT 
-        CONCAT(CP.ID_PARAMETRO,'-',P.NOMBRE),
+        CONCAT(CP.ID_PARAMETRO,'-',P.NOMBRE) AS NOMBRE_PARAMETRO,
         CP.ORDEN_PARAMETRO AS ORDEN_PARAMETRO,
         A.NOMBRE AS NOMBRE_ANALISIS,
         CA.ID_ANALISIS AS ID_ANALISIS
@@ -268,17 +268,15 @@ class Ordenes_model extends CI_Model
 
 
 
-            if ($value['parametros'] === "true") {
+            
 
-                $queryParametroResultado = "INSERT INTO PARAMEROS_TEMPORAL_RESULATDO(ID_ANALSIS_RESULTADO,ID_PARAMETRO,VALOR,REFERENCIA,MEDIDA)VALUES";
+                $queryParametroResultado = "INSERT INTO PARAMEROS_TEMPORAL_RESULATDO(ID_ANALSIS_RESULTADO,ID_PARAMETRO,VALOR)VALUES";
 
-                foreach ($value['lista_parametros'] as $key_r => $value_r) {
+                foreach ($value['parametros'] as $key_r => $value_r) {
                     $queryParametroResultado =$queryParametroResultado . "
                     ('$idUltimoAnalisisResultado','" . 
-                    $value_r['id_parametro'] . 
-                    "','" . $value_r["valor"] . 
-                    "','" . $value_r["referncia"] . 
-                    "','" . $value_r["medida"] . "'),";
+                    $value_r['id_paremetro'] . 
+                    "','" . $value_r["valor"] . "'),";
                 }
 
                 $queryParametroResultado =$queryParametroResultado .";";
@@ -293,17 +291,12 @@ class Ordenes_model extends CI_Model
         
 
                 log_message('ERROR', 'queryVariosParametroResultado \n' . $queryParametroResultado . '\n<pre> ' . print_r($resulatdoParametroResultado, true) . '</pre>');
-            }else{
-                $queryParametroResultado = "INSERT INTO PARAMEROS_TEMPORAL_RESULATDO(ID_ANALSIS_RESULTADO,ID_PARAMETRO,VALOR,REFERENCIA,MEDIDA)VALUES
-                ('$idUltimoAnalisisResultado','" . $value['id_parametro']."','','','');";
+          
+                
 
-                $resulatdoParametroResultado = $this->db->query($queryParametroResultado);
+               
 
-                if(!$resulatdoParametroResultado){
-                    $errores[]="parametroResultado";
-                }
-
-                log_message('ERROR', 'queryParametroResultado \n' . $queryParametroResultado . '\n<pre> ' . print_r($resulatdoParametroResultado, true) . '</pre>');
+                
                
             }
 
@@ -311,13 +304,14 @@ class Ordenes_model extends CI_Model
 
             log_message('ERROR', 'queryAnalisisResultado \n' . $queryAnalisisResultado . '\n<pre> ' . print_r($analsisResultadoResultado, true) . '</pre>');
             log_message('ERROR', 'idUltimoAnalisisResultado \n' . $queryIdUltimoAnalsisResultado . '\n<pre> ' . print_r($idUltimoAnalisisResultado, true) . '</pre>');
-        }
+        
 
 
         if(!empty($errores)){
             log_message('ERROR', 'resultadoProceso \n' . "errores" . '\n<pre> ' . print_r($errores, true) . '</pre>');
             return false;
         }
+        
 
         log_message('ERROR', 'resultadoProceso \n' . $errores . '\n<pre> ' . print_r(true, true) . '</pre>');
         return true;

@@ -39,26 +39,25 @@ class Ordenes extends CI_Controller
                 $formulario[]=array(
                         "ID_ANALISIS"=>$value["ID_ANALISIS"],
                         "NOMBRE_ANALISIS"=>$value["NOMBRE_ANALISIS"],
-                        "PARAMETROS"=>$value["PARAMETROS"],
-                        "NOMBRE_PARAMETRO"=>[$value["NOMBRE_PARAMETRO"]]
+                        "NOMBRE_PARAMETRO"=>[$value["ORDEN_PARAMETRO"]=>$value["NOMBRE_PARAMETRO"]]
                     );
             }else{
                 if(!$this->in_multi_array($value["ID_ANALISIS"],$formulario)){
                     $formulario[]=array(
                         "ID_ANALISIS"=>$value["ID_ANALISIS"],
                         "NOMBRE_ANALISIS"=>$value["NOMBRE_ANALISIS"],
-                        "PARAMETROS"=>$value["PARAMETROS"],
-                        "NOMBRE_PARAMETRO"=>[$value["NOMBRE_PARAMETRO"]]
+                        "NOMBRE_PARAMETRO"=>[$value["ORDEN_PARAMETRO"]=>$value["NOMBRE_PARAMETRO"]]
                     );
                 }else{
                     $clave=$this->bucarKey($value["ID_ANALISIS"],$formulario);
-                    $formulario[$clave]["NOMBRE_PARAMETRO"][]=$value["NOMBRE_PARAMETRO"];
+                    $formulario[$clave]["NOMBRE_PARAMETRO"][$value["ORDEN_PARAMETRO"]]=$value["NOMBRE_PARAMETRO"];
                         
                         
                     
                 } 
             }
         }
+        
         
         $data["formulario"]=$formulario;
         $data["id_orden"]=$id_orden;
@@ -119,9 +118,9 @@ class Ordenes extends CI_Controller
                     $obj->$key = $value;
                 }
 
-                /* echo"<pre>";
+                /* echo"<pre?>";
                 print_r($obj);
-                echo"</pre>";
+                echo"</pre?>";
                 die();*/
 
                 $obj->activo = ($obj->activo == "on") ? "TRUE" : "FALSE";

@@ -60,7 +60,7 @@
 </div>
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <script>
-    App.setPageTitle('UFEJI | Administrar Usuarios');
+    App.setPageTitle('LaboPro | Administrar areas analiticas');
     App.restartGlobalFunction();
 
     $.getScript('assets/admin/plugins/datatables.net/js/jquery.dataTables.min.js?<?php echo time(); ?>').done(function () {

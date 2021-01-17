@@ -13,7 +13,7 @@ echo "</pre>";*/
     }
 </style>
 <div class="modal-header">
-    <h4 class="modal-title"><?php echo ($info[0]["ID"]) ? "Modificar evento" : "Agregar evento"; ?></h4>
+    <h4 class="modal-title"><?php echo ($info[0]["ID"]) ? "Modificar paremetro" : "Agregar parametro"; ?></h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body">

@@ -99,8 +99,9 @@ class Login extends CI_Controller {
 
         $this->session->sess_destroy();
 
-        $this->load->view('login/login');
+       // header("location:".base_url());
         
+        return base_url();
     }
 
 }

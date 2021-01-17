@@ -166,85 +166,47 @@ $(".modal_resultado").on("click","#btn_guardar_resultado",()=>{
   //var datos = $frm_guardar_resultado.serializeArray();
 
 
-  datos= []
-  //data-parameretros
-  let comentario;
-  let objeto;
-  $(".parametros_valores").each(function(index,value){
+  datos= [];
+  $(".padre-maestro").each(function(index,value){
   //console.log(false,' ','false');
     
     
     
-    let valores=$(this).val();
-    valores=valores.split("_");
+    let id_analisis=$(this).attr("data-analisis");
 
-    if($(this).attr("data-parameretros") === "false"){
-      
-      
-      let valor_parametro= $(this).siblings('.switcher').children(".positivo").is(":checked");
-      comentario= $(this).parent('.contenedor-checkbox').siblings(".contenedor-comentario").children("textarea").val();
-  
+    let input_parametros= $(this).children(".agrupar-parametros").find(".valor");
 
-      objeto={
-            "id_analisis":valores[0],
-            "id_parametro":11,
-            "parametros":false,
-            "positivo": valor_parametro,
-            "comentario":comentario
-      }
+    let objetoParametro=[];
 
-      datos.push(objeto);
-     
+    input_parametros.each(function(index,value){
 
-    }else{
-      let id_analisis=$(this).val();
-      comentario= $(this).siblings('.contenedor-comentario-parametros').children("textarea").val();
-
-      let contenedor_parametro=$(this).parent(".form-group.row").siblings(".contenedor-parametro");
-      let objetoParametro= [];
-
-      contenedor_parametro.each(function(index,value){
-
-            let id_parametro=$(this).attr("data-id-parametro");
-            let valor=  $(this).children(".valor").children("input[type='text']").val();
-            let medida= $(this).children(".medida").children("input[type='text']").val();
-            let referencia=  $(this).children(".referencia").children("input[type='text']").val();
-            
-            let objeto={
-              "id_parametro":id_parametro,
-              "valor":valor,
-              "medida":medida ,
-              "referencia":referencia 
-          }
-
-          objetoParametro.push(objeto)
-
-
-      })
-
-      console.log("parametros",objetoParametro);
-     
-
-      objeto={
-        "id_analisis":id_analisis,
-        "parametros":true,
-        "lista_parametros":objetoParametro,
-        "comentario":comentario,
         
-      }
+        let objeto ={
+          id_paremetro:$(this).attr("data-parametro"),
+          valor:$(this).val()
+        }
 
-      
+        objetoParametro.push(objeto);
+    })
 
-      datos.push(objeto);
-      //datos.push(comentario);
+    let comentario=$(this).children(".contenedor-comentario-parametros").children("textarea").val();
 
-      
+  
+   
+
+    objeto={
+      "id_analisis":id_analisis,
+      "parametros":objetoParametro,
+      "comentario":comentario
     }
 
-    console.log(objeto); 
-    
+    datos.push(objeto);
   })
 
+
+  console.log(datos);
+    
+ 
 
   
   var validation = $frm_guardar_resultado.parsley().validate();

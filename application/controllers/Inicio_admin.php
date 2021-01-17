@@ -23,24 +23,55 @@ class Inicio_admin extends CI_Controller
     public function index()
     {
 
-        if ($this->session->id > 0) {
-
-
-            $datos_usuarios = new stdClass();
-
-
-
-
-            foreach ($this->session->userdata() as $key => $value) {
-                $datos_usuarios->$key = $value;
+        /**
+         * 
+         * 
+         * 
+         * 
+         *   [__ci_last_regenerate] => 1610858851
+    [ID_USUARIO] => 1
+    [NOMBRE_USUARIO] => emmanuel guzman
+    [CORREO] => emmanuel.011593@gmail.com
+    [PASSWORD] => $2y$10$pl3tMWwd8fwYDOi998Gwlevkh39uzDn52UOa.0KNxiBisJjGibUWG
+    [ROL] => 1
+    [ID_SUSCURSAL] => 1
+    [NOMBRE_SUCURSAL] => LA ROMANA
+    [TELEFONOS_SUCURSALES] => 8093493151
+    [NOMBRE_LABORATORIO] => Laboratorios Lara
+    [RNC] => 131-364187
+    [CORREO_LABORATORIO] => laralaboratorioclinico@gmail.com
+    [LABORATORIO] => 1
+    [CALLE] => AMIN ABEL HASBUN 
+    [NUMERO] => 36
+    [SECTOR] => VILLA HERMOSA
+    [PROVINCIA] => LA ROAMAN
+    [PAIS] => REPUBLICA DOMINICANA
+         * 
+         if(){
+             echo $this->session->ID_USUARIO;
+             die("haysession");
+            }else{
+                echo "mp hay";
             }
+            */
+
+        if ($this->session->ID_USUARIO > 0) {
+
+
+            
 
 
 
-            $data['datos_sesion_usuario'] = (array) $datos_usuarios;
+
+
+
+           
+            $this->load->view('inicio/inicio_admin');
+        }else{
+            header("location:".base_url());
         }
 
 
-        $this->load->view('inicio/inicio_admin', $data);
     }
+    
 }

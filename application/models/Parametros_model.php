@@ -33,7 +33,7 @@ class Parametros_model extends CI_Model
 
     public function getModalParametros($id)
     {
-        $query = "SELECT P.ID,P.NOMBRE as NOMBRE, A.NOMBRE AS ANALISIS, A.ID AS ID_ANALISIS FROM PARAMETROS AS P JOIN ANALISIS AS A ON (P.ID_ANALISIS = A.ID) WHERE P.ID='$id';";
+        $query = "SELECT P.ID,P.NOMBRE as NOMBRE FROM PARAMETROS AS P  WHERE P.ID='$id';";
 
         $resultado = $this->db->query($query);
 

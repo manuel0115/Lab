@@ -85,7 +85,7 @@ echo "</pre>";
                 </td>
             </tr>
             <tr>
-                  <td><span style="font-weight:bold">Edad:</span>&nbsp;<span><?php echo $info_resulatdo[0]["EDAD"] . "años"
+                  <td><span style="font-weight:bold">Edad:</span>&nbsp;&nbsp;<span><?php echo $info_resulatdo[0]["EDAD"] . "  años"
                     ?></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span style="font-weight:bold">Genero:</span><span><?php echo $info_resulatdo[0]["GENERO"] ?></span></td>
                 <td>
@@ -110,6 +110,7 @@ echo "</pre>";
                     <th>Resultado</th>
                     <th>Unidad</th>
                     <th>Referencia</th>
+                    <th>Area</th>
                 <tr>
             </thead>
 
@@ -117,6 +118,7 @@ echo "</pre>";
             <tbody>
                 <tr>
                     <th width="24%">&nbsp;</th>
+                    <th>&nbsp;</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
@@ -128,16 +130,42 @@ echo "</pre>";
 
                     <?php
                     $area_Analitica = "";
+                        /*
+                        
 
+    [6] => Array
+        (
+            [NOMBRE_AREA] => 
+            [ID_ANALISIS] => 
+            [NOMBRE_ANALISIS] => 
+            [PARAMETROS] => Array
+                (
+                    [0] => Array
+                        (
+                            [nombre] => PSA TOTAL/LIBRE
+                            [valor] => TT
+                            [medida] => nq/ml
+                            [referencia] => 
+                        )
+
+                )
+
+        )
+                        
+                        */
 
                     foreach ($resultado as $value) {
-                        if ($value["TIENE_PARAMETROS"]) {
+
+                        $cantidad_parametros=count($value["PARAMETROS"]);
+                           
+                        if ($cantidad_parametros > 1) {
                             ?>
-                        <tr style="border-bottom:5px solid #c2c2c2">
+                        <tr style="border-bottom:0.5px solid #c2c2c2">
                             <th width="24%" style="font-size:15px"><?php echo $value['NOMBRE_ANALISIS']; ?></th>
                             <th>&nbsp;</th>
-                            <th><?php echo $value['NOMBRE_AREA']; ?></th>
                             <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th><?php echo $value['NOMBRE_AREA']; ?></th>
                         <tr>
                             <?php foreach ($value["PARAMETROS"] as $value_r) { ?>
                             <tr>
@@ -167,15 +195,18 @@ echo "</pre>";
                         <tr  style="border-bottom:0.5px solid #c2c2c2">
                             <th width="24%">&nbsp;</th>
                             <th>&nbsp;</th>
-                            <th><?php echo $value['NOMBRE_AREA']; ?></th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                             <th>&nbsp;</th>
                         </tr>
                             <?php foreach ($value["PARAMETROS"] AS $value_r) { ?>
                             <tr>
                                 <th width="24%"><?php echo $value['NOMBRE_ANALISIS']; ?></th>
-                                <th><?php echo ($value_r['valor'] === "TRUE") ? "POSITIVO" : "NEGATIVO"; ?></th>
+                                <th><?php echo $value_r['valor'] ; ?></th>
                                 <th><?php echo $value_r['medida']; ?></th>
                                 <th><?php echo $value_r['referencia']; ?></th>
+                                <th><?php echo $value['NOMBRE_AREA']; ?></th>
+                                
                             </tr>
                             <?php } ?>
                             <?php if ($value['COMENTARIO']) { ?>        

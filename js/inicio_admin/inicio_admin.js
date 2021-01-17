@@ -8,8 +8,8 @@ $("#cerrar_sesion").on('click', function () {
     })
             .then((cerrar_sesion) => {
                 if (cerrar_sesion) {
-                    $.post('/login/logout', function (data) {
-                        window.location="inicio";
+                    $.post('login/logout', function (data) {
+                        window.location=data;
 
                     }, 'text');
                 }

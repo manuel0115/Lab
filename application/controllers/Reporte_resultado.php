@@ -4,9 +4,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Reporte_resultado extends CI_Controller {
 
+    private $datos_usuarios;
+
     public function __construct() {
         parent::__construct();
         $this->load->model("Reporte_resultado_model");
+
+        
+        $this->datos_usuarios= $this->session->userdata();
+        if(!$this->datos_usuarios["ID_USUARIO"] > 0){
+            redirect('login/page_login');
+        }
     }
 
     public function index() {
@@ -40,7 +48,7 @@ class Reporte_resultado extends CI_Controller {
           //die("s"); */
 
         $data["resultado"] = $formulario;
-        $data["datos_organizacion"] = $this->session->get_userdata();
+        $data["datos_organizacion"] = $this->datos_usuarios;
 
         $this->load->view("reporte_resultado/modal/reporte_resultado_imprimir", $data);
     }
@@ -49,6 +57,58 @@ class Reporte_resultado extends CI_Controller {
 
         $parametros = $this->Reporte_resultado_model->getModalresultados($id);
 
+       /* echo "<pre>";
+        print_r($parametros);
+        echo "</pre>";
+        die();*/
+
+        /*
+            [0] => Array
+        (
+            [ID_PARAMETRO_RESULTADO] => 1
+            [ID_PARAMETRO] => 15
+            [VALOR] => A
+            [CONFIGURACION_PARAMETRO_ID] => 50
+            [ID_UNIDAD_MEDIDA] => 3
+            [NOMBRE_UNIDAD_MEDIDA] => 10E3/UL
+            [NOMBRE_PARAMETRO] => (WBC) GB
+            [ANALISIS_PADRE] => 1
+            [ID_ANALISIS] => 53
+            [NOMBRE_ANALSIS] => HEMOGRAMA
+            [NOMBRE_AREA] => HEMATOLOGIA
+            [ID_RESULATADO] => 1
+            [ID_ORDEN] => 3
+            [ID_PACIENTE] => 1
+            [FECHA_NACIMIENTO] => 1993-01-15
+            [EDAD] => 28
+            [GENERO] => M
+            [REFERENCIA] => 4.0-10.0
+        )
+
+    [1] => Array
+        (
+            [ID_PARAMETRO_RESULTADO] => 2
+            [ID_PARAMETRO] => 16
+            [VALOR] => B
+            [CONFIGURACION_PARAMETRO_ID] => 51
+            [ID_UNIDAD_MEDIDA] => 0
+            [NOMBRE_UNIDAD_MEDIDA] => 
+            [NOMBRE_PARAMETRO] => LYM%
+            [ANALISIS_PADRE] => 1
+            [ID_ANALISIS] => 53
+            [NOMBRE_ANALSIS] => HEMOGRAMA
+            [NOMBRE_AREA] => HEMATOLOGIA
+            [ID_RESULATADO] => 1
+            [ID_ORDEN] => 3
+            [ID_PACIENTE] => 1
+            [FECHA_NACIMIENTO] => 1993-01-15
+            [EDAD] => 28
+            [GENERO] => M
+            [REFERENCIA] => 20.0-40.0
+        )
+
+        */ 
+
         $formulario = array();
 
 
@@ -56,34 +116,43 @@ class Reporte_resultado extends CI_Controller {
         foreach ($parametros as $key => $value) {
             if (empty($formulario)) {
                 $formulario[] = [
-                    "ID_AREA" => $value["id_area_analitica"],
-                    "NOMBRE_AREA" => $value["nombre_araea_analitica"],
-                    "ID_ANALISIS_RESULTADO" => $value["ID_ANALISIS_RESULTADO"],
-                    "NOMBRE_ANALISIS" => $value["NOMBRE_ANALISIS"],
-                    "TIENE_PARAMETROS" => $value["TIENE_PARAMETROS"],
-                    "PARAMETROS" => [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"]]],
-                    "COMENTARIO" => $value["COMENTARIO"]
+                    "NOMBRE_AREA" => $value["NOMBRE_AREA"],
+                    "ID_ANALISIS" =>  $value["ID_ANALISIS"],
+                    "NOMBRE_ANALISIS" => $value["NOMBRE_ANALSIS"],
+                    "PARAMETROS" => [
+                        ["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"],"medida" => $value["NOMBRE_UNIDAD_MEDIDA"],"referencia" => $value["REFERENCIA"]]
+                    ]
                 ];
             } else {
-                if (!$this->in_multi_array($value["ID_ANALISIS_RESULTADO"], $formulario)) {
+                if (!$this->in_multi_array($value["ID_ANALISIS"], $formulario)) {
 
-                    $parametros = ($value["TIENE_PARAMETROS"]) ? [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"], "medida" => $value["MEDIDA"], "referencia" => $value["REFERENCIA"]]] : [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"]]];
+                    /*$parametros = ($value["TIENE_PARAMETROS"]) ? [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"], "medida" => $value["MEDIDA"], "referencia" => $value["REFERENCIA"]]] : [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"]]];*/
+
                     $formulario[] = [
-                        "ID_AREA" => $value["id_area_analitica"],
-                        "NOMBRE_AREA" => $value["nombre_araea_analitica"],
-                        "ID_ANALISIS_RESULTADO" => $value["ID_ANALISIS_RESULTADO"],
-                        "NOMBRE_ANALISIS" => $value["NOMBRE_ANALISIS"],
-                        "TIENE_PARAMETROS" => $value["TIENE_PARAMETROS"],
-                        "PARAMETROS" => $parametros,
-                        "COMENTARIO" => $value["COMENTARIO"]
+                    "NOMBRE_AREA" => $value["NOMBRE_AREA"],
+                    "ID_ANALISIS" =>  $value["ID_ANALISIS"],
+                    "NOMBRE_ANALISIS" => $value["NOMBRE_ANALSIS"],
+                    "PARAMETROS" => [
+                        ["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"],"medida" => $value["NOMBRE_UNIDAD_MEDIDA"],"referencia" => $value["REFERENCIA"]]
+                    ]
+                   
                     ];
-                } else {
-                    $clave = $this->bucarKey($value["ID_ANALISIS_RESULTADO"], $formulario);
-                    $formulario[$clave]["PARAMETROS"][] = ["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"], "medida" => $value["MEDIDA"], "referencia" => $value["REFERENCIA"]];
+                }else {
+                    $clave = $this->bucarKey($value["ID_ANALISIS"], $formulario);
+                    $formulario[$clave]["PARAMETROS"][] = ["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"],"medida" => $value["NOMBRE_UNIDAD_MEDIDA"],"referencia" => $value["REFERENCIA"]];
+                   
+
                 }
             }
         }
 
+
+       /* echo "<pre>";
+        print_r($formulario);
+        echo "</pre>";
+        die();*/
+
+        
         return $formulario;
     }
 
@@ -98,7 +167,7 @@ class Reporte_resultado extends CI_Controller {
 
     public function bucarKey($id, $array) {
         foreach ($array as $key => $val) {
-            if ($val['ID_ANALISIS_RESULTADO'] == $id) {
+            if ($val['ID_ANALISIS'] == $id) {
                 return $key;
             }
         }
@@ -121,12 +190,16 @@ class Reporte_resultado extends CI_Controller {
 
 
         foreach ($formulario as $value) {
-            if ($value["TIENE_PARAMETROS"]) {
+            $cantidad_parametros=count($value["PARAMETROS"]);
+                           
+            if ($cantidad_parametros > 1) {
+           
                 $fila = ' <tr class="filas" style="border-bottom:0.5px solid #c2c2c2">
                             <th width="24%" style="font-size:15px;text-align:left">' . $value['NOMBRE_ANALISIS'] . '</th>
                             <th>&nbsp;</th>
                             <th></th>
                             <th>&nbsp;</th>
+                            <th style="font-size:12px;font-weight:normal;text-align:center">'.$value["NOMBRE_AREA"].'</th>
                         <tr>';
 
                 foreach ($value["PARAMETROS"] as $value_r) {
@@ -164,12 +237,13 @@ class Reporte_resultado extends CI_Controller {
                 foreach ($value['PARAMETROS'] AS $value_r) {
 
 
-                    $valor = ($value_r['valor'] == 'TRUE') ? 'POSITIVO' : 'NEGATIVO';
+                  
                     $fila .= '<tr>
                     <th width="24%" style="font-size:15px;text-align:left" >' . $value['NOMBRE_ANALISIS'] . '</th>
-                    <th style="font-size:12px;font-weight:normal;text-align:center">' . $valor . '</th>
-                    <th style="text-align:center">' . $value_r['medida'] . '</th>
-                    <th style="text-align:center">' . $value_r['referencia'] . '</th>
+                    <th style="font-size:12px;font-weight:normal;text-align:center">' . $value_r['valor'] . '</th>
+                    <th  style="font-size:12px;font-weight:normal;text-align:center">' . $value_r['medida'] . '</th>
+                    <th  style="font-size:12px;font-weight:normal;text-align:center">' . $value_r['referencia'] . '</th>
+                    <th style="font-size:12px;font-weight:normal;text-align:center">'.$value["NOMBRE_AREA"].'</th>
                 </tr>';
                 }
                 if ($value['COMENTARIO']) {
@@ -291,10 +365,11 @@ class Reporte_resultado extends CI_Controller {
         <table style="width:100%;">
             <thead>
                 <tr style=" background:#d6d6d6">
-                    <td width="24%" style="font-weight:bold;text-align:left">Pruebas</th>
-                    <th style="text-align:center">Resultado</th>
-                    <th style="text-align:center">Unidad de medida</th>
-                    <th style="text-align:center">Referencia</th>
+                    <td width="20%" style="font-weight:bold;text-align:left">Pruebas</th>
+                    <th width="20%" style="text-align:center">Resultado</th>
+                    <th width="20%" style="text-align:center">Unidad de medida</th>
+                    <th width="20%" style="text-align:center">Referencia</th>
+                    <th width="20%" style="text-align:center">Area Analitica</th>
                 <tr>
             </thead>
 
@@ -330,11 +405,11 @@ class Reporte_resultado extends CI_Controller {
                    <table style="width:100%" >
                     <tr>
                         <td>
-                             <div><img src="data/img/sistema/logo/labotech-logo-temp.png" width="60px"></div>
+                             <div>&nbsp;&nbsp;&nbsp;</div>
                             
                         </td>
                         <td style="width:12%;text-align:center;" >
-                             <div><span>Labotech</span></div>
+                             <div><span>LaboPro</span></div>
                         </td>
                         <td style="width:12%;text-align:center;" >
                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -356,8 +431,12 @@ class Reporte_resultado extends CI_Controller {
 
 
         ';
+        /*echo $HEADER;
+    
+        echo $html2;
+        echo $footer;
+        die();*/
 
-        //echo $html2;
 
 
         $pdf = new PDF("c","letter");
