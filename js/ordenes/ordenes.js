@@ -161,8 +161,8 @@ $(".modal_usuarios .modal-content").on(
 
 $(".modal_resultado").on("click","#btn_guardar_resultado",()=>{
 
-        
   var url = $frm_guardar_resultado.attr("action");
+  let orden=$frm_guardar_resultado.attr("data-id-orden");
   //var datos = $frm_guardar_resultado.serializeArray();
 
 
@@ -203,8 +203,8 @@ $(".modal_resultado").on("click","#btn_guardar_resultado",()=>{
     datos.push(objeto);
   })
 
-
-  console.log(datos);
+ 
+ // console.log( {"datos":datos,"id_orden":orden});
     
  
 
@@ -215,7 +215,7 @@ $(".modal_resultado").on("click","#btn_guardar_resultado",()=>{
       //let $datos =JSON.stringify(datos);
       //console.log($datos);
     
-    $.post(url,{"datos":datos,"id_orden":$('#id_orden').val()},function (data) {
+    $.post(url,{"datos":datos,"id_orden":orden},function (data) {
         if (data.codigo == 0) {
           swal({
             text: data.mensaje,
@@ -224,7 +224,7 @@ $(".modal_resultado").on("click","#btn_guardar_resultado",()=>{
           });
 
           tblordenes.ajax.reload();
-          $(".modal_usuarios").modal("hide");
+          $(".modal_resultado").modal("hide");
         } else {
           swal({
             text: data.mensaje,

@@ -74,6 +74,7 @@ class Reporte_resultado_model extends CI_Model
         A.NOMBRE AS NOMBRE_ANALSIS,
         AA.NOMBRE AS NOMBRE_AREA,
         AR.ID_RESULTADO AS ID_RESULATADO,
+        AR.COMENTARIO AS COMENTARIO,
         R.ID_ORDEN AS ID_ORDEN,
         O.ID_PACIENTE AS ID_PACIENTE,
         PA.FECHA_NACIMIENTO AS FECHA_NACIMIENTO,
@@ -128,6 +129,48 @@ class Reporte_resultado_model extends CI_Model
 
         return $resultado;
     }
+
+    public function modificarfoResultados($obj)
+    {   
+
+      
+        $this->db->trans_start();
+
+        foreach($obj as $value){
+            $queryComentario = "UPDATE ANALISIS_RESULTADO SET COMENTARIO = '" .$value['comentario']."' WHERE ID = '".$value["id_analisis"]."';";
+
+            $this->db->query($queryComentario);
+
+
+            foreach($value["parametros"] as $value_p){
+                $queryValorParametro = "UPDATE PARAMEROS_TEMPORAL_RESULATDO SET VALOR = '" .$value_p['valor']."' WHERE ID = '".$value_p["id_paremetro"]."';";
+
+                $this->db->query($queryValorParametro);
+
+            }
+        }
+
+        $resultado=$this->db->trans_complete(); 
+
+
+        
+        
+        
+
+       
+
+        /*$resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();*/
+
+        
+
+        log_message('ERROR','getInfoResultados \n'. $queryComentario .$queryValorParametro. '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
+        
+    }
+
 
     
 

@@ -1,9 +1,9 @@
 <?php
-echo "<pre>";
-
+/*echo "<pre>";
+print_r($datos_resultados);
 echo "$id_orden";
 echo "</pre>";
-
+*/
 ?>
 <style>
     .ui-autocomplete {
@@ -28,110 +28,87 @@ echo "</pre>";
 <div class="modal-body p-0">
 
 
-    <form action="ordenes/guardar_resultado" id="frm_guardar_resultado" class="form-horizontal" data-parsley-validate="true" data-id-orden="<?php echo $id_orden; ?>">
-       
+    <form action="reporte_resultado/editarResultado" id="frm_guardar_resultado" class="form-horizontal" data-parsley-validate="true">
+        <input type="hidden" id="id_orden" name="id_orden" value='<?php echo $id_orden; ?>' />
         <?php
-
-        /*
-                Array
-(
-    [0] => Array
+        
+        /**
+         * 
+         *  [2] => Array
         (
-            [ID_ANALISIS] => 53
-            [NOMBRE_ANALISIS] => HEMOGRAMA
-            [NOMBRE_PARAMETRO] => Array
+            [NOMBRE_AREA] => QUIMICA
+            [ID_ANALISIS] => 13
+            [NOMBRE_ANALISIS] => CREATININA
+            [PARAMETROS] => Array
                 (
-                    [1] => 15-(WBC) GB
-                    [2] => 16-LYM%
-                    [3] => 17-MID%
-                    [4] => 46-GRANULITOS%
-                    [5] => 48-NO. LINFOCITOS
-                    [6] => 47-MIXTOS
-                    [7] => 49-NO. GRANULITOS
-                    [8] => 50-HGB
-                    [9] => 51-(RBC) GR
-                    [10] => 52-HCTO
-                    [11] => 53-MVC
-                    [12] => 54-MCH
-                    [13] => 55-MCHC
-                    [14] => 56-RWD-CV
-                    [15] => 57-PLT
-                    [16] => 58-MPV
-                    [17] => 59-PDW
-                    [18] => 60-PCT
-                )
+                    [0] => Array
+                        (
+                            [nombre] => 45-SIN PARAMETRO
+                            [valor] => NEGATVO
+                            [medida] => mq/dl
+                            [referencia] => 0.6-1.3
+                        )
 
-        )
-
-    [1] => Array
-        (
-            [ID_ANALISIS] => 3
-            [NOMBRE_ANALISIS] => AMILASA
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 11-SIN PARAMETRO
-                )
-
-        )
-
-    [2] => Array
-        (
-            [ID_ANALISIS] => 8
-            [NOMBRE_ANALISIS] => COLESTEROL
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 11-SIN PARAMETRO
                 )
 
         )
 
     [3] => Array
         (
-            [ID_ANALISIS] => 13
-            [NOMBRE_ANALISIS] => CREATININA
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 11-SIN PARAMETRO
-                )
-
-        )
-
-    [4] => Array
-        (
+            [NOMBRE_AREA] => PRUEBAS ESP.
             [ID_ANALISIS] => 137
             [NOMBRE_ANALISIS] => PSA LIBRE Y TOTAL
-            [NOMBRE_PARAMETRO] => Array
+            [PARAMETROS] => Array
                 (
-                    [1] => 43-PSA TOTAL
-                    [2] => 44-PSA LIBRE
-                    [3] => 45-PSA TOTAL/LIBRE
+                    [0] => Array
+                        (
+                            [nombre] => 46-PSA TOTAL
+                            [valor] => 30
+                            [medida] => nq/dl
+                            [referencia] => 0.0-4.0
+                        )
+
+                    [1] => Array
+                        (
+                            [nombre] => 47-PSA LIBRE
+                            [valor] => 50
+                            [medida] => nq/ml
+                            [referencia] => 0.00-1.30
+                        )
+
+                    [2] => Array
+                        (
+                            [nombre] => 48-PSA TOTAL/LIBRE
+                            [valor] => 80
+                            [medida] => nq/ml
+                            [referencia] => 
+                        )
+
                 )
 
         )
-
-)
-            
-            */
+         */
+        
+        
         ?>
 
-
-        <?php foreach ($formulario as $key => $value) : ?>
+        <?php foreach ($datos_resultados as $key => $value) : ?>
             <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID_ANALISIS"] ?>">
                 <span style="font-size:12px;font-weight:bold"><?php echo $value["NOMBRE_ANALISIS"] ?></span>
                 <div class="custom-control custom-switch mt-2 mb-2">
-                    <input type="checkbox" class="custom-control-input acti_com" id="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>">
+                    <input type="checkbox" class="custom-control-input acti_com" id="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>" <?php echo ($value["COMENTARIO"])?"checked":""; ?> >
                     <label class="custom-control-label" for="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>"> Activar Comentarios</label>
                 </div>
                 <div class="agrupar-parametros">
                     <?php
-                    foreach ($value["NOMBRE_PARAMETRO"] as $key_r => $value_r) {
-                        $id_parametro = explode("-", $value_r);
+                    foreach ($value["PARAMETROS"] as $key_r => $value_r) {
+                        $id_parametro = explode("-", $value_r["nombre"]);
                     ?>
 
                         <div class="form-group">
                             <label><?php echo $id_parametro[1]; ?></label>
                             <div class="input-group">
-                                <input type="text" class="form-control valor" data-parametro="<?php echo $id_parametro[0] ?>" required data-parsley-errors-container="<?php echo "#error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[0]; ?>">
+                                <input type="text" class="form-control valor" data-parametro="<?php echo $id_parametro[0] ?>" required data-parsley-errors-container="<?php echo "#error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[0]; ?>" value="<?php echo $value_r["valor"]; ?>">
                             </div>
 
                             <small id="<?php echo "error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[0]; ?>">
@@ -144,9 +121,9 @@ echo "</pre>";
                     <?php } ?>
                 </div>
 
-                <div class="form-group contenedor-comentario-parametros d-none" id="<?php echo "cj_coment_" . $value['ID_ANALISIS']; ?>">
+                <div class="form-group contenedor-comentario-parametros <?php echo (!$value["COMENTARIO"])?"d-none":""; ?>" id="<?php echo "cj_coment_" . $value['ID_ANALISIS']; ?>">
                     <label>Observaciones</label>
-                    <textarea class="form-control" rows="3" data-parsley-errors-container="<?php echo "#errorcm_" . $value["ID_ANALISIS"]; ?>"></textarea>
+                    <textarea class="form-control" rows="3" data-parsley-errors-container="<?php echo "#errorcm_" . $value["ID_ANALISIS"]; ?>"><?php echo $value["COMENTARIO"]; ?></textarea>
                     <small id="<?php echo "errorcm_" . $value["ID_ANALISIS"]; ?>">
 
                     </small>
@@ -170,7 +147,7 @@ echo "</pre>";
 
 
 <div class="modal-footer">
-    <a href="javascript:;" class="btn btn-success" id="btn_guardar_resultado">Guardar Cambios <i class="fa fa-save"></i></a>
+    <a href="javascript:;" class="btn btn-success" id="btn_editar_resultado">Guardar Cambios <i class="fa fa-save"></i></a>
     <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Cancelar <i class="fa fa-times"></i></a>
 </div>
 
@@ -195,5 +172,5 @@ echo "</pre>";
 
 
 
-    })
+    });
 </script>

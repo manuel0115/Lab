@@ -109,7 +109,7 @@
                             </li>
                             <li>
                                 <a href="configuracion_analisis/configuracion" data-toggle="ajax">
-                                    <i class="fas fa-poll"></i>
+                                    <i class="fas fa-cogs"></i>
                                     <span>configuracion analisis</span>
                                 </a>
                             </li>

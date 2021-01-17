@@ -114,6 +114,10 @@ class Reporte_resultado extends CI_Controller {
 
 
         foreach ($parametros as $key => $value) {
+
+            $value["NOMBRE_PARAMETRO"]=$value["ID_PARAMETRO_RESULTADO"].'-'. $value["NOMBRE_PARAMETRO"];
+            $value["ID_ANALISIS"]=$value["ANALISIS_PADRE"];
+            
             if (empty($formulario)) {
                 $formulario[] = [
                     "NOMBRE_AREA" => $value["NOMBRE_AREA"],
@@ -121,7 +125,8 @@ class Reporte_resultado extends CI_Controller {
                     "NOMBRE_ANALISIS" => $value["NOMBRE_ANALSIS"],
                     "PARAMETROS" => [
                         ["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"],"medida" => $value["NOMBRE_UNIDAD_MEDIDA"],"referencia" => $value["REFERENCIA"]]
-                    ]
+                    ],
+                    "COMENTARIO"=>$value["COMENTARIO"]
                 ];
             } else {
                 if (!$this->in_multi_array($value["ID_ANALISIS"], $formulario)) {
@@ -134,7 +139,8 @@ class Reporte_resultado extends CI_Controller {
                     "NOMBRE_ANALISIS" => $value["NOMBRE_ANALSIS"],
                     "PARAMETROS" => [
                         ["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"],"medida" => $value["NOMBRE_UNIDAD_MEDIDA"],"referencia" => $value["REFERENCIA"]]
-                    ]
+                    ],
+                    "COMENTARIO"=>$value["COMENTARIO"]
                    
                     ];
                 }else {
@@ -147,7 +153,7 @@ class Reporte_resultado extends CI_Controller {
         }
 
 
-       /* echo "<pre>";
+        /*echo "<pre>";
         print_r($formulario);
         echo "</pre>";
         die();*/
@@ -203,8 +209,10 @@ class Reporte_resultado extends CI_Controller {
                         <tr>';
 
                 foreach ($value["PARAMETROS"] as $value_r) {
+
+                    $nombre_parametro_id = explode("-",$value_r['nombre']) ;
                     $fila .= '<tr>
-                                <th width="24%" style="font-size:12px;font-weight:normal;">' . $value_r['nombre'] . '</th>
+                                <th width="24%" style="font-size:12px;font-weight:normal;">' .  $nombre_parametro_id[1] . '</th>
                                 <th style="font-size:12px;font-weight:normal;text-align:center;">' . $value_r['valor'] . '</th>
                                 <th style="font-size:12px;font-weight:normal;text-align:center;">' . $value_r['medida'] . '</th>
                                 <th style="font-size:12px;font-weight:normal;text-align:center;">' . $value_r['referencia'] . '</th>
@@ -451,5 +459,52 @@ class Reporte_resultado extends CI_Controller {
         
         $pdf->Output("prueba.pdf", "I");
     }
+
+
+    public function editarModalResultado($id_orden){
+        $id_orden = base64_decode(base64_decode(base64_decode($id_orden)));
+        $data["datos_resultados"]=$this->generarDatosResultado($id_orden);
+
+
+        
+
+        $this->load->view("reporte_resultado/modal/editar_resultado.php",$data);
+
+        
+        
+    }
+
+    public function editarResultado(){
+        $codigo = 500;
+        $mensaje = 'error';
+
+        $obj = new stdClass();
+
+        foreach ($this->input->post() as $key => $value) {
+                   
+            $obj->$key = $value;
+        }
+
+
+        /*echo "<pre>";
+        print_r($obj->datos);
+        echo "</pre>";
+        die();*/
+
+        $resultado = $this->Reporte_resultado_model->modificarfoResultados($obj->datos);
+
+       
+
+        if ($resultado) {
+            $codigo = 0;
+            $mensaje = "orden guardarda con exito";
+        }
+
+        echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
+                
+     }
+
+        
+    
 
 }

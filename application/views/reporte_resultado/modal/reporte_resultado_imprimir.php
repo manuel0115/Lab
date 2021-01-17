@@ -1,9 +1,9 @@
 <?php
-echo "<pre>";
+/*echo "<pre>";
 
 print_r($datos_organizacion);
 
-echo "</pre>";
+echo "</pre>";*/
 ?>
 
 <div class="modal-header">
@@ -168,8 +168,10 @@ echo "</pre>";
                             <th><?php echo $value['NOMBRE_AREA']; ?></th>
                         <tr>
                             <?php foreach ($value["PARAMETROS"] as $value_r) { ?>
+
+                          <?php  $nombre_parametro_id = explode("-",$value_r['nombre']) ?>
                             <tr>
-                                <th width="24%"><?php echo $value_r['nombre']; ?></th>
+                                <th width="24%"><?php echo $nombre_parametro_id[1]; ?></th>
                                 <th><?php echo $value_r['valor']; ?></th>
                                 <th><?php echo $value_r['medida']; ?></th>
                                 <th><?php echo $value_r['referencia']; ?></th>

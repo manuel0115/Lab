@@ -15,7 +15,12 @@ class Ordenes_model extends CI_Model
 {
 
 
-
+    public $user_id;
+    public $id_laboratorio;
+    function __construct(){
+        $this->user_id = $this->session->userdata("ID_USUARIO");
+        $this->id_laboratorio = $this->session->userdata("LABORATORIO");
+    }
 
     public function cargarDatosOrdenes()
     {
@@ -63,9 +68,9 @@ class Ordenes_model extends CI_Model
         (
         '$obj->id_paciente',
         '$obj->referencia',
-        '$user_id',
+        '$this->user_id',
         NOW(),
-        '$user_id',
+        '$this->user_id',
         NOW(),
         TRUE,
         '1',
@@ -93,14 +98,14 @@ class Ordenes_model extends CI_Model
 
     public function modificar_orden($obj)
     {
-        $user_id = 1;
+      
 
         $query = "UPDATE ORDEN
         SET
         
         `ID_PACIENTE` = '$obj->id_paciente',
         `REFERENCIA` = '$obj->referencia',
-        `MODIFICADO_POR` = '$user_id',
+        `MODIFICADO_POR` = '$this->user_id',
         `MODIFICADO_EN` = NOW(),
         `ACTIVO` = TRUE,
         `STATUS` = '1',
@@ -163,13 +168,15 @@ class Ordenes_model extends CI_Model
         CONCAT(CP.ID_PARAMETRO,'-',P.NOMBRE) AS NOMBRE_PARAMETRO,
         CP.ORDEN_PARAMETRO AS ORDEN_PARAMETRO,
         A.NOMBRE AS NOMBRE_ANALISIS,
-        CA.ID_ANALISIS AS ID_ANALISIS
+        CP.ID_ANALISISIS AS ID_ANALISIS
         FROM CONFIGURACION_PAREMETROS AS CP 
-        JOIN CONFIGURACION_ANALISIS AS CA ON CP.ID_CONFIGURACION_ANALISISIS	 = CA.ID
-        JOIN ANALISIS AS A ON A.ID=CA.ID_ANALISIS 
+        JOIN ANALISIS AS A ON A.ID=CP.ID_ANALISISIS 
         JOIN PARAMETROS AS P ON CP.ID_PARAMETRO = P.ID
-        WHERE CA.ID_ANALISIS IN($analisis)";
+        WHERE CP.ID_ANALISISIS IN($analisis);
+";
 
+
+        
         
 
         $resultado = $this->db->query($query);
@@ -185,8 +192,9 @@ class Ordenes_model extends CI_Model
     {   
 
         $errores= array();
-        $user_id = 1;
+        
 
+       
 
 
         $queryCrearResultado = "INSERT INTO `RESULTADO`
@@ -200,9 +208,9 @@ class Ordenes_model extends CI_Model
         VALUES
         (
         '$obj->id_orden',
-        '$user_id',
+        '$this->user_id',
         NOW(),
-        '$user_id',
+        '$this->user_id',
         NOW(),
         TRUE);";
 
@@ -242,9 +250,9 @@ class Ordenes_model extends CI_Model
             `ID_ANALISIS`)
             VALUES
             (
-            '$user_id',
+            '$this->user_id',
             NOW(),
-            '$user_id',
+            '$this->user_id',
             NOW(),
             TRUE,
             '" . $value["comentario"] . "',
