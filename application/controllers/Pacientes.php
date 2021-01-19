@@ -12,30 +12,32 @@ class Pacientes extends CI_Controller
     }
 
 
-    public function pacientes()
+    public function index()
     {
 
-        $this->load->view("analisis/analisis");
+        $this->load->view("pacientes/pacientes");
     }
 
     public function cargarDatosPacientes()
     {
-        $resultado["data"] = $this->Analisis_model->cargarDatosTablaAreaAnalisis();
+        $resultado["data"] = $this->Pacientes_model->cargarDatosPacientes();
         echo json_encode($resultado);
     }
 
     public function getModalPacientes($id = 0)
     {
-        $this->load->model("Area_analitica_model");
+        $this->load->model("Coberturas_model");
+        $this->load->model("Referencias_model");
 
         if ($id !== 0) {
             $id = base64_decode(base64_decode(base64_decode($id)));
-            $data["info"] = $this->Analisis_model->getModalAnalisis($id);
+            $data["info"] = $this->Pacientes_model->getModalPacientes($id);
         }
 
-        $data["areas"] = $this->Area_analitica_model->areasAnaliticas();
+        $data["coberturas"] = $this->Coberturas_model->cargarDatosTablaCobertura();
+        $data["referencias"] = $this->Referencias_model->getDatosReferencias();
 
-        $this->load->view("analisis/modal/analisis_crear_modificar", $data);
+        $this->load->view("pacientes/modal/paciente_crear_editar", $data);
     }
 
 
@@ -44,21 +46,54 @@ class Pacientes extends CI_Controller
 
     public function guardar_pacientes()
     {
+        
         $this->load->library('form_validation');
 
         $codigo = 500;
         $mensaje = 'error';
-
+ 
+        
+      
 
         $config = array(
             array(
-                "field" => "area",
-                "label" => "Area analitica",
+                "field" => "nombre",
+                "label" => "Nombre",
                 "rules" => "required"
             ),
             array(
-                "field" => "analisis",
-                "label" => "Nombre",
+                "field" => "apellido",
+                "label" => "Apellido",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "id_facturacion",
+                "label" => "Fecha",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "fecha",
+                "label" => "Fecha de nacimiento",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "cedula",
+                "label" => "Cedula",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "genero",
+                "label" => "Genero",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "referencia",
+                "label" => "Referencia",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "cobertura",
+                "label" => "Cobertura",
                 "rules" => "required"
             )
 
@@ -71,7 +106,7 @@ class Pacientes extends CI_Controller
             if ($this->form_validation->run() == TRUE) {
 
 
-
+               
                 $obj = new stdClass();
 
                 foreach ($this->input->post() as $key => $value) {
@@ -79,16 +114,19 @@ class Pacientes extends CI_Controller
                 }
 
 
-                /*   print_r($obj);
+                /*   
+                echo "<pre>";
+                print_r($obj);
+                echo "</pre>";
                 die();*/
 
 
 
-                if ($obj->id_analisis > 0) {
+                if ($obj->id_paciente > 0) {
 
-                    $resultado = $this->Analisis_model->modificar_analisis($obj);
+                    $resultado = $this->Pacientes_model->modificar_pacientes($obj);
                 } else {
-                    $resultado = $this->Analisis_model->insertar_analisis($obj);
+                    $resultado = $this->Pacientes_model->insertar_pacientes($obj);
                 }
 
 
@@ -104,13 +142,13 @@ class Pacientes extends CI_Controller
 
         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
     }
-    
+
 
     public function datosPorCedula($cedula)
-    {   
-        
-        $cedula= base64_decode($cedula);
-        
+    {
+
+        $cedula = base64_decode($cedula);
+
         $termino = trim(strtolower($_GET['term']));
 
         $resultado = $this->Pacientes_model->getDatosPorCedula($cedula);

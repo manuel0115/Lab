@@ -24,15 +24,8 @@ class Configuracion_analisis_model extends CI_Model
 
     public function cargarDatosTablaConfiguracion_analisis()
     {
-        $query = "SELECT CA.ID AS ID_CONFIGURACION,
-        CA.ID_ANALISIS AS ID_ANALISIS,
-        CA.ID_LABORATORIO AS ID_LABORATORIO,
-        L.NOMBRE AS NOMBRE_LABORATORIO,
-        A.NOMBRE AS NOMBRE_ANALISIS,
-        IF(CA.ACTIVO,'ACTIVO','INACTIVO') AS ESTADO
-        FROM CONFIGURACION_ANALISIS AS CA
-        JOIN LABORATORIO AS L ON CA.ID_LABORATORIO = L.ID
-        JOIN ANALISIS AS A ON CA.ID_ANALISIS = A.ID";
+        $query = "SELECT DISTINCT CP.ID_ANALISISIS,A.NOMBRE,L.NOMBRE NOMBRE_LABORATORIO FROM CONFIGURACION_PAREMETROS AS CP
+        JOIN ANALISIS AS A ON CP.ID_ANALISISIS = A.ID JOIN LABORATORIO AS L ON CP.LABORATORIO = L.ID";
 
         $resultado = $this->db->query($query);
 
@@ -63,9 +56,9 @@ class Configuracion_analisis_model extends CI_Model
 
     public function insertar_configuracion($obj)
     {
-        $orden=0;
+       // $orden=0;
         $error=array();
-        $queryInsertaAnalisisConfiguracion = " INSERT INTO CONFIGURACION_ANALISIS
+        /*$queryInsertaAnalisisConfiguracion = " INSERT INTO CONFIGURACION_ANALISIS
                     (
                     ID_ANALISIS,
                     ID_LABORATORIO,
@@ -103,25 +96,72 @@ class Configuracion_analisis_model extends CI_Model
         }
 
         log_message('ERROR', 'insertar configuracion analisis \n' . $queryInsertaAnalisisConfiguracion . '\n<pre> ' . print_r($resultadoInsertaAnalisisConfiguracion, true) . '</pre>');
-        log_message('ERROR', 'ultimo analisis confirguracion \n' . $queryUltimoAnalisisConfiguracion . '\n<pre> ' . print_r($resultadoUltimoAnalisisConfiguracion, true) . '</pre>');
+        log_message('ERROR', 'ultimo analisis confirguracion \n' . $queryUltimoAnalisisConfiguracion . '\n<pre> ' . print_r($resultadoUltimoAnalisisConfiguracion, true) . '</pre>');*/
+
+
+
+        $this->db->trans_start();
+
+        foreach($obj->parametros as $value){
+            $queryInsertarParametros = "INSERT INTO CONFIGURACION_PAREMETROS
+            (
+            ID_ANALISISIS,
+            ID_PARAMETRO,
+            ORDEN_PARAMETRO,
+            UNIDAD_MEDIDA,
+            CREADO_POR,
+            CREADO_EN,
+            MODIFICADO_POR,
+            MODIFICADO_EN,
+            ACTIVO,
+            HOMBRE_ADULTO_REFERENCIA,
+            HOMBRE_NINO_REFERENCIA,
+            HOMBRE_ANCIANO_REFERENCIA,
+            MUJER_ADULTO_REFERENCIA,
+            MUJER_NINO_REFERENCIA,
+            MUJER_ANCIANO_REFERENCIA,
+            LABORATORIO)VALUES(
+            '$obj->id_analisis','".
+            $value["ID_PARAMETRO"]."','".
+            $value["ORDEN_PARAMETRO"]."','".
+            $value["MEDIDA"].
+            "','$this->user_id',
+            now(),
+            '$this->user_id',
+            now(),
+            TRUE,'".
+            $value["HOMBRE_ADULTO"]."','".
+            $value["HOMBRE_NINO"]."','".
+            $value["HOMBRE_ANCIANO"]."','".
+            $value["MUJER_ADULTO"]."','".
+            $value["MUJER_NINO"]."','".
+            $value["MUJER_ANCIANO"]."','".
+            $this->id_laboratorio."');";
+
+            $this->db->query($queryInsertarParametros);
+           
+        }
+
+        $resultado=$this->db->trans_complete(); 
+
         
-        $queryInsertarParametros="INSERT INTO CONFIGURACION_PAREMETROS
+        /*$queryInsertarParametros="INSERT INTO CONFIGURACION_PAREMETROS
         (
-        `ID_CONFIGURACION_ANALISISIS`,
-        `ID_PARAMETRO`,
-        `ORDEN_PARAMETRO`,
-        `UNIDAD_MEDIDA`,
-        `CREADO_POR`,
-        `CREADO_EN`,
-        `MODIFICADO_POR`,
-        `MODIFICADO_EN`,
-        `ACTIVO`,
-        `HOMBRE_ADULTO_REFERENCIA`,
-        `HOMBRE_NINO_REFERENCIA`,
-        `HOMBRE_ANCIANO_REFERENCIA`,
-        `MUJER_ADULTO_REFERENCIA`,
-        `MUJER_NINO_REFERENCIA`,
-        `MUJER_ANCIANO_REFERENCIA`)VALUES";
+        ID_CONFIGURACION_ANALISISIS,
+        ID_PARAMETRO,
+        ORDEN_PARAMETRO,
+        UNIDAD_MEDIDA,
+        CREADO_POR,
+        CREADO_EN,
+        MODIFICADO_POR,
+        MODIFICADO_EN,
+        ACTIVO,
+        HOMBRE_ADULTO_REFERENCIA,
+        HOMBRE_NINO_REFERENCIA,
+        HOMBRE_ANCIANO_REFERENCIA,
+        MUJER_ADULTO_REFERENCIA,
+        MUJER_NINO_REFERENCIA,
+        MUJER_ANCIANO_REFERENCIA)VALUES";
 
         foreach($obj->parametros as $value){
 
@@ -155,10 +195,10 @@ class Configuracion_analisis_model extends CI_Model
 
             if(!$resultadoInsertarParametros){
                 $error[]=" insertar parametro configuracion";
-            }
+            }*/
 
 
-            log_message('ERROR', 'insertar configuracion parametros \n' . $queryInsertarParametros . '\n<pre> ' . print_r($resultadoInsertaAnalisisConfiguracion, true) . '</pre>');
+            log_message('ERROR', 'insertar configuracion parametros \n' . $queryInsertarParametros . '\n<pre> ' . print_r($resultado, true) . '</pre>');
          
 
             
@@ -180,13 +220,12 @@ class Configuracion_analisis_model extends CI_Model
       
 
 
-        return count($error) == 0;
+        return $resultado;
     }
 
     public function eliminarConfiguracion($id){
-        $query="DELETE CA,CP FROM CONFIGURACION_ANALISIS AS CA
-        JOIN CONFIGURACION_PAREMETROS AS CP ON CA.ID = CP.ID_CONFIGURACION_ANALISISIS
-        WHERE CA.ID = '$id'";
+        $query="DELETE  FROM  CONFIGURACION_PAREMETROS
+        WHERE ID_ANALISISIS = '$id' AND LABORATORIO = '$this->id_laboratorio';";
 
         $resultado= $this->db->query($query);
 
@@ -198,7 +237,7 @@ class Configuracion_analisis_model extends CI_Model
 
     public function getConfiguracionesModal($id){
         $query="SELECT CP.ID AS CONFIGURACION_PARAMETRO,
-        CP.ID_CONFIGURACION_ANALISISIS AS CONFIGURACION_ANALISIS,
+        CP.ID_ANALISISIS AS ID_ANALISIS,
         CP.ID_PARAMETRO,
         CP.HOMBRE_ADULTO_REFERENCIA,
         CP.HOMBRE_NINO_REFERENCIA,
@@ -209,13 +248,11 @@ class Configuracion_analisis_model extends CI_Model
         P.NOMBRE AS NOMBRE_PARAMETRO,
         CP.UNIDAD_MEDIDA ,
         CP.ORDEN_PARAMETRO,
-        CA.ID_ANALISIS,
         A.NOMBRE AS NOMBRE_ANALISIS
         FROM CONFIGURACION_PAREMETROS AS CP
         JOIN PARAMETROS AS P ON CP.ID_PARAMETRO = P.ID
-        JOIN CONFIGURACION_ANALISIS AS CA ON CA.ID = CP.ID_CONFIGURACION_ANALISISIS
-        JOIN ANALISIS AS A ON CA.ID_ANALISIS=A.ID 
-        WHERE CP.ACTIVO = TRUE AND CP.ID_CONFIGURACION_ANALISISIS='$id';";
+        JOIN ANALISIS AS A ON CP.ID_ANALISISIS=A.ID 
+		WHERE CP.LABORATORIO = '$this->id_laboratorio' AND CP.ID_ANALISISIS='$id'";
 
         $resultado= $this->db->query($query);
         $resultado= $resultado->result_array();
@@ -243,7 +280,7 @@ class Configuracion_analisis_model extends CI_Model
     public function modificar_configuracion($obj)
     {
         $errores = array();
-        $eliminarConfiguraqcion=$this->eliminarConfiguracion($obj->id_analisis_confifuracion);
+        $eliminarConfiguraqcion=$this->eliminarConfiguracion($obj->id_analisis);
 
         if(!$eliminarConfiguraqcion){
             $errores[]="error al eliminar";

@@ -109,7 +109,7 @@
                             </li>
                             <li>
                                 <a href="configuracion_analisis/configuracion" data-toggle="ajax">
-                                    <i class="fas fa-cogs"></i>
+                                    <i class="fas fa-poll"></i>
                                     <span>configuracion analisis</span>
                                 </a>
                             </li>
@@ -122,6 +122,12 @@
                         <a href="ordenes/ordenes" data-toggle="ajax">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                             <span>Ordenes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Pacientes" data-toggle="ajax">
+                            <i class="fab fa-accessible-icon" aria-hidden="true"></i>
+                            <span>Pacientes</span>
                         </a>
                     </li>
 

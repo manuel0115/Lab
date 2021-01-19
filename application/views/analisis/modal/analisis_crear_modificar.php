@@ -71,7 +71,5 @@ echo "</pre>";
     var $frm_modficar_agregar_analisis = $("#frm_modficar_agregar_analisis");
 
 
-    $("#myTags").tagit({
-        fieldName: "analisis[]"
-    });
+   
 </script>

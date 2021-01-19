@@ -12,17 +12,23 @@
  * @author manuel
  */
 class Pacientes_model extends CI_Model
-{
+{   
+    public $user_id;
+    public $id_laboratorio;
+    function __construct(){
+        $this->user_id = $this->session->userdata("ID_USUARIO");
+        $this->id_laboratorio = $this->session->userdata("LABORATORIO");
+    }
 
-    public function cargarDatosTablaPacientes()
+    public function cargarDatosPacientes()
     {
-        $query = "SELECT A.ID,A.NOMBRE,AA.NOMBRE AS AREA FROM ANALISIS AS A INNER JOIN AREA_ANALITICA AS AA ON (A.ID_AREA_ANALITICA= AA.ID);";
+        $query = "SELECT P.ID,CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS NOMBRE,P.CEDULA,P.GENERO,P.FECHA_NACIMIENTO FROM PACIENTES AS P";
 
         $resultado = $this->db->query($query);
 
         $resultado = $resultado->result_array();
 
-        log_message('ERROR','cargar_menus \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR','cargarDatosPacientes \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
@@ -33,7 +39,9 @@ class Pacientes_model extends CI_Model
 
     public function getModalPacientes($id)
     {
-        $query = "SELECT ID,NOMBRE,ID_AREA_ANALITICA FROM ANALISIS WHERE ID= '$id'";
+        $query = "SELECT  PACI.ID,PACI.NOMBRE,PACI.APELLIDOS,PACI.ID_PACIENTE_FACTURACION,PACI.FECHA_NACIMIENTO,
+        PACI.CEDULA,PACI.GENERO,PACI.REFERIDO_POR,PACI.COBERTURA,PACI.MEDICO
+        FROM PACIENTES AS PACI WHERE PACI.ID= '$id'";
 
         $resultado = $this->db->query($query);
 
@@ -46,28 +54,75 @@ class Pacientes_model extends CI_Model
     
 
     public function insertar_pacientes($obj)
-    {
-        $query = "INSERT INTO ANALISIS (NOMBRE,ID_AREA_ANALITICA,CREADO_POR,MODIFICADO_POR,CREADO_EN,MODIFICADO_EN,ACTIVO)VALUES('$obj->analisis','$obj->area','$this->user_id','$this->user_id',NOW(),NOW(),TRUE);";
+    {   
+        
+        
+        $query = "INSERT INTO PACIENTES
+        (
+        ID_PACIENTE_FACTURACION,
+        NOMBRE,
+        APELLIDOS,
+        GENERO,
+        CEDULA,
+        FECHA_NACIMIENTO,
+        REFERIDO_POR,
+        COBERTURA,
+        CREADO_POR,
+        CREADO_EN,
+        MODIFICADO_POR,
+        MODIFCADO_EN,
+        ACTIVO,
+        MEDICO,
+        LABORATORIO)
+        VALUES
+        (
+        '$obj->id_facturacion',
+        '$obj->nombre',
+        '$obj->apellido',
+        '$obj->genero',
+        '$obj->cedula',
+        '$obj->fecha',
+        '$obj->referencia',
+        '$obj->cobertura',
+        '$this->user_id',
+        now(),
+        '$this->user_id',
+        now(),
+        TRUE,
+        '$obj->medico',
+        '$this->id_laboratorio');";
 
         $resultado = $this->db->query($query);
 
         
 
-        log_message('ERROR','insertar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR','insertar_pacientes \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
 
     public function modificar_pacientes($obj)
-    {
-        $query = "UPDATE `ANALISIS`
+    {   
+       
+        $query = "UPDATE PACIENTES
         SET
-        `NOMBRE` = '$obj->analisis',
-        `ID_AREA_ANALITICA` = '$obj->area',
-        `MODIFICADO_POR` = '$this->user_id',
-        `MODIFICADO_EN` = NOW(),
-        `ACTIVO` = TRUE
-        WHERE `ID` = '$obj->id_analisis';";
+       
+        ID_PACIENTE_FACTURACION = '$obj->id_facturacion',
+        NOMBRE = '$obj->nombre',
+        APELLIDOS = '$obj->apellido',
+        GENERO = '$obj->genero',
+        CEDULA = '$obj->cedula',
+        FECHA_NACIMIENTO = '$obj->fecha',
+        REFERIDO_POR =  '$obj->referencia',
+        COBERTURA = '$obj->cobertura',
+        CREADO_POR = '$this->user_id',
+        CREADO_EN = now(),
+        MODIFICADO_POR = '$this->user_id',
+        MODIFCADO_EN = now(),
+        ACTIVO = TRUE,
+        MEDICO = '$obj->medico',
+        LABORATORIO='$this->id_laboratorio'
+        WHERE ID = $obj->id_paciente;";
 
         $resultado = $this->db->query($query);
 

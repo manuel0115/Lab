@@ -23,7 +23,7 @@ class Configuracion_analisis extends CI_Controller
         echo json_encode($resultado);
     }
 
-    public function getModalConfiguracionanalisis($id = 0)
+    public function getModalConfiguracionanalisis($id = 0,$modo=0)
     {
         $this->load->model("Parametros_model");
         $this->load->model("Medidas_model");
@@ -33,9 +33,11 @@ class Configuracion_analisis extends CI_Controller
         
 
         if ($id !== 0) {
+            $modo=base64_decode($modo);
+            
             $id = base64_decode(base64_decode(base64_decode($id)));
             $data["info"] = $this->Configuracion_analisis_model->getConfiguracionesModal($id);
-            $data["id_configuracion_analisis"] = $id;
+            $data["modo"] = $modo;
 
           
 
@@ -109,7 +111,7 @@ class Configuracion_analisis extends CI_Controller
 
 
 
-                if ($obj->id_analisis_confifuracion > 0) {
+                if ($obj->id_analisis_confifuracion == "E") {
 
                     $resultado = $this->Configuracion_analisis_model->modificar_configuracion($obj);
                 } else {

@@ -25,7 +25,7 @@
     </div>
 
     <form action="Configuracion_analisis/guardar_configuracion" id="frm_modficar_agregar_analisis" class="form-horizontal" data-parsley-validate="true" name="frm_modficar_agregar_analisis">
-        <input type="hidden" id="id_analisis_confifuracion" name="id_analisis_confifuracion" value="<?php echo $info[0]["CONFIGURACION_ANALISIS"] ?>">
+        <input type="hidden" id="modo" name="modo" value="<?php echo $modo ?>">
 
         <div class="form-group row m-b-15">
             <label class="col-md-2 col-sm-4 col-form-label" for="website">Analisis <stron style="color:red"> *</stron></label>
@@ -69,11 +69,11 @@
         <div class="contenedor-parametros">
 
         
-        <?php if($id_configuracion_analisis) { ?>
+        <?php if($modo == "E") { ?>
            
            <?php foreach($info as $value){?>
 
-        <div data-id-parametro="<?php echo $value["ID_PARAMETRO"]  ?>"  class="row pb-2 mb-1 mt-1 parametro-individual" style="border:1px solid #00acac;border-radius:3px ">
+        <div data-id-parametro="<?php echo $value["ID_PARAMETRO"]  ?>" data-id_parametro-configuracion="<?php echo $value["CONFIGURACION_PARAMETRO"];?>"  class="row pb-2 mb-1 mt-1 parametro-individual" style="border:1px solid #00acac;border-radius:3px ">
             <div class="col-md-2 mt-2 pt-2">
                 <h5 class="d-inline-block mr-2"><?php echo $value["NOMBRE_PARAMETRO"] ?></h5>
                 

@@ -6,7 +6,6 @@
 <link href="assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
-<link href="assets/admin/plugins/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 
 <!-- ================== END PAGE LEVEL STYLE ================== -->
@@ -15,7 +14,7 @@
 
 <!-- end breadcrumb -->
 <!-- begin page-header -->
-<h1 class="page-header">Analisis <small> > Configuracion analisis </small></h1>
+<h1 class="page-header">Pacientes <small> > Administracion de pacientes </small></h1>
 <!-- end page-header -->
 <!-- begin panel -->
 <div class="panel panel-inverse">
@@ -30,14 +29,13 @@
         <table id="tblAnalisis" class="table table-striped table-bordered table-td-valign-middle" style="width:100%;">
             <thead>
                 <tr>
-                    
-                    
-                    <th width="10%" class="text-rap" class="text-center">ID ANALISIS</th>
-                    <th width="10%" class="text-rap" class="text-center">NOMBRE ANALISIS</th>
-                    <th width="1%" class="text-rap" class="text-center">LABORATORIO</th>
+                    <th width="1%" class="text-rap" class="text-center">ID</th>
+                    <th width="5%" class="text-rap" class="text-center">NOMBRE</th>
+                    <th width="10%" class="text-rap" class="text-center">CEDULA</th>
+                    <th width="1%" class="text-rap" class="text-center">GENERO</th>
+                    <th width="5%" class="text-rap" class="text-center">FECHA</th>
                     <th width="1%" class="text-rap" class="text-center">OPCIONES</th>
-                    <th width="1%" class="text-rap" class="text-center">ELIMINAR</th>
-
+                </tr>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +65,7 @@
 </div>
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <script>
-    App.setPageTitle('UFEJI | Administrar Usuarios');
+    App.setPageTitle('LaboPro | Administrar pacintes');
     App.restartGlobalFunction();
 
     $.getScript('assets/admin/plugins/datatables.net/js/jquery.dataTables.min.js?<?php echo time(); ?>').done(function () {
@@ -84,13 +82,12 @@
                 $.getScript('assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js'),
                 $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
                 $.getScript('assets/admin/plugins/tag-it/js/tag-it.min.js'),
-                $.getScript('assets/admin/plugins/select2/dist/js/select2.min.js'),
                 $.Deferred(function (deferred) {
                     $(deferred.resolve);
                 })
                 ).done(function () {
             $.getScript('assets/admin/js/demo/table-manage-default.demo.js'),
-            $.getScript('js/configuracion_analisis/configuracion_analisis.js?<?php echo time(); ?>'),
+            $.getScript('js/pacientes/pacientes.js?<?php echo time(); ?>'),
                     $.Deferred(function (deferred) {
                         $(deferred.resolve);
                     })
