@@ -92,7 +92,7 @@
                 <input class="form-control orden_parametro" min="0" type="number" placeholder="orden"  value="<?php echo $value["ORDEN_PARAMETRO"];?>" />
             </div>
             <div class="col-md-5 mt-2">
-                <button type="button" class="close float-right  eliminar-parametro" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="button" class="close float-right  eliminar-parametro"  aria-hidden="true">×</button>
             </div>
             <div class="row hombre" style="max-width: 100%;">
                 <div class="col-md-2 mt-3 ">

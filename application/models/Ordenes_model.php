@@ -34,7 +34,7 @@ class Ordenes_model extends CI_Model
         FROM ORDEN AS O 
         right JOIN PACIENTES AS P ON(P.ID = O.ID_PACIENTE)
         left JOIN REFERENCIA AS R ON (R.ID = O.REFERENCIA)
-        left JOIN COBERTURA AS C ON (C.ID = P.ID);";
+        left JOIN COBERTURA AS C ON (C.ID = P.ID) order by O.ID DESC;";
 
         $resultado = $this->db->query($query);
 

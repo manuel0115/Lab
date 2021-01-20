@@ -1,6 +1,7 @@
 var tblReporteResultado = $("#tblAnalisis").DataTable({
   ajax: "reporte_resultado/tablaReporteResultado",
   type: "POST",
+  order: [[ 0, 'desc' ]],
   columns: [
     { data: "ID_ORDEN", className: "text-center", orderable: false },
     { data: "NOMBRE", className: "text-center", orderable: false },

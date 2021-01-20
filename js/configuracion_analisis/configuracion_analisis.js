@@ -71,6 +71,11 @@ $(".modal_usuarios .modal-content").on(
   "click",
   "#btn_guardar_analisis",
   function () {
+    
+
+    
+
+
     var url = $frm_modficar_agregar_analisis.attr("action");
     
     let id_analisis=$("#ID_ANALISIS").val();
@@ -131,30 +136,40 @@ $(".modal_usuarios .modal-content").on(
       "id_analisis_confifuracion":id_analisis_confifuracion
     };
 
-   
+    swal({
+      title: "¿Esta seguro que desea guardar estos analisis?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+  })
+          .then((cerrar_sesion) => {
+              if (cerrar_sesion) {
+                $.post(
+                  url,
+                  datos,
+                  function (data) {
+                    if (data.codigo == 0) {
+                      swal({
+                        text: data.mensaje,
+                        title: "Petfecto!",
+                        icon: "success",
+                      });
+                      tblconfiguracionAnalisis.ajax.reload();
+                      $(".modal_usuarios").modal("hide");
+                    } else {
+                      swal({
+                        text: data.mensaje,
+                        title: "Error!",
+                        icon: "error",
+                      });
+                    }
+                  },
+                  "json"
+                );
+              }
+          });
 
-      $.post(
-        url,
-        datos,
-        function (data) {
-          if (data.codigo == 0) {
-            swal({
-              text: data.mensaje,
-              title: "Petfecto!",
-              icon: "success",
-            });
-            tblconfiguracionAnalisis.ajax.reload();
-            $(".modal_usuarios").modal("hide");
-          } else {
-            swal({
-              text: data.mensaje,
-              title: "Error!",
-              icon: "error",
-            });
-          }
-        },
-        "json"
-      );
+      
     }
   }
 );
@@ -218,7 +233,20 @@ $(".modal_usuarios .modal-content").on(
   "click",
   ".eliminar-parametro",
   function () {
-    $(this).parent().parent().remove();
+    swal({
+      title: "¿Esta seguro que desea eliminar esta parametro?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+  })
+          .then((cerrar_sesion) => {
+              if (cerrar_sesion) {
+                $(this).parent().parent().remove();
+              }
+          });
+   
+    
+   
   }
 );
 
@@ -236,7 +264,7 @@ function agregarParametro(nombre, id, medida) {
     <input class="form-control orden_parametro" min="1" type="number" value='' placeholder="orden" />
   </div>
   <div class="col-md-5 mt-2">
-      <button type="button" class="close float-right  eliminar-parametro" data-dismiss="modal" aria-hidden="true">×</button>
+      <button type="button" class="close float-right  eliminar-parametro" aria-hidden="true">×</button>
   </div>
   <div class="row hombre" style="max-width: 100%;">
       <div class="col-md-2 mt-3 ">
@@ -274,23 +302,37 @@ function agregarParametro(nombre, id, medida) {
 $("#tblAnalisis").on("click",".btn_eliminar_configuracion",function(){
     let id=btoa(btoa(btoa($(this).attr("data_id_configuracion"))));
 
-    $.post("configuracion_analisis/eliminarConfiguracion/"+id,function(data){
-      if (data.codigo == 0) {
-        swal({
-          text: data.mensaje,
-          title: "Petfecto!",
-          icon: "success",
-        });
-        tblconfiguracionAnalisis.ajax.reload();
-        $(".modal_usuarios").modal("hide");
-      } else {
-        swal({
-          text: data.mensaje,
-          title: "Error!",
-          icon: "error",
-        });
-      }
-    },'json');
+   
+    swal({
+      title: "¿Esta seguro que desea eliminar esta configuracion?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+  })
+          .then((cerrar_sesion) => {
+              if (cerrar_sesion) {
+                $.post("configuracion_analisis/eliminarConfiguracion/"+id,function(data){
+                  if (data.codigo == 0) {
+                    swal({
+                      text: data.mensaje,
+                      title: "Petfecto!",
+                      icon: "success",
+                    });
+                    tblconfiguracionAnalisis.ajax.reload();
+                    $(".modal_usuarios").modal("hide");
+                  } else {
+                    swal({
+                      text: data.mensaje,
+                      title: "Error!",
+                      icon: "error",
+                    });
+                  }
+                },'json');
+              }
+          });
+   
+   
+  
     
       
 })

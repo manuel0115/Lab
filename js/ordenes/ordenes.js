@@ -1,6 +1,7 @@
 var tblordenes = $("#tblAnalisis").DataTable({
   ajax: "ordenes/cargarDatosOrdenes",
   type: "POST",
+  order: [[ 0, 'desc' ]],
   columns: [
     { data: "ORDEN", className: "text-center", orderable: false },
     { data: "PACIENTE", className: "text-center", orderable: false },
