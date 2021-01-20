@@ -24,17 +24,17 @@ class Ordenes_model extends CI_Model
 
     public function cargarDatosOrdenes()
     {
-        $query = "SELECT O.ID AS ORDEN,
-        O.LISTA_ANALISIS,
+        $query = "SELECT 	O.ID AS ORDEN,
+		O.LISTA_ANALISIS,
         CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS PACIENTE,
         R.NOMBRE AS REFERENCIA,
         C.NOMBRE AS COBERTURA,
         O.CREADO_EN AS FECHA_ENTRADA,
         IF((SELECT count(id) FROM RESULTADO where ID_ORDEN =O.ID ) > 0,TRUE,FALSE) AS RESULATADO_EXISTENTES
         FROM ORDEN AS O 
-        JOIN PACIENTES AS P ON(P.ID = O.ID_PACIENTE)
-        JOIN REFERENCIA AS R ON (R.ID = O.REFERENCIA)
-        JOIN COBERTURA AS C ON (C.ID = P.ID);";
+        right JOIN PACIENTES AS P ON(P.ID = O.ID_PACIENTE)
+        left JOIN REFERENCIA AS R ON (R.ID = O.REFERENCIA)
+        left JOIN COBERTURA AS C ON (C.ID = P.ID);";
 
         $resultado = $this->db->query($query);
 
