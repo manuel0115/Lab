@@ -17,24 +17,32 @@ class Ordenes_model extends CI_Model
 
     public $user_id;
     public $id_laboratorio;
-    function __construct(){
+    function __construct()
+    {
         $this->user_id = $this->session->userdata("ID_USUARIO");
         $this->id_laboratorio = $this->session->userdata("LABORATORIO");
     }
 
     public function cargarDatosOrdenes()
     {
-        $query = "SELECT 	O.ID AS ORDEN,
-		O.LISTA_ANALISIS,
+        /*$query = "SELECT 	O.ID AS ORDEN,
         CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS PACIENTE,
         R.NOMBRE AS REFERENCIA,
         C.NOMBRE AS COBERTURA,
         O.CREADO_EN AS FECHA_ENTRADA,
         IF((SELECT count(id) FROM RESULTADO where ID_ORDEN =O.ID ) > 0,TRUE,FALSE) AS RESULATADO_EXISTENTES
         FROM ORDEN AS O 
-        right JOIN PACIENTES AS P ON(P.ID = O.ID_PACIENTE)
-        left JOIN REFERENCIA AS R ON (R.ID = O.REFERENCIA)
-        left JOIN COBERTURA AS C ON (C.ID = P.ID) order by O.ID DESC;";
+        left JOIN PACIENTES AS P ON(P.ID = O.ID_PACIENTE)
+        JOIN REFERENCIA AS R ON (R.ID = O.REFERENCIA)
+        JOIN COBERTURA AS C ON (C.ID = P.ID) order by O.ID DESC;";*/
+
+        $query = "SELECT O.ID as ORDEN,
+        CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS PACIENTE,
+        R.NOMBRE AS REFERENCIA,
+        O.CREADO_EN AS FECHA
+        FROM ORDEN AS O JOIN 
+        PACIENTES AS P ON O.ID_PACIENTE = P.ID JOIN
+        REFERENCIA AS R ON R.ID = O.REFERENCIA";
 
         $resultado = $this->db->query($query);
 
@@ -51,7 +59,7 @@ class Ordenes_model extends CI_Model
 
     public function insertar_orden($obj)
     {
-        $user_id = 1;
+        $this->db->trans_start();
 
         $query = "INSERT INTO `ORDEN`
         (
@@ -63,7 +71,7 @@ class Ordenes_model extends CI_Model
         `MODIFICADO_EN`,
         `ACTIVO`,
         `STATUS`,
-        `LISTA_ANALISIS`)
+        `LABORATORIO`)
         VALUES
         (
         '$obj->id_paciente',
@@ -74,23 +82,52 @@ class Ordenes_model extends CI_Model
         NOW(),
         TRUE,
         '1',
-        '$obj->listado_analisis' );";
+        '$this->id_laboratorio');";
 
-        $resultado = $this->db->query($query);
+        $this->db->query($query);
+
+        $lastOreden = $insertId = $this->db->insert_id();
+        $queryAnalisisResulatado = "INSERT INTO ANALISIS_RESULTADO
+        (
+        CREADO_POR,
+        CREADO_EN,
+        MODIFICADO_POR,
+        MODIFICADO_EN,
+        ACTIVO,
+        COMENTARIO,
+        ID_ANALISIS,
+        ID_ORDEN)
+        VALUES";
+
+        foreach ($obj->lista_analisis as $key => $value) {
+            $queryAnalisisResulatado .= "(
+                $obj->id_paciente,
+                NOW(),
+                $obj->id_paciente,
+                NOW(),
+                TRUE,
+                '',
+                '$value',
+                '$lastOreden'),";
+        }
+
+        $queryAnalisisResulatado .= ";";
+        $queryAnalisisResulatado = str_replace("),;", ");", $queryAnalisisResulatado);
+
+        $this->db->query($queryAnalisisResulatado);
 
 
+        $resultado = $this->db->trans_complete();
 
 
+        //$resultado=$resultado->result_array(); 
 
 
+        $resultado = ["RESULTADO" => $resultado, "ID_ORDEN" => $lastOreden];
+        $arrayQuery = [$queryAnalisisResulatado, $query];
 
 
-
-
-
-
-
-        log_message('ERROR', 'insertar_orden \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR', 'insertar_orden \n' . $arrayQuery . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
@@ -98,25 +135,87 @@ class Ordenes_model extends CI_Model
 
     public function modificar_orden($obj)
     {
-      
+
+        $this->db->trans_start();
+
+
 
         $query = "UPDATE ORDEN
         SET
-        
-        `ID_PACIENTE` = '$obj->id_paciente',
-        `REFERENCIA` = '$obj->referencia',
-        `MODIFICADO_POR` = '$this->user_id',
-        `MODIFICADO_EN` = NOW(),
-        `ACTIVO` = TRUE,
-        `STATUS` = '1',
-        `LISTA_ANALISIS` = '$obj->listado_analisis'
-        WHERE `ID` = '$obj->id_orden';";
+        ID_PACIENTE = '$obj->id_paciente',
+        REFERENCIA = '$obj->referencia',
+        MODIFICADO_POR = '$this->user_id',
+        MODIFICADO_EN= NOW(),
+        ACTIVO = TRUE
+        WHERE ID = '$obj->id_orden';";
+
 
         $resultado = $this->db->query($query);
 
 
 
+
+        if (!empty($obj->valores_eliminar)) {
+
+            $valores = implode(",", $obj->valores_eliminar);
+
+            $queryElimina = "DELETE ANALISIS_RESULTADO,
+        PARAMEROS_TEMPORAL_RESULATDO 
+        FROM ANALISIS_RESULTADO 
+        LEFT JOIN PARAMEROS_TEMPORAL_RESULATDO ON ANALISIS_RESULTADO.ID = PARAMEROS_TEMPORAL_RESULATDO.ID_ANALSIS_RESULTADO
+        WHERE ANALISIS_RESULTADO.ID_ANALISIS in ($valores) AND  ANALISIS_RESULTADO.ID_ORDEN ='$obj->id_orden'";
+
+            $this->db->query($queryElimina);
+        }
+
+        /*foreach($obj->valores_eliminar as $value){
+            $this->db->query("DELETE ANALISIS_RESULTADO,
+            PARAMEROS_TEMPORAL_RESULATDO 
+            FROM ANALISIS_RESULTADO 
+            LEFT JOIN PARAMEROS_TEMPORAL_RESULATDO ON ANALISIS_RESULTADO.ID = PARAMEROS_TEMPORAL_RESULATDO.ID_ANALSIS_RESULTADO
+            WHERE ANALISIS_RESULTADO.ID_ANALISIS = '$value' AND  ANALISIS_RESULTADO.ID_ORDEN ='$obj->id_orden'");
+        }*/
+
+        if (!empty($obj->valores_agregar)) {
+            $queryAnalisisResulatado = "INSERT INTO ANALISIS_RESULTADO
+        (
+        CREADO_POR,
+        CREADO_EN,
+        MODIFICADO_POR,
+        MODIFICADO_EN,
+        ACTIVO,
+        COMENTARIO,
+        ID_ANALISIS,
+        ID_ORDEN)
+        VALUES";
+
+            foreach ($obj->valores_agregar as $key => $value) {
+                $queryAnalisisResulatado .= "(
+                $obj->id_paciente,
+                NOW(),
+                $obj->id_paciente,
+                NOW(),
+                TRUE,
+                '',
+                '$value',
+                '$obj->id_orden'),";
+            }
+
+            $queryAnalisisResulatado .= ";";
+            $queryAnalisisResulatado = str_replace("),;", ");", $queryAnalisisResulatado);
+
+            $this->db->query($queryAnalisisResulatado);
+        }
+
+        $resultado = $this->db->trans_complete();
+
+        $resultado = ["RESULTADO" => $resultado];
+        $arrayQuery = [$query];
+
         log_message('ERROR', 'modificar_orden \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        log_message('ERROR', 'eliminar \n' . $queryElimina . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
 
         return $resultado;
     }
@@ -142,16 +241,20 @@ class Ordenes_model extends CI_Model
 
     public function getDataOrden($id)
     {
-        $query = "SELECT O.ID,
-        O.LISTA_ANALISIS,
+        $query = "SELECT AR.ID_ORDEN,
+        GROUP_CONCAT(AR.ID_ANALISIS,'-',A.NOMBRE,'-',PP.PRECIO) AS LISTA_PRECIO,
         O.ID,
         O.ID_PACIENTE,
-        CONCAT(P.NOMBRE,'',P.APELLIDOS)AS NOMBRE,
-        P.CEDULA,
-        O.REFERENCIA  
+        O.REFERENCIA,
+        CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS NOMBRE,
+        P.CEDULA AS CEDULA
         FROM ORDEN AS O
-        JOIN PACIENTES AS P ON P.ID = O.ID_PACIENTE
-        WHERE O.ID = '$id';";
+        JOIN ANALISIS_RESULTADO AS AR
+        JOIN PERFIL_PRECIOS AS PP ON PP.ID_ANALISIS = AR.ID_ANALISIS AND O.REFERENCIA= PP.ID_REFERENCIA AND PP.ID_LABORATORIO = 1
+        JOIN ANALISIS AS A ON AR.ID_ANALISIS = A.ID
+        JOIN PACIENTES AS P ON O.ID_PACIENTE = P.ID
+        WHERE O.ID ='$id'
+        GROUP BY O.ID;";
 
         $resultado = $this->db->query($query);
 
@@ -162,9 +265,9 @@ class Ordenes_model extends CI_Model
         return $resultado;
     }
 
-    public function buscarParametrosResulatdo($analisis)
+    public function buscarParametrosResulatdo($id_orden)
     {
-        $query = "SELECT 
+        /* $query = "SELECT 
         CONCAT(CP.ID_PARAMETRO,'-',P.NOMBRE) AS NOMBRE_PARAMETRO,
         CP.ORDEN_PARAMETRO AS ORDEN_PARAMETRO,
         A.NOMBRE AS NOMBRE_ANALISIS,
@@ -173,11 +276,27 @@ class Ordenes_model extends CI_Model
         JOIN ANALISIS AS A ON A.ID=CP.ID_ANALISISIS 
         JOIN PARAMETROS AS P ON CP.ID_PARAMETRO = P.ID
         WHERE CP.ID_ANALISISIS IN($analisis);
-";
+";*/
+
+        $query = "SELECT AR.ID,
+        AR.ID_ANALISIS,
+        A.NOMBRE AS NOMBRE_ANALISIS,
+        CP.ID_PARAMETRO,
+        PTR.VALOR,
+        AR.COMENTARIO,
+        GROUP_CONCAT(CONCAT(CP.ORDEN_PARAMETRO,'-',CP.ID_PARAMETRO,'-',P.NOMBRE,'-',IF(PTR.VALOR IS NULL,'NO TIENE VALOR',PTR.VALOR ))) AS PARAMETROS
+        FROM ANALISIS_RESULTADO AS AR
+        LEFT JOIN CONFIGURACION_PAREMETROS AS CP ON CP.ID_ANALISISIS = AR.ID_ANALISIS AND CP.LABORATORIO =1
+        LEFT JOIN  PARAMEROS_TEMPORAL_RESULATDO AS PTR ON AR.ID = PTR.ID_ANALSIS_RESULTADO AND PTR.ID_PARAMETRO = CP.ID_PARAMETRO
+        JOIN PARAMETROS AS P ON P.ID = CP.ID_PARAMETRO
+        JOIN ANALISIS AS A ON AR.ID_ANALISIS = A.ID
+        WHERE AR.ID_ORDEN='$id_orden'
+        GROUP BY AR.ID_ANALISIS";
 
 
-        
-        
+
+
+
 
         $resultado = $this->db->query($query);
 
@@ -189,143 +308,54 @@ class Ordenes_model extends CI_Model
     }
 
     public function insertar_resulatdo($obj)
-    {   
+    {
+        $this->db->trans_start();
 
-        $errores= array();
-        
+        foreach ($obj->datos as $value) {
+            $queryAnalisisResultados = "UPDATE ANALISIS_RESULTADO
+                SET
+                MODIFICADO_POR = '$this->user_id',
+                MODIFICADO_EN = NOW(),
+                COMENTARIO = '".$value["comentario"]."',
+                WHERE ID = '".$value["id_analisis"]."';";
 
-       
+                $resultado = $this->db->query($queryAnalisisResultados); 
 
-
-        $queryCrearResultado = "INSERT INTO `RESULTADO`
-        (
-        `ID_ORDEN`,
-        `CREADO_POR`,
-        `CREADO_EN`,
-        `MODIFICADO_POR`,
-        `MODIFICADO_EN`,
-        `ACTIVO`)
-        VALUES
-        (
-        '$obj->id_orden',
-        '$this->user_id',
-        NOW(),
-        '$this->user_id',
-        NOW(),
-        TRUE);";
-
-
-
-        $resultadoCrearResultado = $this->db->query($queryCrearResultado);
-
-        if(!$resultadoCrearResultado){
-            $errores[]="CrearResulatado";
-        }
-
-        $queryIdUltimoResultado = "select last_insert_id() as id";
-
-        $idUltimoResultado = $this->db->query($queryIdUltimoResultado);
-        $idUltimoResultado = $idUltimoResultado->result_array();
-
-        $idUltimoResultado = $idUltimoResultado[0]["id"];
-
-
-        log_message('ERROR', 'insertar resultado');
-        log_message('ERROR', 'queryCrearResultado \n' . $queryCrearResultado . '\n<pre> ' . print_r($resultadoCrearResultado, true) . '</pre>');
-        log_message('ERROR', 'idUltimoResultado \n' . $queryIdUltimoResultado . '\n<pre> ' . print_r($idUltimoResultado, true) . '</pre>');
-
-        foreach ($obj->datos as $key => $value) {
-
-
-
-            $queryAnalisisResultado = "INSERT INTO `ANALISIS_RESULTADO`
-            (
-            `CREADO_POR`,
-            `CREADO_EN`,
-            `MODIFICADO_POR`,
-            `MODIFICADO_EN`,
-            `ACTIVO`,
-            `COMENTARIO`,
-            `ID_RESULTADO`,
-            `ID_ANALISIS`)
-            VALUES
-            (
-            '$this->user_id',
-            NOW(),
-            '$this->user_id',
-            NOW(),
-            TRUE,
-            '" . $value["comentario"] . "',
-            '$idUltimoResultado',
-            '" . $value["id_analisis"] . "');";
-
-            $analsisResultadoResultado = $this->db->query($queryAnalisisResultado);
-            
-            if(!$analsisResultadoResultado){
-                $errores[]="analisResulatado";
-            }
-    
-
-
-            $queryIdUltimoAnalsisResultado = "select last_insert_id() as id";
-
-            $idUltimoAnalsisResultado = $this->db->query($queryIdUltimoAnalsisResultado);
-
-            $idUltimoAnalisisResultado = $idUltimoAnalsisResultado->result_array();
-            $idUltimoAnalisisResultado = $idUltimoAnalisisResultado[0]["id"];
-
-
-
-            
-
-                $queryParametroResultado = "INSERT INTO PARAMEROS_TEMPORAL_RESULATDO(ID_ANALSIS_RESULTADO,ID_PARAMETRO,VALOR)VALUES";
-
-                foreach ($value['parametros'] as $key_r => $value_r) {
-                    $queryParametroResultado =$queryParametroResultado . "
-                    ('$idUltimoAnalisisResultado','" . 
-                    $value_r['id_paremetro'] . 
-                    "','" . $value_r["valor"] . "'),";
+                foreach($value['parametros'] as $key =>$value){
+                    
                 }
-
-                $queryParametroResultado =$queryParametroResultado .";";
-
-                $queryParametroResultado =str_replace("),;",");",$queryParametroResultado);
-
-                $resulatdoParametroResultado = $this->db->query($queryParametroResultado);
-
-                if(!$resulatdoParametroResultado){
-                    $errores[]="parametrosVariosResulatado";
-                }
-        
-
-                log_message('ERROR', 'queryVariosParametroResultado \n' . $queryParametroResultado . '\n<pre> ' . print_r($resulatdoParametroResultado, true) . '</pre>');
-          
-                
-
-               
-
-                
-               
-            }
-
-
-
-            log_message('ERROR', 'queryAnalisisResultado \n' . $queryAnalisisResultado . '\n<pre> ' . print_r($analsisResultadoResultado, true) . '</pre>');
-            log_message('ERROR', 'idUltimoAnalisisResultado \n' . $queryIdUltimoAnalsisResultado . '\n<pre> ' . print_r($idUltimoAnalisisResultado, true) . '</pre>');
-        
-
-
-        if(!empty($errores)){
-            log_message('ERROR', 'resultadoProceso \n' . "errores" . '\n<pre> ' . print_r($errores, true) . '</pre>');
-            return false;
         }
-        
+    }
 
-        log_message('ERROR', 'resultadoProceso \n' . $errores . '\n<pre> ' . print_r(true, true) . '</pre>');
-        return true;
+    public function eliminar_Ordenes($id)
+    {
 
+        $query = "DELETE ORDEN,ANALISIS_RESULTADO FROM ORDEN 
+        JOIN ANALISIS_RESULTADO ON ORDEN.ID = ANALISIS_RESULTADO.ID_ORDEN
+        WHERE ORDEN.ID = '$id'";
 
+        $resultado = $this->db->query($query);
 
-     
+        log_message('ERROR', 'eliminar_Ordenes \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        return $resultado;
+    }
+
+    public function actulizarListaPrecios($obj)
+    {
+
+        $query = "SELECT PP.ID_ANALISIS,
+        A.NOMBRE, 
+        PP.PRECIO 
+        FROM PERFIL_PRECIOS AS PP 
+        JOIN ANALISIS AS A ON A.ID = PP.ID_ANALISIS
+        WHERE PP.ID_ANALISIS IN ($obj->lista_analisis) AND PP.ID_REFERENCIA ='$obj->id_referencia'  AND ID_LABORATORIO='$this->id_laboratorio'";
+
+        $resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();
+
+        log_message('ERROR', 'actulizarListaPrecios \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
     }
 }

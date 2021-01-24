@@ -24,49 +24,46 @@ class Ordenes extends CI_Controller
         echo json_encode($resultado);
     }
 
-    public function getModalResultado($lista_analisis,$id_orden)
+    public function getModalResultado( $id_orden)
     {
-        $lista_analisis = str_replace("|", ",", base64_decode($lista_analisis));
+        // $lista_analisis = str_replace("|", ",", base64_decode($lista_analisis));
 
-        $parametros = $this->Ordenes_model->buscarParametrosResulatdo($lista_analisis);
+        $analisis = $this->Ordenes_model->buscarParametrosResulatdo($id_orden);
 
-       // echo($this->in_multi_array("60",$parametros))?"loencontro":"no lo encontro";
-        
-        $formulario= array();
+        // echo($this->in_multi_array("60",$parametros))?"loencontro":"no lo encontro";
 
-        foreach($parametros as $key => $value){
-            if(empty($formulario)){
-                $formulario[]=array(
-                        "ID_ANALISIS"=>$value["ID_ANALISIS"],
-                        "NOMBRE_ANALISIS"=>$value["NOMBRE_ANALISIS"],
-                        "NOMBRE_PARAMETRO"=>[$value["ORDEN_PARAMETRO"]=>$value["NOMBRE_PARAMETRO"]]
+        /*$formulario = array();
+
+        foreach ($parametros as $key => $value) {
+            if (empty($formulario)) {
+                $formulario[] = array(
+                    "ID_ANALISIS" => $value["ID_ANALISIS"],
+                    "NOMBRE_ANALISIS" => $value["NOMBRE_ANALISIS"],
+                    "NOMBRE_PARAMETRO" => [$value["ORDEN_PARAMETRO"] => $value["NOMBRE_PARAMETRO"]]
+                );
+            } else {
+                if (!$this->in_multi_array($value["ID_ANALISIS"], $formulario)) {
+                    $formulario[] = array(
+                        "ID_ANALISIS" => $value["ID_ANALISIS"],
+                        "NOMBRE_ANALISIS" => $value["NOMBRE_ANALISIS"],
+                        "NOMBRE_PARAMETRO" => [$value["ORDEN_PARAMETRO"] => $value["NOMBRE_PARAMETRO"]]
                     );
-            }else{
-                if(!$this->in_multi_array($value["ID_ANALISIS"],$formulario)){
-                    $formulario[]=array(
-                        "ID_ANALISIS"=>$value["ID_ANALISIS"],
-                        "NOMBRE_ANALISIS"=>$value["NOMBRE_ANALISIS"],
-                        "NOMBRE_PARAMETRO"=>[$value["ORDEN_PARAMETRO"]=>$value["NOMBRE_PARAMETRO"]]
-                    );
-                }else{
-                    $clave=$this->bucarKey($value["ID_ANALISIS"],$formulario);
-                    $formulario[$clave]["NOMBRE_PARAMETRO"][$value["ORDEN_PARAMETRO"]]=$value["NOMBRE_PARAMETRO"];
-                        
-                        
-                    
-                } 
+                } else {
+                    $clave = $this->bucarKey($value["ID_ANALISIS"], $formulario);
+                    $formulario[$clave]["NOMBRE_PARAMETRO"][$value["ORDEN_PARAMETRO"]] = $value["NOMBRE_PARAMETRO"];
+                }
             }
-        }
-        
-        
-        $data["formulario"]=$formulario;
-        $data["id_orden"]=$id_orden;
+        }*/
 
 
-        
-        
-        
-       
+        $data["formulario"] = $analisis;
+        $data["id_orden"] = $id_orden;
+
+
+
+
+
+
 
         $this->load->view("ordenes/modal/resultados_crear_modificar", $data);
     }
@@ -92,8 +89,8 @@ class Ordenes extends CI_Controller
                 "rules" => "required"
             ),
             array(
-                "field" => "listado_analisis[]",
-                "label" => "Lista analisis",
+                "field" => "lista_analisis",
+                "label" => "Lista de analisis vacia analisis",
                 "rules" => "required"
             )
 
@@ -111,32 +108,35 @@ class Ordenes extends CI_Controller
                 $obj = new stdClass();
 
                 foreach ($this->input->post() as $key => $value) {
-                    if ($key === "listado_analisis") {
-
-                        $value = implode("|", $value);
-                    }
+                    
                     $obj->$key = $value;
                 }
 
-                /* echo"<pre?>";
+                $obj->lista_analisis = explode(",", $obj->lista_analisis);
+
+                $obj->lista_analisis_old =explode(",", $obj->lista_analisis_old);
+
+                $obj->valores_agregar=array_diff($obj->lista_analisis,$obj->lista_analisis_old);
+                $obj->valores_eliminar=array_diff($obj->lista_analisis_old,$obj->lista_analisis);
+               
+                /*echo "<pre>";
                 print_r($obj);
-                echo"</pre?>";
+                echo "</pre>";
                 die();*/
 
-                $obj->activo = ($obj->activo == "on") ? "TRUE" : "FALSE";
+                // $obj->activo = ($obj->activo == "on") ? "TRUE" : "FALSE";
 
 
                 if ($obj->id_orden > 0) {
                     $resultado = $this->Ordenes_model->modificar_orden($obj);
                 } else {
 
-
                     $resultado = $this->Ordenes_model->insertar_orden($obj);
                 }
 
-                if ($resultado) {
+                if ($resultado["RESULTADO"]) {
                     $codigo = 0;
-                    $mensaje = "orden guardarda con exito";
+                    $mensaje = "orden ". $resultado["ID_ORDEN"] ." guardarda con exito";
                 }
             } else {
                 $mensaje = $this->form_validation->error_string();
@@ -158,7 +158,7 @@ class Ordenes extends CI_Controller
         $this->load->model("Analisis_model");
 
         $data["referencias"] = $this->Referencias_model->getDatosReferencias();
-        $data["lista_analisis"] = $this->Analisis_model->cargarDatosTablaAreaAnalisis();
+        //$data["lista_analisis"] = $this->Analisis_model->cargarDatosTablaAreaAnalisis();
 
 
         if ($id !== 0) {
@@ -179,7 +179,8 @@ class Ordenes extends CI_Controller
         }
         return false;
     }
-    public function bucarKey($id, $array) {
+    public function bucarKey($id, $array)
+    {
         foreach ($array as $key => $val) {
             if ($val['ID_ANALISIS'] == $id) {
                 return $key;
@@ -187,9 +188,10 @@ class Ordenes extends CI_Controller
         }
 
         return null;
-     }
+    }
 
-     public function guardar_resultado() {
+    public function guardar_resultado()
+    {
 
 
         $codigo = 500;
@@ -197,26 +199,92 @@ class Ordenes extends CI_Controller
 
         $obj = new stdClass();
 
-                foreach ($this->input->post() as $key => $value) {
-                   
-                    $obj->$key = $value;
-                }
+        foreach ($this->input->post() as $key => $value) {
 
-                 /*echo"<pre?>";
+            $obj->$key = $value;
+        }
+
+        echo"<pre?>";
+        print_r($obj);
+        echo"</pre?>";
+        die();
+
+        $resultado = $this->Ordenes_model->insertar_resulatdo($obj);
+
+
+
+        if ($resultado) {
+            $codigo = 0;
+            $mensaje = "orden guardarda con exito";
+        }
+
+        echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
+    }
+
+    public function getModalPacientes()
+    {
+
+        $this->load->view("tablas/pacientes");
+    }
+
+    public function getOrdenesPrecio()
+    {
+        $this->load->model("Perfil_precios_model");
+
+        $obj = new stdClass();
+
+        foreach ($this->input->post() as $key => $value) {
+            $obj->$key = $value;
+        }
+
+        //$obj->listaAnalisis=implode(",",$obj->listaAnalisis);
+
+
+        /*echo"<pre?>";
                 print_r($obj);
                 echo"</pre?>";
                 die();*/
 
-                $resultado = $this->Ordenes_model->insertar_resulatdo($obj);
 
-                
+        $datos = $this->Perfil_precios_model->listaAnalisisPrecioPorReferencia($obj);
 
-                if ($resultado) {
-                    $codigo = 0;
-                    $mensaje = "orden guardarda con exito";
-                }
+        echo json_encode($datos);
+    }
 
-                echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
-                
-     }
+   public function eliminarOrdenes($id){
+        $id = base64_decode(base64_decode(base64_decode($id)));
+
+        $resultado=$this->Ordenes_model->eliminar_Ordenes($id);
+
+
+        $codigo = 500;
+        $mensaje = 'error';
+
+        if ($resultado) {
+            $codigo = 0;
+            $mensaje = "orden eliminada con exito";
+        }
+
+         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
+        
+   }
+
+
+   public function actulizarLista_Precios(){
+        
+        $obj= new stdClass();
+
+        foreach ($this->input->post() as $key => $value) {
+            $obj->$key =$value;
+        }
+
+        $obj->lista_analisis =(!isset($obj->lista_analisis))? 0:implode(",",$obj->lista_analisis);
+
+        
+        $datos =$this->Ordenes_model->actulizarListaPrecios($obj);
+
+        echo json_encode($datos);
+
+
+   }
 }

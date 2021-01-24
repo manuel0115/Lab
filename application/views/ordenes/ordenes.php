@@ -7,7 +7,9 @@
 <link href="assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/select2/dist/css/select2.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/switchery/switchery.min.css" rel="stylesheet" />
-
+<style>
+    .modal { overflow-y: auto !important; }
+</style>
 <!-- ================== END PAGE LEVEL STYLE ================== -->
 
 <!-- begin breadcrumb -->
@@ -32,10 +34,10 @@
                     <th width="1%" class="text-rap" class="text-center">Id</th>
                     <th width="8%" class="text-rap" class="text-center">Nombre paciente</th>
                     <th width="8%" class="text-rap" class="text-center">Referencia</th>
-                    <th width="8%" class="text-rap" class="text-center">Cobertura</th>
                     <th width="8%" class="text-rap" class="text-center">Fecha entrada</th>
                     <th width="1%" class="text-rap" class="text-center">Opciones</th>
                     <th width="1%" class="text-rap" class="text-center">Crear resultado</th>
+                    <th width="1%" class="text-rap" class="text-center">Eliminar orden</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +50,15 @@
 <!-- end panel -->
 <!-- #modal-alert -->
 <div class="modal fade modal_usuarios" >
-    <div class="modal-dialog" style="width: 100%;max-width: 500px;">
+    <div class="modal-dialog" style="width: 100%;max-width: 800px;">
+        <div class="modal-content">
+        
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal_tabla_pacientes" >
+    <div class="modal-dialog" style="width: 100%;max-width: 650px;">
         <div class="modal-content">
         
         </div>

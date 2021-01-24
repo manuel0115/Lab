@@ -183,6 +183,7 @@ $("#tblAnalisis").on("click", ".btn_editar_configuracion", function () {
     "configuracion_analisis/getModalConfiguracionanalisis/" + id +'/'+modo,
     function () {
       $(".modal_usuarios").modal({
+        
         show: true,
       });
     }
@@ -201,12 +202,21 @@ $(".modal_usuarios .modal-content").on(
     let parametros_individuales = $(".parametro-individual");
 
     let medidas = $(".contenedor-medidas-padre").html();
+    let cantidad_parametros =$(contenedor_parametros).children().length;
 
-    if ($(contenedor_parametros).children().length == 0) {
-      let plantillaParemetro = agregarParametro(
+
+
+    console.log(cantidad_parametros);
+    
+    if (cantidad_parametros == 0) {
+        
+        let numero_de_orden= cantidad_parametros + 1;
+        let plantillaParemetro = agregarParametro(
         nombreParametro,
         idParametro,
-        medidas
+        medidas,
+        numero_de_orden
+      
       );
       $(contenedor_parametros).append(plantillaParemetro);
     } else {
@@ -218,10 +228,14 @@ $(".modal_usuarios .modal-content").on(
       });
 
       if (!valor) {
+        let numero_de_orden= cantidad_parametros + 1;
         let plantillaParemetro = agregarParametro(
           nombreParametro,
           idParametro,
-          medidas
+          medidas,
+          numero_de_orden
+    
+
         );
         $(contenedor_parametros).append(plantillaParemetro);
       }
@@ -250,7 +264,7 @@ $(".modal_usuarios .modal-content").on(
   }
 );
 
-function agregarParametro(nombre, id, medida) {
+function agregarParametro(nombre, id, medida,numero_orden) {
   let plantillaParemetro = `<div data-id-parametro="${id}" class="row pb-2 mb-1 mt-1 parametro-individual" style="border:1px solid #00acac;border-radius:3px ">
   <div class="col-md-2 mt-2 pt-2">
       <h5 class="d-inline-block mr-2">${nombre}</h5>
@@ -261,7 +275,7 @@ function agregarParametro(nombre, id, medida) {
       ${medida}
   </div>
   <div class="col-md-2 mt-2 pl-0 contenedor-medidas">
-    <input class="form-control orden_parametro" min="1" type="number" value='' placeholder="orden" />
+    <input class="form-control orden_parametro" min="1" type="number" value='${numero_orden}' placeholder="orden" />
   </div>
   <div class="col-md-5 mt-2">
       <button type="button" class="close float-right  eliminar-parametro" aria-hidden="true">×</button>

@@ -6,6 +6,7 @@
 <link href="assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
+<link href="assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
 
 <!-- ================== END PAGE LEVEL STYLE ================== -->
@@ -82,6 +83,7 @@
                 $.getScript('assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js'),
                 $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
                 $.getScript('assets/admin/plugins/tag-it/js/tag-it.min.js'),
+                $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
                 $.Deferred(function (deferred) {
                     $(deferred.resolve);
                 })

@@ -1,8 +1,8 @@
 <?php
-/*echo "<pre>";
+echo "<pre>";
 print_r($info);
 echo "</pre>";
-*/
+
 
 
 
@@ -69,6 +69,11 @@ echo "</pre>";
 
 <script>
     var $frm_modficar_agregar_analisis = $("#frm_modficar_agregar_analisis");
+    
+    $("#myTags").tagit({
+        fieldName: "analisis[]"
+    });
+
 
 
    

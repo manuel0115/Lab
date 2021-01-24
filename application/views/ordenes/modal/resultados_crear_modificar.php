@@ -1,7 +1,7 @@
 <?php
 echo "<pre>";
 
-echo "$id_orden";
+print_r($formulario);
 echo "</pre>";
 
 ?>
@@ -22,7 +22,7 @@ echo "</pre>";
     }
 </style>
 <div class="modal-header">
-    <h4 class="modal-title"><?php echo (is_array($datos_evento)) ? "Generar Resultado" : "Modificar Resultado"; ?></h4>
+    <h4 class="modal-title"><?php echo (is_array($datos_evento)) ? "Modificar Resultado" : "Crear Resultado"; ?></h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body p-0">
@@ -33,90 +33,36 @@ echo "</pre>";
         <?php
 
         /*
-                Array
+            Array
 (
     [0] => Array
         (
+            [ID] => 35
             [ID_ANALISIS] => 53
             [NOMBRE_ANALISIS] => HEMOGRAMA
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 15-(WBC) GB
-                    [2] => 16-LYM%
-                    [3] => 17-MID%
-                    [4] => 46-GRANULITOS%
-                    [5] => 48-NO. LINFOCITOS
-                    [6] => 47-MIXTOS
-                    [7] => 49-NO. GRANULITOS
-                    [8] => 50-HGB
-                    [9] => 51-(RBC) GR
-                    [10] => 52-HCTO
-                    [11] => 53-MVC
-                    [12] => 54-MCH
-                    [13] => 55-MCHC
-                    [14] => 56-RWD-CV
-                    [15] => 57-PLT
-                    [16] => 58-MPV
-                    [17] => 59-PDW
-                    [18] => 60-PCT
-                )
-
+            [ID_PARAMETRO] => 15
+            [VALOR] => 
+            [COMENTARIO] => 
+            [PARAMETROS] => 1-15-(WBC) GB-NO TIENE VALOR,2-16-LYM%-NO TIENE VALOR,3-17-MID%-NO TIENE VALOR,4-46-GRANULITOS%-NO TIENE VALOR,5-48-NO. LINFOCITOS-NO TIENE VALOR,6-47-MIXTOS-NO TIENE VALOR,7-49-NO. GRANULITOS-NO TIENE VALOR,8-50-HGB-NO TIENE VALOR,9-51-(RBC) GR-NO TIENE VALOR,10-52-HCTO-NO TIENE VALOR,11-53-MVC-NO TIENE VALOR,12-54-MCH-NO TIENE VALOR,13-55-MCHC-NO TIENE VALOR,14-56-RWD-CV-NO TIENE VALOR
         )
 
     [1] => Array
         (
-            [ID_ANALISIS] => 3
-            [NOMBRE_ANALISIS] => AMILASA
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 11-SIN PARAMETRO
-                )
-
+            [ID] => 36
+            [ID_ANALISIS] => 174
+            [NOMBRE_ANALISIS] => ORINA
+            [ID_PARAMETRO] => 1
+            [VALOR] => 
+            [COMENTARIO] => 
+            [PARAMETROS] => 1-1-COLOR-NO TIENE VALOR,2-4-OLOR-NO TIENE VALOR,3-3-ASPECTO-NO TIENE VALOR,4-5-P.H.-NO TIENE VALOR,5-6-DENSIDAD-NO TIENE VALOR,6-22-GLUCOSA EN ORINA-NO TIENE VALOR,7-24-PROTEINA-NO TIENE VALOR,8-27-UROBILINOGENOS-NO TIENE VALOR,9-26-BILIRRUBINA-NO TIENE VALOR,10-28-NITRITO-NO TIENE VALOR,11-23-ACETONA EN ORINA-NO TIENE VALOR,12-25-SANGRE OCULTA-NO TIENE VALOR,13-7-LEUCOCITOS.-NO TIENE VALOR,14-8-HEMATIES-NO TIENE VALOR,15-32-FIBRA-MUCOSA-NO TIENE VALOR,16-34-BACTERIAS-NO TIENE VALOR,17-33-EPITELIOS-NO TIENE VALOR,18-31-CILINDROS-NO TIENE VALOR,19-35-CRISTALES-NO TIENE VALOR,20-63-otros-NO TIENE VALOR
         )
 
-    [2] => Array
-        (
-            [ID_ANALISIS] => 8
-            [NOMBRE_ANALISIS] => COLESTEROL
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 11-SIN PARAMETRO
-                )
-
-        )
-
-    [3] => Array
-        (
-            [ID_ANALISIS] => 13
-            [NOMBRE_ANALISIS] => CREATININA
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 11-SIN PARAMETRO
-                )
-
-        )
-
-    [4] => Array
-        (
-            [ID_ANALISIS] => 137
-            [NOMBRE_ANALISIS] => PSA LIBRE Y TOTAL
-            [NOMBRE_PARAMETRO] => Array
-                (
-                    [1] => 43-PSA TOTAL
-                    [2] => 44-PSA LIBRE
-                    [3] => 45-PSA TOTAL/LIBRE
-                )
-
-        )
-
-)
-            
-            */
+         */
         ?>
 
 
         <?php foreach ($formulario as $key => $value) : ?>
-            <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID_ANALISIS"] ?>">
+            <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID"] ?>">
                 <span style="font-size:12px;font-weight:bold"><?php echo $value["NOMBRE_ANALISIS"] ?></span>
                 <div class="custom-control custom-switch mt-2 mb-2">
                     <input type="checkbox" class="custom-control-input acti_com" id="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>">
@@ -124,17 +70,19 @@ echo "</pre>";
                 </div>
                 <div class="agrupar-parametros">
                     <?php
-                    foreach ($value["NOMBRE_PARAMETRO"] as $key_r => $value_r) {
+
+                    $paremetros=explode(",",$value["PARAMETROS"]);
+                    foreach ($paremetros as $key_r => $value_r) {
                         $id_parametro = explode("-", $value_r);
                     ?>
 
                         <div class="form-group">
-                            <label><?php echo $id_parametro[1]; ?></label>
+                            <label><?php echo $id_parametro[2]; ?></label>
                             <div class="input-group">
-                                <input type="text" class="form-control valor" data-parametro="<?php echo $id_parametro[0] ?>" required data-parsley-errors-container="<?php echo "#error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[0]; ?>">
+                                <input type="text" class="form-control valor" data-parametro="<?php echo $id_parametro[0] ?>" required data-parsley-errors-container="<?php echo "#error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[1]; ?>">
                             </div>
 
-                            <small id="<?php echo "error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[0]; ?>">
+                            <small id="<?php echo "error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[1]; ?>">
 
                             </small>
                         </div>
@@ -146,7 +94,7 @@ echo "</pre>";
 
                 <div class="form-group contenedor-comentario-parametros d-none" id="<?php echo "cj_coment_" . $value['ID_ANALISIS']; ?>">
                     <label>Observaciones</label>
-                    <textarea class="form-control" rows="3" data-parsley-errors-container="<?php echo "#errorcm_" . $value["ID_ANALISIS"]; ?>"></textarea>
+                    <textarea class="form-control" rows="3" data-parsley-errors-container="<?php echo "#errorcm_" . $value["ID_ANALISIS"]; ?>"><?php echo $value["COMENTARIO"]; ?></textarea>
                     <small id="<?php echo "errorcm_" . $value["ID_ANALISIS"]; ?>">
 
                     </small>

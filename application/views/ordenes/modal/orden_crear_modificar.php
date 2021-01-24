@@ -1,11 +1,4 @@
-<?php
-/*
-echo "<pre>";
-print_r($lista_analisis);
-echo "</pre>";
 
-*/
-?>
 <style>
     .ui-autocomplete {
         z-index: 2147483647;
@@ -14,33 +7,48 @@ echo "</pre>";
     input[readonly] {
         background-color: #fff !important;
     }
+
+    th.dt-center,
+    td.dt-center {
+        text-align: center !important;
+    }
 </style>
 <div class="modal-header">
-    <h4 class="modal-title"><?php echo (is_array($datos_evento)) ? "Generar Resultado" : "Modificar Resultado"; ?></h4>
+    <h4 class="modal-title"><?php echo ($datos_orden[0]["ID_ORDEN"] > 0) ? "Modificar orden " : "Crear orden"; ?></h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body">
 
 
     <form action="ordenes/guardar_orden" id="frm_modficar_agregar_orden" name="frm_modficar_agregar_orden" class="form-horizontal " data-parsley-validate="true">
+        <?php
 
-        <input type="hidden" name="id_orden" id="id_orden" class="form-control" placeholder="" value=" <?php echo  $datos_orden[0]['ID'] ?> ">
+
+
+        ?>
+        <input type="hidden" name="id_orden" id="id_orden" class="form-control" placeholder="" value="<?php echo  $datos_orden[0]['ID_ORDEN'] ?>">
 
         <legend>Informacion de usuario</legend>
         <div class="row pl-2 pt-4">
 
-            <div class="form-group col-sm-6 pl-0 d-inline-block">
-                <label>Cedula</label>
-                <input type="text" name="cedula" id="cedula" class="form-control " placeholder="Nombre el analisis" maxlength="11" minlength="11" required data-parsley-cedula="" value="<?php echo $datos_orden[0]['CEDULA'] ?>" />
+            <div class="form-group col-sm-2 pl-0 d-inline-block">
+                <label>NO#</label>
+                <input type="text" name="id_paciente" id="id_paciente" class="form-control tabla_paciente" placeholder="XX" value="<?php echo $datos_orden[0]['ID_PACIENTE'] ?>" readonly />
 
 
             </div>
 
-            <div class="form-group col-sm-6 pl-0 d-inline-block">
-                <label>Nombre</label>
-                <input type="text" name="nombre" id="nombre" class="form-control " placeholder="Nombre el analisis" required value="<?php echo $datos_orden[0]['NOMBRE'] ?>" />
+            <div class="form-group col-sm-5 pl-0 d-inline-block">
+                <label>Cedula</label>
+                <input type="text" name="cedula" id="cedula" class="form-control tabla_paciente " placeholder="Nombre el analisis" required value="<?php echo $datos_orden[0]['CEDULA'] ?>" />
 
-                <input type="hidden" name="id_paciente" id="id_paciente" class="form-control" placeholder="" value="<?php echo $datos_orden[0]['ID_PACIENTE']; ?>">
+
+            </div>
+            <div class="form-group col-sm-5 pl-0 d-inline-block">
+                <label>Nombre</label>
+                <input type="text" name="nombre" id="nombre" class="form-control tabla_paciente" placeholder="Nombre el analisis" required value="<?php echo $datos_orden[0]['NOMBRE'] ?>" readonly />
+
+
             </div>
 
         </div>
@@ -59,38 +67,107 @@ echo "</pre>";
             </div>
 
 
+
         </div>
-        <span><strong> Lista de analisis</strong></span>
-        
+        <div class="row pl-2 pb-4 mb-1">
+            <div class="form-group col-sm-10 pl-0 d-inline-block">
+                <label>Lista de analisis</label>
+                <input data-parsley-addanalisisno type="text" name="analisis" id="analisis" class="form-control" placeholder="nombre del analisis" data-parsley-addanalisis />
+                <input type="hidden" name="id_analisis" id="id_analisis" class="form-control" value="" />
+            </div>
+            <div class="form-group col-sm-2 pl-0 d-inline-block">
+                <label>&nbsp;</label>
+                <a href="javascript:;" id="generador_ordenes" class="btn btn-primary btn-block ">Agregar <span class="btn-label"><i class="fas fa-plus"> </i></span></a>
+            </div>
 
-        <select class="multiple-select2 form-control" id="listado_analisis" name="listado_analisis[]" multiple="multiple" required>
-            <div class="form-group">
+        </div>
+
+        <!--<div class="row pl-2 pb-4 mb-1">
+            <div class="col-sm-10 pl-0">
+
+                <input type="text">
+                <select class="multiple-select2 form-control" id="listado_analisis" name="listado_analisis[]" multiple="multiple" required style="width: 100%;">
+                    <div class="form-group">
 
 
-                <?php 
-                 $lista_analisis_guardados=explode("|",$datos_orden[0]["LISTA_ANALISIS"]);
-                foreach ($lista_analisis as $key => $value) : 
-                ?>
+                        <?php
+                        $lista_analisis_guardados = explode("|", $datos_orden[0]["LISTA_ANALISIS"]);
+                        foreach ($lista_analisis as $key => $value) :
+                        ?>
 
-                    <option value="<?php echo $value["ID"] ?>" <?php echo(in_array($value["ID"],$lista_analisis_guardados))?"selected":""?> ><?php echo $value["NOMBRE"] ?></option>
-                <?php endforeach; ?>
+                            <option value="<?php echo $value["ID"] ?>" <?php echo (in_array($value["ID"], $lista_analisis_guardados)) ? "selected" : "" ?>><?php echo $value["NOMBRE"] ?></option>
+                        <?php endforeach; ?>
 
 
-        </select>
+                </select>
+            </div>
+            
+        </div>-->
+
+
+        <div class="panel panel-inverse">
+            <!-- begin panel-heading -->
+            <div class="panel-heading">
+                <h4 class="panel-title"></h4>
+
+            </div>
+            <!-- end panel-heading -->
+            <!-- begin panel-body -->
+            <div class="panel-body table-responsive p-0">
+                <table id="tblAnalisisOrdenes" class="table table-striped table-bordered table-td-valign-middle" style="width:100%;">
+                    <form class="form-horizontal">
+                        <thead>
+                            <tr>
+                                <th width="1%" class="text-rap text-center">ID</th>
+                                <th width="5%" class="text-rap text-center">NOMBRE</th>
+                                <th width="10%" class="text-rap text-center">PRECIO</th>
+                                <th width="10%" class="text-rap text-center">&nbsp;</th>
+                            </tr>
+                            <?php if ($datos_orden[0]["ID_ORDEN"] > 0) {
+
+                                $LISTA_PRECIO = explode(",", $datos_orden[0]["LISTA_PRECIO"]);
+
+                                function lista_mapeo_array($ar)
+                                {
+                                    $detalle = explode("-", $ar);
+                                    return  $detalle[0];
+                                }
+
+                                $lista_analisis = implode(",", array_map("lista_mapeo_array", $LISTA_PRECIO));
+                            } ?>
+                            <input type="hidden" id="lista_analisis_old" value="<?php echo $lista_analisis ?>">
+
+                        </thead>
+                        <tbody id="tbody_orden">
+                            <?php if ($datos_orden[0]["ID_ORDEN"] > 0) { ?>
+
+                                <?php foreach ($LISTA_PRECIO as $key => $value) {
+                                    $detalle = explode("-", $value);
+                                ?>
+
+                                    <tr class="id-analisis" data-id-analisis="<?php echo $detalle[0] ?>">
+                                        <td width="1%" class="text-rap text-center"><?php echo $detalle[0] ?></td>
+                                        <td width="5%" class="text-rap text-center"><?php echo $detalle[1] ?></td>
+                                        <td width="10%" class="text-rap text-center"><?php echo $detalle[2] ?></td>
+                                        <td width="10%" class="text-rap text-center"><a href="javascript:;" class="btn btn-danger eliminar-analisis"><i class="fas fa-times"></i></a> </td>
+                                    </tr>
+
+
+
+                                <?php } ?>
+                            <?php } ?>
+                        </tbody>
+                    </form>
+
+                </table>
+            </div>
+
+        </div>
+
+
+
 </div>
-<!--<div class="form-group">
-            <label>Analsis</label>
-            <input type="text" name="analisis" id="analisis" class="form-control" placeholder="Nombre el analisis" />
-            <input type="hidden" name="id_orden" id="id_orden" class="form-control" placeholder="" value=" <?php echo  $pacientes[0]['NUMERO_ORDEN'] ?> ">
-        </div>
-        <fieldset class="articulos">
-            <?php foreach ($datos_orden as $key => $value) : ?>
-                <div data-id="<?php echo $value['ID_ANALISIS'] ?>" class="alert alert-primary fade show item">
-                    <span class="close salir">×</span>
-                    <strong><?php echo $value['NOMBRE_ANALISIS'] ?></strong>
-                </div>
-            <?php endforeach ?>
-        </fieldset>-->
+
 
 </form>
 </div>
@@ -102,115 +179,158 @@ echo "</pre>";
 </div>
 
 <script>
-    /*$('#analisis').autocomplete({
+    var $frm_modficar_agregar_orden = $("#frm_modficar_agregar_orden");
+
+    $('#analisis').autocomplete({
         minLength: 1,
         source: "analisis/autocompletadoAnalisis",
         select: function(event, ui) {
-
-            let nombre_contenerdor_parametros = `analisis_${ui.item.value}`;
-            let parametros = (ui.item.parametros);
             event.preventDefault();
+            $("#analisis").val(ui.item.value);
+            $("#id_analisis").val(ui.item.ID);
 
-            $(this).val(ui.item.label);
-            $(this).blur();
+        }
+    });
 
-            let ids = getIds($(".item"));
 
-            if (!ids.includes(ui.item.ID)) {
-                let item = `<div data-id="${ui.item.ID}" class="alert alert-primary fade show item">
-                            <span class="close salir" >×</span>
-                            <strong> ${ui.item.label}</strong>
-                        </div>`;
-                $(".articulos").append(item);
 
+    var tblAnalisisOrdenes = $("#tblAnalisisOrdenes");
+
+    $("#generador_ordenes").click(function() {
+
+        var referencia = $("#referencia").val();
+        var id_analisis = $("#id_analisis").val();
+        var lista_id = $(".dt-ordenes-id");
+        var tbody_orden = $("#tbody_orden");
+
+        if (tbody_orden.children().length == 0) {
+
+
+            $.post("ordenes/getOrdenesPrecio", {
+                listaAnalisis: id_analisis,
+                id_referencia: referencia
+            }, function(data) {
+
+
+                $.each(data, function(index, value) {
+
+                    let row = ` <tr class="id-analisis" data-id-analisis="${value.ID_ANALISIS}">
+                                <td width="1%" class="text-rap text-center">${value.ID_ANALISIS}</td>
+                                <td width="5%" class="text-rap text-center">${value.NOMBRE_ANALISIS}</td>
+                                <td width="10%" class="text-rap text-center">${value.PRECIO}</td>
+                                <td width="10%" class="text-rap text-center"><a href="javascript:;" class="btn btn-danger eliminar-analisis"><i class="fas fa-times"></i></a> </td>
+                            </tr>`
+
+                    tbody_orden.append(row);
+
+
+
+                })
+            }, "json")
+        } else {
+            let objs = [];
+
+            $('#tblAnalisisOrdenes tbody tr td:nth-child(1)').each(function() {
+
+                objs.push($(this).text());
+            });
+
+            console.log(objs.includes(id_analisis));
+
+            let existe = objs.includes(id_analisis);
+
+            if (!existe) {
+
+                $.post("ordenes/getOrdenesPrecio", {
+                    listaAnalisis: id_analisis,
+                    id_referencia: referencia
+                }, function(data) {
+
+
+                    $.each(data, function(index, value) {
+
+                        let row = ` <tr class="id-analisis" data-id-analisis="${value.ID_ANALISIS}">
+                                <td width="1%" class="text-rap text-center">${value.ID_ANALISIS}</td>
+                                <td width="5%" class="text-rap text-center">${value.NOMBRE_ANALISIS}</td>
+                                <td width="10%" class="text-rap text-center">${value.PRECIO}</td>
+                                <td width="10%" class="text-rap text-center"><a href="javascript:;" class="btn btn-danger eliminar-analisis"><i class="fas fa-times"></i></a> </td>
+                            </tr>`
+
+                        tbody_orden.append(row);
+
+
+
+                    })
+                }, "json")
             }
 
         }
+    });
 
-    });*/
+    tblAnalisisOrdenes.on("click", ".eliminar-analisis", function() {
 
-
-
-    var $frm_modficar_agregar_orden = $("#frm_modficar_agregar_orden");
-
-
-
-    /*$(".articulos").on("click", ".salir", function() {
-        swal("Quieres eliminar este analisis?", {
-                buttons: {
-                    cancel: "Cancelar",
-                    catch: {
-                        text: "Eliminar",
-                        value: "eliminar",
-                    }
-
-                },
+        swal({
+                title: "¿Esta seguro que desea eliminar esta analisis?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
             })
-            .then((value) => {
-
-                if (value == "eliminar") {
-
-                    $(this).parent().remove();
-                    let elementos = getIds($(".item"));
-
-                    if (elementos.length === 0) {
-                        $('#btn_guardar_orden').addClass("disabled");
-                    }
-
+            .then((cerrar_sesion) => {
+                if (cerrar_sesion) {
+                    /*$tblAnalisisOrdenes
+                        .row($(this).parents('tr'))
+                        .remove()
+                        .draw();*/
+                    $(this).parents('tr').remove();
                 }
-
-
             });
-    });*/
 
-    $('#analisis').change(function() {
-        $('#btn_guardar_orden').removeClass("disabled");
     })
 
+    var listaAnalisisOrdenes = [];
 
-
-    /*$('#btn_guardar_orden').click(function() {
-        console.log(getIds($(".item")));
-    })*/
-
-
-
-
-    window.Parsley.addValidator('cedula', {
-        validateString: function(value) {
-
-            let regex = new RegExp("^[0-9]{3}-?[0-9]{7}-?[0-9]{1}$");
-
-            if (!regex.test(value)) {
-                return falsedsd;
-            }
-
-        },
-        messages: {
-            es: 'Cedula no es valida',
-            fr: "Cette valeur n'est pas l'inverse d'elle même."
-        }
+    $('#tblAnalisisOrdenes tbody tr td:nth-child(1)').each(function() {
+        //add item to array
+        listaAnalisisOrdenes.push($(this).text());
     });
 
-    $("#cedula").change(function() {
+   
 
-        $("#nombre").val("");
-        $("#id_paciente").val("");
-        let cedula = btoa($(this).val());
+    $("#referencia").change(function() {
+        let lista_analisis = [];
 
-        $.post(`pacientes/datosPorCedula/${cedula}`, function(data) {
+        let id_referencia = $(this).val()
 
-            $("#nombre").val(`${data[0]["NOMBRE"]} ${data[0]["APELLIDOS"]}`);
-            $("#id_paciente").val(data[0]["ID"])
+        $('#tblAnalisisOrdenes tbody tr td:nth-child(1)').each(function() {
+            //add item to array
+            lista_analisis.push($(this).text());
+        });
 
-        }, "json");
+        $.post("ordenes/actulizarLista_Precios", {
+            id_referencia: id_referencia,
+            lista_analisis: lista_analisis
+        }, function(data) {
+            $("#tbody_orden").html("");
+
+            $.each(data, function(index, value) {
+                let row = ` <tr class="id-analisis" data-id-analisis="${value.ID_ANALISIS}">
+                    <td width="1%" class="text-rap text-center">${value.ID_ANALISIS}</td>
+                    <td width="5%" class="text-rap text-center">${value.NOMBRE}</td>
+                    <td width="10%" class="text-rap text-center">${value.PRECIO}</td>
+                    <td width="10%" class="text-rap text-center"><a href="javascript:;" class="btn btn-danger eliminar-analisis"><i class="fas fa-times"></i></a> </td>
+                </tr>`
 
 
 
+                $("#tbody_orden").append(row);
+            })
 
+        }, 'json')
     });
 
-
-
-    $('#listado_analisis').select2();
+    window.Parsley.addValidator('addanalisis',
+            function(value) {
+                return $("#tbody_orden").children().length != 0
+            })
+        .addMessage('es', 'addanalisis', 'Debe agregar un analisis');
 </script>

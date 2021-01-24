@@ -1,4 +1,3 @@
-
 <style>
     .ui-autocomplete {
         z-index: 2147483647;
@@ -68,76 +67,76 @@
         </div>
         <div class="contenedor-parametros">
 
-        
-        <?php if($modo == "E") { ?>
-           
-           <?php foreach($info as $value){?>
 
-        <div data-id-parametro="<?php echo $value["ID_PARAMETRO"]  ?>" data-id_parametro-configuracion="<?php echo $value["CONFIGURACION_PARAMETRO"];?>"  class="row pb-2 mb-1 mt-1 parametro-individual" style="border:1px solid #00acac;border-radius:3px ">
-            <div class="col-md-2 mt-2 pt-2">
-                <h5 class="d-inline-block mr-2"><?php echo $value["NOMBRE_PARAMETRO"] ?></h5>
-                
-            </div>
-            <div class="col-md-3 mt-2 pl-0 contenedor-medidas">
-                
-                <select name="" id="" class="form-control medida" style="width: 137px;">
-                    <option value="">Medida</option>
-                    <?php foreach ($lista_medidad as $value_m){ ?>
-                    <option value="<?php echo $value_m["ID"] ?>" <?php echo( $value_m["ID"] == $value["UNIDAD_MEDIDA"] )?"selected":"";?>  ><?php echo $value_m["NOMBRE"] ?></option>
+            <?php if ($modo == "E") { ?>
+
+                <?php foreach ($info as $value) { ?>
+
+                    <div data-id-parametro="<?php echo $value["ID_PARAMETRO"]  ?>" data-id_parametro-configuracion="<?php echo $value["CONFIGURACION_PARAMETRO"]; ?>" class="row pb-2 mb-1 mt-1 parametro-individual" style="border:1px solid #00acac;border-radius:3px ">
+                        <div class="col-md-2 mt-2 pt-2">
+                            <h5 class="d-inline-block mr-2"><?php echo $value["NOMBRE_PARAMETRO"] ?></h5>
+
+                        </div>
+                        <div class="col-md-3 mt-2 pl-0 contenedor-medidas">
+
+                            <select name="" id="" class="form-control medida" style="width: 137px;">
+                                <option value="">Medida</option>
+                                <?php foreach ($lista_medidad as $value_m) { ?>
+                                    <option value="<?php echo $value_m["ID"] ?>" <?php echo ($value_m["ID"] == $value["UNIDAD_MEDIDA"]) ? "selected" : ""; ?>><?php echo $value_m["NOMBRE"] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 mt-2 pl-0 contenedor-medidas">
+                            <input class="form-control orden_parametro" min="0" type="number" placeholder="orden" value="<?php echo $value["ORDEN_PARAMETRO"]; ?>" />
+                        </div>
+                        <div class="col-md-5 mt-2">
+                            <button type="button" class="close float-right  eliminar-parametro" aria-hidden="true">×</button>
+                        </div>
+                        <div class="row hombre" style="max-width: 100%;">
+                            <div class="col-md-2 mt-3 ">
+                                <label class="col-md-3 col-sm-3 col-form-label" for="fullname">Masculino <stron style="color:red"></stron></label>
+                            </div>
+                            <div class="col-md-3 mt-3 ">
+                                <input class="form-control nino" type="text" value='<?php echo $value["HOMBRE_NINO_REFERENCIA"]; ?>' placeholder="Niño" />
+                            </div>
+                            <div class="col-md-4 mt-3 ">
+                                <input class="form-control adulto" type="text" value='<?php echo $value["HOMBRE_ADULTO_REFERENCIA"]; ?>' placeholder="Adulto" />
+                            </div>
+                            <div class="col-md-3 mt-3">
+                                <input class="form-control anciano" type="text" value='<?php echo $value["HOMBRE_ANCIANO_REFERENCIA"]; ?>' placeholder="Anciano" />
+                            </div>
+                        </div>
+                        <div class="row mujer" style="max-width: 100%;">
+                            <div class="col-md-2 mt-3 ">
+                                <label class="col-md-3 col-sm-3 col-form-label" for="fullname">Femenino <stron style="color:red"></stron></label>
+                            </div>
+                            <div class="col-md-3 mt-3 ">
+                                <input class="form-control nino" type="text" value='<?php echo $value["MUJER_NINO_REFERENCIA"]; ?>' placeholder="Niño" />
+                            </div>
+                            <div class="col-md-4 mt-3 ">
+                                <input class="form-control adulto" type="text" value='<?php echo $value["MUJER_ADULTO_REFERENCIA"]; ?>' placeholder="Adulto" />
+                            </div>
+                            <div class="col-md-3 mt-3">
+                                <input class="form-control anciano" type="text" value='<?php echo $value["MUJER_ANCIANO_REFERENCIA"]; ?>' placeholder="Anciano" />
+                            </div>
+                        </div>
+                    </div>
                 <?php } ?>
-                </select>
-            </div>
-           
-            <div class="col-md-2 mt-2 pl-0 contenedor-medidas">
-                <input class="form-control orden_parametro" min="0" type="number" placeholder="orden"  value="<?php echo $value["ORDEN_PARAMETRO"];?>" />
-            </div>
-            <div class="col-md-5 mt-2">
-                <button type="button" class="close float-right  eliminar-parametro"  aria-hidden="true">×</button>
-            </div>
-            <div class="row hombre" style="max-width: 100%;">
-                <div class="col-md-2 mt-3 ">
-                    <label class="col-md-3 col-sm-3 col-form-label" for="fullname">Masculino <stron style="color:red"></stron></label>
-                </div>
-                <div class="col-md-3 mt-3 ">
-                    <input class="form-control nino" type="text" value='<?php echo $value["HOMBRE_NINO_REFERENCIA"];?>' placeholder="Niño" />
-                </div>
-                <div class="col-md-4 mt-3 ">
-                    <input class="form-control adulto" type="text" value='<?php echo $value["HOMBRE_ADULTO_REFERENCIA"];?>' placeholder="Adulto" />
-                </div>
-                <div class="col-md-3 mt-3">
-                    <input class="form-control anciano" type="text" value='<?php echo $value["HOMBRE_ANCIANO_REFERENCIA"];?>' placeholder="Anciano" />
-                </div>
-            </div>
-            <div class="row mujer" style="max-width: 100%;">
-                <div class="col-md-2 mt-3 ">
-                    <label class="col-md-3 col-sm-3 col-form-label" for="fullname">Femenino <stron style="color:red"></stron></label>
-                </div>
-                <div class="col-md-3 mt-3 ">
-                    <input class="form-control nino" type="text" value='<?php echo $value["MUJER_NINO_REFERENCIA"];?>' placeholder="Niño" />
-                </div>
-                <div class="col-md-4 mt-3 ">
-                    <input class="form-control adulto" type="text" value='<?php echo $value["MUJER_ADULTO_REFERENCIA"];?>' placeholder="Adulto" />
-                </div>
-                <div class="col-md-3 mt-3">
-                    <input class="form-control anciano" type="text" value='<?php echo $value["MUJER_ANCIANO_REFERENCIA"];?>' placeholder="Anciano" />
-                </div>
-            </div>
-            </div>   
-           <?php } ?>
 
 
-        <?php } ?>
-            
+            <?php } ?>
         </div>
+</div>
 
 
 
-    </form>
+</form>
 
 
 
 
-   
+
 </div>
 
 

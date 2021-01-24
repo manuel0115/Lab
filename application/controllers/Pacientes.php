@@ -32,6 +32,7 @@ class Pacientes extends CI_Controller
         if ($id !== 0) {
             $id = base64_decode(base64_decode(base64_decode($id)));
             $data["info"] = $this->Pacientes_model->getModalPacientes($id);
+            $data["info"][0]["FECHA_NACIMIENTO"]= date("d-m-Y", strtotime($data["info"][0]["FECHA_NACIMIENTO"]));
         }
 
         $data["coberturas"] = $this->Coberturas_model->cargarDatosTablaCobertura();
@@ -66,21 +67,13 @@ class Pacientes extends CI_Controller
                 "label" => "Apellido",
                 "rules" => "required"
             ),
-            array(
-                "field" => "id_facturacion",
-                "label" => "Fecha",
-                "rules" => "required"
-            ),
+           
             array(
                 "field" => "fecha",
                 "label" => "Fecha de nacimiento",
                 "rules" => "required"
             ),
-            array(
-                "field" => "cedula",
-                "label" => "Cedula",
-                "rules" => "required"
-            ),
+            
             array(
                 "field" => "genero",
                 "label" => "Genero",
@@ -114,6 +107,14 @@ class Pacientes extends CI_Controller
                 }
 
 
+                if($obj->cedula == ""){
+                    $obj->cedula="NO";
+                }
+
+                
+                $obj->fecha = str_replace('/', '-', $obj->fecha);
+                $obj->fecha= date("Y-m-d", strtotime($obj->fecha));
+                
                 /*   
                 echo "<pre>";
                 print_r($obj);
