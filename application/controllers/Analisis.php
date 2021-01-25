@@ -77,14 +77,6 @@ class Analisis extends CI_Controller
                 foreach ($this->input->post() as $key => $value) {
                     $obj->$key = $value;
                 }
-/*
-                echo "<pre>";
-                print_r($obj);
-                echo "</pre>";
-
-                die();
-*/
-
 
                 if ($obj->id_analisis > 0) {
 
