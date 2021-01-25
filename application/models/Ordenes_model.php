@@ -284,7 +284,7 @@ class Ordenes_model extends CI_Model
         CP.ID_PARAMETRO,
         PTR.VALOR,
         AR.COMENTARIO,
-        GROUP_CONCAT(CONCAT(CP.ORDEN_PARAMETRO,'-',CP.ID_PARAMETRO,'-',P.NOMBRE,'-',IF(PTR.VALOR IS NULL,'NO TIENE VALOR',PTR.VALOR ))) AS PARAMETROS
+        GROUP_CONCAT(CONCAT(CP.ORDEN_PARAMETRO,'|',CP.ID_PARAMETRO,'|',P.NOMBRE,'|',IF(PTR.VALOR IS NULL,'NTV',PTR.VALOR ))) AS PARAMETROS
         FROM ANALISIS_RESULTADO AS AR
         LEFT JOIN CONFIGURACION_PAREMETROS AS CP ON CP.ID_ANALISISIS = AR.ID_ANALISIS AND CP.LABORATORIO =1
         LEFT JOIN  PARAMEROS_TEMPORAL_RESULATDO AS PTR ON AR.ID = PTR.ID_ANALSIS_RESULTADO AND PTR.ID_PARAMETRO = CP.ID_PARAMETRO
@@ -309,6 +309,9 @@ class Ordenes_model extends CI_Model
 
     public function insertar_resulatdo($obj)
     {
+
+
+
         $this->db->trans_start();
 
         foreach ($obj->datos as $value) {
@@ -316,22 +319,60 @@ class Ordenes_model extends CI_Model
                 SET
                 MODIFICADO_POR = '$this->user_id',
                 MODIFICADO_EN = NOW(),
-                COMENTARIO = '".$value["comentario"]."',
-                WHERE ID = '".$value["id_analisis"]."';";
+                COMENTARIO = '" . $value["comentario"] . "'
+                WHERE ID = '" . $value["id_analisis"] . "';";
 
-                $resultado = $this->db->query($queryAnalisisResultados); 
+            $this->db->query($queryAnalisisResultados);
 
-                foreach($value['parametros'] as $key =>$value){
+            foreach ($value['parametros'] as $key_r => $value_r) {
+               
+
+                if ($value_r["status"] == "AGREGAR") {
+
+                   
+                    $query_parametro_valor = "INSERT INTO PARAMEROS_TEMPORAL_RESULATDO
+                        (
+                        ID_ANALSIS_RESULTADO,
+                        ID_PARAMETRO,
+                        VALOR)
+                        VALUES
+                        (
+                        '" . $value["id_analisis"] . "',
+                        '" . $value_r["id_paremetro"] . "',
+                        '" . $value_r["valor"] . "');";
+
+                    $this->db->query($query_parametro_valor);
+                } else {
+
                     
+                    $query_parametro_valor = "UPDATE  PARAMEROS_TEMPORAL_RESULATDO
+                       SET VALOR = '" . $value_r["valor"] . "' WHERE ID_ANALSIS_RESULTADO ='" . $value["id_analisis"] . "' AND  ID_PARAMETRO ='" . $value_r["id_paremetro"] . "';";
+
+
+                   
+
+
+
+
+                    $this->db->query($query_parametro_valor);
                 }
+            }
         }
+
+        $resultado = $this->db->trans_complete();
+
+
+        log_message('ERROR', 'insertar_resulatdo \n' . $query_parametro_valor . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
     }
 
     public function eliminar_Ordenes($id)
     {
 
-        $query = "DELETE ORDEN,ANALISIS_RESULTADO FROM ORDEN 
-        JOIN ANALISIS_RESULTADO ON ORDEN.ID = ANALISIS_RESULTADO.ID_ORDEN
+        $query = "DELETE ORDEN,ANALISIS_RESULTADO,PARAMEROS_TEMPORAL_RESULATDO FROM ORDEN 
+        JOIN ANALISIS_RESULTADO ON ORDEN.ID = ANALISIS_RESULTADO.ID_ORDEN JOIN 
+        PARAMEROS_TEMPORAL_RESULATDO ON ANALISIS_RESULTADO.ID = PARAMEROS_TEMPORAL_RESULATDO.ID_ANALSIS_RESULTADO
         WHERE ORDEN.ID = '$id'";
 
         $resultado = $this->db->query($query);

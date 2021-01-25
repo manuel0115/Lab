@@ -73,9 +73,9 @@ class Reporte_resultado_model extends CI_Model
         AR.ID_ANALISIS AS ID_ANALISIS,
         A.NOMBRE AS NOMBRE_ANALSIS,
         AA.NOMBRE AS NOMBRE_AREA,
-        AR.ID_RESULTADO AS ID_RESULATADO,
+    
         AR.COMENTARIO AS COMENTARIO,
-        R.ID_ORDEN AS ID_ORDEN,
+        AR.ID_ORDEN AS ID_ORDEN,
         O.ID_PACIENTE AS ID_PACIENTE,
         PA.FECHA_NACIMIENTO AS FECHA_NACIMIENTO,
         @EDAD :=YEAR(CURDATE())-YEAR(PA.FECHA_NACIMIENTO) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(PA.FECHA_NACIMIENTO,'%m-%d'), 0 , -1 ) AS EDAD,
@@ -88,10 +88,10 @@ class Reporte_resultado_model extends CI_Model
         JOIN AREA_ANALITICA AA ON A.ID_AREA_ANALITICA = AA.ID
         JOIN CONFIGURACION_PAREMETROS AS CP ON CP.ID_PARAMETRO = PTR.ID_PARAMETRO AND AR.ID_ANALISIS = CP.	ID_ANALISISIS
         LEFT JOIN UNIDAD_MEDIDA AS UM ON UM.ID = CP.UNIDAD_MEDIDA
-        JOIN RESULTADO AS R ON R.ID = AR.ID_RESULTADO
-        JOIN ORDEN AS O ON R.ID_ORDEN = O.ID
+      
+        JOIN ORDEN AS O ON AR.ID_ORDEN = O.ID
         JOIN PACIENTES AS PA ON PA.ID = O.ID_PACIENTE
-        WHERE AR.ID_RESULTADO = '$resultado'";
+        WHERE AR.ID_ORDEN = '$resultado'";
 
         $resultado = $this->db->query($query);
 
@@ -114,10 +114,11 @@ class Reporte_resultado_model extends CI_Model
         O.CREADO_EN AS FECHA_ENTRADA,
         NOW() AS FECHA_SALIDA,
         ' ' AS MEDICO,
-        C.NOMBRE AS COBERTURA
+        R.NOMBRE AS NOMBRE_REFERENCIA
         FROM ORDEN AS O 
         JOIN PACIENTES AS P ON P.ID = O.ID_PACIENTE
-        JOIN COBERTURA AS C ON P.COBERTURA = C.ID WHERE O.ID= '$id';";
+        JOIN REFERENCIA AS R ON R.ID = O.REFERENCIA
+        WHERE O.ID= '$id';";
 
         $resultado = $this->db->query($query);
 

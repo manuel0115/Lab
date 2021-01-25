@@ -302,12 +302,11 @@ echo "</pre>";*/
 
 
 
-
 </div>
 
 
 <div class="modal-footer">
-    <a href="javascript:;" class="btn btn-success"  data-id-resultado="<?php echo $id_resultado; ?>" id="btn_imprimir_analisis">Imprimir Resultado <i class="fa fa-print"></i></a>
+    <a href="javascript:;" class="btn btn-success"  data-id-resultado="<?php echo $orden; ?>" id="btn_imprimir_analisis">Imprimir Resultado <i class="fa fa-print"></i></a>
     <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Cancelar <i class="fa fa-times"></i></a>
 </div>
 

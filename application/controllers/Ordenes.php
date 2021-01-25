@@ -204,10 +204,10 @@ class Ordenes extends CI_Controller
             $obj->$key = $value;
         }
 
-        echo"<pre?>";
+        /*echo"<pre?>";
         print_r($obj);
         echo"</pre?>";
-        die();
+        die();*/
 
         $resultado = $this->Ordenes_model->insertar_resulatdo($obj);
 

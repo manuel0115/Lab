@@ -8,7 +8,9 @@
 <link href="assets/admin/plugins/select2/dist/css/select2.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/switchery/switchery.min.css" rel="stylesheet" />
 <style>
-    .modal { overflow-y: auto !important; }
+    .modal {
+        overflow-y: auto !important;
+    }
 </style>
 <!-- ================== END PAGE LEVEL STYLE ================== -->
 
@@ -36,7 +38,8 @@
                     <th width="8%" class="text-rap" class="text-center">Referencia</th>
                     <th width="8%" class="text-rap" class="text-center">Fecha entrada</th>
                     <th width="1%" class="text-rap" class="text-center">Opciones</th>
-                    <th width="1%" class="text-rap" class="text-center">Crear resultado</th>
+                    <th width="1%" class="text-rap" class="text-center">Manejo de resultados</th>
+                    <th width="1%" class="text-rap" class="text-center">Impresion de resultados</th>
                     <th width="1%" class="text-rap" class="text-center">Eliminar orden</th>
                 </tr>
             </thead>
@@ -49,27 +52,35 @@
 </div>
 <!-- end panel -->
 <!-- #modal-alert -->
-<div class="modal fade modal_usuarios" >
+<div class="modal fade modal_usuarios">
     <div class="modal-dialog" style="width: 100%;max-width: 800px;">
         <div class="modal-content">
-        
+
         </div>
     </div>
 </div>
 
-<div class="modal fade modal_tabla_pacientes" >
+<div class="modal fade modal_tabla_pacientes">
     <div class="modal-dialog" style="width: 100%;max-width: 650px;">
         <div class="modal-content">
-        
+
         </div>
     </div>
 </div>
 </div>
 
-<div class="modal fade modal_resultado" >
-<div class="modal-dialog" style="width: 100%;max-width: 500px;">
+<div class="modal fade modal_resultado">
+    <div class="modal-dialog" style="width: 100%;max-width: 500px;">
         <div class="modal-content">
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal_imprimir_resultado" >
+    <div class="modal-dialog" style="width: 100%;max-width: 900px;">
+        <div class="modal-content">
+        
         </div>
     </div>
 </div>
@@ -81,37 +92,31 @@
     App.setPageTitle('UFEJI | Administrar Usuarios');
     App.restartGlobalFunction();
 
-    $.getScript('assets/admin/plugins/datatables.net/js/jquery.dataTables.min.js?<?php echo time(); ?>').done(function () {
+    $.getScript('assets/admin/plugins/datatables.net/js/jquery.dataTables.min.js?<?php echo time(); ?>').done(function() {
         $.when(
-                $.getScript('assets/admin/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js'),
-                $.getScript('assets/admin/plugins/datatables.net-responsive/js/dataTables.responsive.min.js'),
-                $.getScript('assets/admin/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js'),
-                $.getScript('assets/admin/plugins/datatables.net-buttons/js/dataTables.buttons.min.js'),
-                $.getScript('assets/admin/plugins/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'),
-                $.getScript('assets/admin/plugins/croppie/croppie.js?<?php echo time(); ?>'),
-                $.getScript('assets/admin/plugins/moment/moment.js?<?php echo time(); ?>'),
-                $.getScript('assets/admin/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'),
-                $.getScript('assets/admin/plugins/jquery.maskedinput/src/jquery.maskedinput.js'),
-                $.getScript('assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js'),
-                $.getScript('assets/admin/plugins/select2/dist/js/select2.min.js'),
-                $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
-                $.getScript('assets/admin/plugins/switchery/switchery.min.js'),
-                $.Deferred(function (deferred) {
+            $.getScript('assets/admin/plugins/datatables.net-bs4/js/dataTables.bootstrap4.min.js'),
+            $.getScript('assets/admin/plugins/datatables.net-responsive/js/dataTables.responsive.min.js'),
+            $.getScript('assets/admin/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js'),
+            $.getScript('assets/admin/plugins/datatables.net-buttons/js/dataTables.buttons.min.js'),
+            $.getScript('assets/admin/plugins/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'),
+            $.getScript('assets/admin/plugins/croppie/croppie.js?<?php echo time(); ?>'),
+            $.getScript('assets/admin/plugins/moment/moment.js?<?php echo time(); ?>'),
+            $.getScript('assets/admin/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'),
+            $.getScript('assets/admin/plugins/jquery.maskedinput/src/jquery.maskedinput.js'),
+            $.getScript('assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js'),
+            $.getScript('assets/admin/plugins/select2/dist/js/select2.min.js'),
+            $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
+            $.getScript('assets/admin/plugins/switchery/switchery.min.js'),
+            $.Deferred(function(deferred) {
+                $(deferred.resolve);
+            })
+        ).done(function() {
+            $.getScript('assets/admin/js/demo/table-manage-default.demo.js'),
+                $.getScript('js/ordenes/ordenes.js?<?php echo time(); ?>'),
+                $.Deferred(function(deferred) {
                     $(deferred.resolve);
                 })
-                ).done(function () {
-            $.getScript('assets/admin/js/demo/table-manage-default.demo.js'),
-            $.getScript('js/ordenes/ordenes.js?<?php echo time(); ?>'),
-                    $.Deferred(function (deferred) {
-                        $(deferred.resolve);
-                    })
         });
     });
-
-
-
-
-
-
 </script>
 <!-- ================== END PAGE LEVEL JS ================== -->

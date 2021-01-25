@@ -10,6 +10,7 @@ var tblordenes = $("#tblAnalisis").DataTable({
     { data: null, className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
+    { data: null, className: "text-center", orderable: false },
   ],
   aoColumnDefs: [
     {
@@ -36,7 +37,7 @@ var tblordenes = $("#tblAnalisis").DataTable({
           full.ORDEN +
           '" data-lista-analisis="' +
           full.LISTA_ANALISIS +
-          '"  class="btn btn-primary btn_crear_resultado ' +
+          '"  class="btn btn-success btn_crear_resultado ' +
           existe_Resultado +
           '" ><i class="fas fa-poll"></i></a>'
         );
@@ -44,6 +45,20 @@ var tblordenes = $("#tblAnalisis").DataTable({
     },
     {
       aTargets: [6],
+      mRender: function (data, type, full) {
+        let existe_Resultado =
+          full.RESULATADO_EXISTENTES === "1" ? "disabled" : "";
+        return (
+          '<a href="javascript:void(0);" data-orde-id="' +
+          full.ORDEN +
+          '" data-lista-analisis="' +
+          full.LISTA_ANALISIS +
+          '"  class="btn btn-warning btn_imprimir_resulatdo" > <i class="fas fa-print"></i></a>'
+        );
+      },
+    },
+    {
+      aTargets: [7],
       mRender: function (data, type, full) {
         let existe_Resultado =
           full.RESULATADO_EXISTENTES === "1" ? "disabled" : "";
@@ -196,6 +211,7 @@ $(".modal_resultado").on("click", "#btn_guardar_resultado", () => {
       let objeto = {
         id_paremetro: $(this).attr("data-parametro"),
         valor: $(this).val(),
+        status:$(this).attr("data-status"),
       };
 
       objetoParametro.push(objeto);
@@ -267,34 +283,72 @@ $(".modal_usuarios .modal-content").on(
 );
 
 $("#tblAnalisis").on("click", ".btn_eliminar_orden", function () {
-  alert();
 
-  let id_orden = btoa(btoa(btoa($(this).attr("data-orde-id"))));
 
-  $.post(
-    "ordenes/eliminarOrdenes/" + id_orden,
-    function (data) {
+  swal({
+    title: "¿Esta seguro que desea eliminar esta analisis?",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+})
+.then((cerrar_sesion) => {
+    if (cerrar_sesion) {
+      let id_orden = btoa(btoa(btoa($(this).attr("data-orde-id"))));
 
-      if (data.codigo == 0) {
-        swal({
-          text: data.mensaje,
-          title: "Petfecto!",
-          icon: "success",
-        });
+      $.post(
+        "ordenes/eliminarOrdenes/" + id_orden,
+        function (data) {
     
-        tblordenes.ajax.reload();
-        $(".modal_resultado").modal("hide");
-      } else {
-        swal({
-          text: data.mensaje,
-          title: "Error!",
-          icon: "error",
-        });
-      }
-     
-    },
-    "json"
-  );
+          if (data.codigo == 0) {
+            swal({
+              text: data.mensaje,
+              title: "Petfecto!",
+              icon: "success",
+            });
+        
+            tblordenes.ajax.reload();
+            $(".modal_resultado").modal("hide");
+          } else {
+            swal({
+              text: data.mensaje,
+              title: "Error!",
+              icon: "error",
+            });
+          }
+         
+        },
+        "json"
+      );
+        
+    }
+});
+  
+  
 
  
 });
+
+$("#tblAnalisis").on("click", ".btn_imprimir_resulatdo", function () {
+  id = btoa(btoa(btoa($(this).attr("data-orde-id"))));
+
+  $(".modal_imprimir_resultado .modal-content").load(
+    "reporte_resultado/getModalImprimir/" + id,
+    function () {
+      $(".modal_imprimir_resultado").modal({
+        //backdrop: 'static',
+        // keyboard: false,
+        show: true,
+      });
+    }
+  );
+});
+
+$(".modal_imprimir_resultado").on(
+  "click",
+  "#btn_imprimir_analisis",
+  function () {
+    let id = btoa(btoa(btoa($(this).attr("data-id-resultado"))));
+    window.open("reporte_resultado/imprimir_resultado/" + id, "_blank") ||
+      window.location.replace("reporte_resultado/imprimir_resultado/" + id);
+  }
+);

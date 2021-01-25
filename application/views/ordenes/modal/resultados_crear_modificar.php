@@ -65,7 +65,7 @@ echo "</pre>";
             <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID"] ?>">
                 <span style="font-size:12px;font-weight:bold"><?php echo $value["NOMBRE_ANALISIS"] ?></span>
                 <div class="custom-control custom-switch mt-2 mb-2">
-                    <input type="checkbox" class="custom-control-input acti_com" id="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>">
+                    <input type="checkbox" class="custom-control-input acti_com" id="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>" <?php echo $value["COMENTARIO"]?"checked":""  ?>>
                     <label class="custom-control-label" for="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>"> Activar Comentarios</label>
                 </div>
                 <div class="agrupar-parametros">
@@ -73,13 +73,14 @@ echo "</pre>";
 
                     $paremetros=explode(",",$value["PARAMETROS"]);
                     foreach ($paremetros as $key_r => $value_r) {
-                        $id_parametro = explode("-", $value_r);
+                        $id_parametro = explode("|", $value_r);
+                        $status =  ($id_parametro[3]=="NTV")?"AGREGAR":"EDITAR";
                     ?>
 
                         <div class="form-group">
-                            <label><?php echo $id_parametro[2]; ?></label>
+                            <label><?php echo ($id_parametro[2]=="SIN PARAMETRO")?"":$id_parametro[2]; ?></label>
                             <div class="input-group">
-                                <input type="text" class="form-control valor" data-parametro="<?php echo $id_parametro[0] ?>" required data-parsley-errors-container="<?php echo "#error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[1]; ?>">
+                                <input type="text" class="form-control valor" data-parametro="<?php echo $id_parametro[1] ?>"  data-parsley-errors-container="<?php echo "#error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[1]; ?>" data-status="<?php echo $status; ?>" value="<?php echo ($id_parametro[3]=="NTV")?"":$id_parametro[3];  ?>">
                             </div>
 
                             <small id="<?php echo "error_" . $value["ID_ANALISIS"] . "_" . $id_parametro[1]; ?>">
@@ -92,7 +93,7 @@ echo "</pre>";
                     <?php } ?>
                 </div>
 
-                <div class="form-group contenedor-comentario-parametros d-none" id="<?php echo "cj_coment_" . $value['ID_ANALISIS']; ?>">
+                <div class="form-group contenedor-comentario-parametros <?php echo $value["COMENTARIO"]?"":"d-none"  ?>" id="<?php echo "cj_coment_" . $value['ID_ANALISIS']; ?>">
                     <label>Observaciones</label>
                     <textarea class="form-control" rows="3" data-parsley-errors-container="<?php echo "#errorcm_" . $value["ID_ANALISIS"]; ?>"><?php echo $value["COMENTARIO"]; ?></textarea>
                     <small id="<?php echo "errorcm_" . $value["ID_ANALISIS"]; ?>">
