@@ -157,11 +157,19 @@ class Reporte_resultado extends CI_Controller
         $formulario = $this->generarDatosResultado($id);
         $datos_organizacion = $this->session->get_userdata();
 
+
+        /*$mpdf=new mPDF('utf-8', 'Letter', 0, '', 200, 0, 0, 0, 0, 0);
+
+
+
+
+/*
+class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])*/
         $this->load->library('Pdf');
-        $pdf = new PDF("c", "letter");
+        $pdf = new PDF("c", "letter",0,'',200,0,0,0,0,0);
         $pdf->setAutoTopMargin = 'stretch';
 
-        $HEADER = '
+        $HEADER = '<div style="100%">
         
         <div style="text-align:center"> 
             <div>
@@ -267,7 +275,7 @@ class Reporte_resultado extends CI_Controller
                 
                 </div>
                 
-
+</div>
 
 
 
@@ -331,7 +339,7 @@ class Reporte_resultado extends CI_Controller
             $lista_parametros = "";
             $analisis_comentario = ($value['COMENTARIO']) ? '
                  <tr>
-                            <th style="font-weight:normal;font-size:14px" COLSPAN="5">
+                            <th style="font-weight:normal;font-size:16px" COLSPAN="5">
                                 <br><span style="font-weight:bold;width:100%">Observacion</span><br>' .
                 $value['COMENTARIO'] . '
                             </th>
@@ -343,11 +351,11 @@ class Reporte_resultado extends CI_Controller
                 foreach ($value["PARAMETROS"] as $value_r) {
                     $nombre_parametro_id = explode("-", $value_r['nombre']);
                     $lista_parametros .= '<tr>
-                    <th width="24%" style="font-size:12px;font-weight:normal;text-align:left;text-transform:uppercase">' .  $nombre_parametro_id[1] . '</th>
-                    <th style="font-size:12px;font-weight:normal;text-align:center;ext-align:left;text-transform:uppercase">' . $value_r['valor'] . '</th>
-                    <th style="font-size:12px;font-weight:normal;text-align:center;">' . $value_r['medida'] . '</th>
-                    <th style="font-size:12px;font-weight:normal;text-align:center;">' . $value_r['referencia'] . '</th>
-                    <th style="font-size:12px;font-weight:normal;text-align:center;">&nbsp;</th>
+                    <th width="24%" style="font-size:18px;font-weight:normal;text-align:left;text-transform:uppercase">' .  $nombre_parametro_id[1] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;ext-align:left;text-transform:uppercase">' . $value_r['valor'] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;">' . $value_r['medida'] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;">' . $value_r['referencia'] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;">&nbsp;</th>
                 <tr>';
                 }
 
@@ -397,10 +405,10 @@ class Reporte_resultado extends CI_Controller
         
                     <tbody><tr>
                     <th width="24%" style="font-size:18px;text-align:left;text-align:left;text-transform:uppercase" >' . $value['NOMBRE_ANALISIS'] . '</th>
-                    <th style="font-size:15px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value_r['valor'] . '</th>
-                    <th  style="font-size:15px;font-weight:normal;text-align:center">' . $value_r['medida'] . '</th>
-                    <th  style="font-size:15px;font-weight:normal;text-align:center">' . $value_r['referencia'] . '</th>
-                    <th style="font-size:15px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value["NOMBRE_AREA"] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value_r['valor'] . '</th>
+                    <th  style="font-size:18px;font-weight:normal;text-align:center">' . $value_r['medida'] . '</th>
+                    <th  style="font-size:18px;font-weight:normal;text-align:center">' . $value_r['referencia'] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value["NOMBRE_AREA"] . '</th>
                 </tr>' .$analisis_comentario . '
                 </tbody>
                 </table>';
