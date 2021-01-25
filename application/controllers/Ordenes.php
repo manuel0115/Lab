@@ -26,44 +26,12 @@ class Ordenes extends CI_Controller
 
     public function getModalResultado( $id_orden)
     {
-        // $lista_analisis = str_replace("|", ",", base64_decode($lista_analisis));
+        
 
         $analisis = $this->Ordenes_model->buscarParametrosResulatdo($id_orden);
 
-        // echo($this->in_multi_array("60",$parametros))?"loencontro":"no lo encontro";
-
-        /*$formulario = array();
-
-        foreach ($parametros as $key => $value) {
-            if (empty($formulario)) {
-                $formulario[] = array(
-                    "ID_ANALISIS" => $value["ID_ANALISIS"],
-                    "NOMBRE_ANALISIS" => $value["NOMBRE_ANALISIS"],
-                    "NOMBRE_PARAMETRO" => [$value["ORDEN_PARAMETRO"] => $value["NOMBRE_PARAMETRO"]]
-                );
-            } else {
-                if (!$this->in_multi_array($value["ID_ANALISIS"], $formulario)) {
-                    $formulario[] = array(
-                        "ID_ANALISIS" => $value["ID_ANALISIS"],
-                        "NOMBRE_ANALISIS" => $value["NOMBRE_ANALISIS"],
-                        "NOMBRE_PARAMETRO" => [$value["ORDEN_PARAMETRO"] => $value["NOMBRE_PARAMETRO"]]
-                    );
-                } else {
-                    $clave = $this->bucarKey($value["ID_ANALISIS"], $formulario);
-                    $formulario[$clave]["NOMBRE_PARAMETRO"][$value["ORDEN_PARAMETRO"]] = $value["NOMBRE_PARAMETRO"];
-                }
-            }
-        }*/
-
-
         $data["formulario"] = $analisis;
         $data["id_orden"] = $id_orden;
-
-
-
-
-
-
 
         $this->load->view("ordenes/modal/resultados_crear_modificar", $data);
     }
@@ -119,12 +87,7 @@ class Ordenes extends CI_Controller
                 $obj->valores_agregar=array_diff($obj->lista_analisis,$obj->lista_analisis_old);
                 $obj->valores_eliminar=array_diff($obj->lista_analisis_old,$obj->lista_analisis);
                
-                /*echo "<pre>";
-                print_r($obj);
-                echo "</pre>";
-                die();*/
-
-                // $obj->activo = ($obj->activo == "on") ? "TRUE" : "FALSE";
+            
 
 
                 if ($obj->id_orden > 0) {
@@ -158,9 +121,7 @@ class Ordenes extends CI_Controller
         $this->load->model("Analisis_model");
 
         $data["referencias"] = $this->Referencias_model->getDatosReferencias();
-        //$data["lista_analisis"] = $this->Analisis_model->cargarDatosTablaAreaAnalisis();
-
-
+    
         if ($id !== 0) {
             $id = base64_decode(base64_decode(base64_decode($id)));
             $data["datos_orden"] = $this->Ordenes_model->getDataOrden($id);
@@ -204,10 +165,7 @@ class Ordenes extends CI_Controller
             $obj->$key = $value;
         }
 
-        /*echo"<pre?>";
-        print_r($obj);
-        echo"</pre?>";
-        die();*/
+       
 
         $resultado = $this->Ordenes_model->insertar_resulatdo($obj);
 
@@ -236,15 +194,6 @@ class Ordenes extends CI_Controller
         foreach ($this->input->post() as $key => $value) {
             $obj->$key = $value;
         }
-
-        //$obj->listaAnalisis=implode(",",$obj->listaAnalisis);
-
-
-        /*echo"<pre?>";
-                print_r($obj);
-                echo"</pre?>";
-                die();*/
-
 
         $datos = $this->Perfil_precios_model->listaAnalisisPrecioPorReferencia($obj);
 

@@ -74,11 +74,7 @@ class Configuracion_analisis extends CI_Controller
         $mensaje = 'error';
        
         $config = array(
-            /*array(
-                "field" => "parametros",
-                "label" => "Area analitica",
-                "rules" => "required"
-            ),*/
+            
             array(
                 "field" => "id_analisis",
                 "label" => "Nombre",
@@ -101,14 +97,7 @@ class Configuracion_analisis extends CI_Controller
                     $obj->$key = $value;
                 }
 
-                /*
-                echo "<pre>";
-                print_r($obj);
-                echo "<pre>";
-                die();
-                
-                */ 
-
+               
 
 
                 if ($obj->id_analisis_confifuracion == "E") {

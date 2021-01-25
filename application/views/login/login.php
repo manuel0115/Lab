@@ -33,7 +33,7 @@
                 <!-- begin login-header -->
                 <div class="login-header">
                     <div class="brand">
-                        <img src="data/img/sistema/logo/labotech-logo-temp.png" width="40px" style="margin-right:10px"> <b>Labotech</b>
+                        <img src="data/img/sistema/logo/labotech-logo-temp.png" width="40px" style="margin-right:10px"> <b>LaboPro</b>
                         <small class="mt-2">Un producto Jtech</small>
                     </div>
                     <div class="icon">

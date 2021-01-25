@@ -104,18 +104,8 @@ class Parametros extends CI_Controller
 
         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
 
-        /* echo "<pre>";
-        print_r($this->input->post());
-        echo "<pre>";
-        die();*/
     }
 
 
-    public function index()
-    {
-
-        $data["eventos"] = $this->Eventos_model->cargarDatosTablaEventos();
-
-        $this->load->view("eventos_frontend/eventos", $data);
-    }
+    
 }

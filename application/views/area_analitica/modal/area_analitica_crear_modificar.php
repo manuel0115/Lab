@@ -1,8 +1,4 @@
-<?php
-/*echo "<pre>";
-print_r($area);
-echo "</pre>";*/
-?>
+
 <style>
     .ui-autocomplete {
         z-index: 2147483647;

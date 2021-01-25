@@ -1,10 +1,7 @@
 <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
 <link href="assets/admin/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
+
 <link href="assets/admin/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
 
 <!-- ================== END PAGE LEVEL STYLE ================== -->
@@ -64,18 +61,13 @@
             $.getScript('assets/admin/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js'),
             $.getScript('assets/admin/plugins/datatables.net-buttons/js/dataTables.buttons.min.js'),
             $.getScript('assets/admin/plugins/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'),
-            $.getScript('assets/admin/plugins/croppie/croppie.js?<?php echo time(); ?>'),
-            $.getScript('assets/admin/plugins/moment/moment.js?<?php echo time(); ?>'),
-            $.getScript('assets/admin/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'),
-            $.getScript('assets/admin/plugins/jquery.maskedinput/src/jquery.maskedinput.js'),
-            $.getScript('assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js'),
-            $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
+            
             $.getScript('assets/admin/plugins/tag-it/js/tag-it.min.js'),
             $.Deferred(function(deferred) {
                 $(deferred.resolve);
             })
         ).done(function() {
-            $.getScript('assets/admin/js/demo/table-manage-default.demo.js'),
+            
                 $.getScript('js/parametros/parametros.js?<?php echo time(); ?>'),
                 $.Deferred(function(deferred) {
                     $(deferred.resolve);

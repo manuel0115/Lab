@@ -160,14 +160,8 @@
 
 
 
-
-
-
-    $("#myTags").tagit({
-        fieldName: "analisis[]"
-    });
-
     $("#parametros").select2();
+    
     $("#parametros").change(function() {
         $("#btn-agregar-parametros").removeClass('disabled');
 

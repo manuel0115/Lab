@@ -19,7 +19,7 @@ class Area_analitica_model extends CI_Model
 
     public function cargarDatosTablaAreaAnalitica()
     {
-        $query = "SELECT * FROM AREA_ANALITICA;";
+        $query = "SELECT ID,NOMBRE FROM AREA_ANALITICA;";
 
         $resultado = $this->db->query($query);
 
