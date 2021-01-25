@@ -237,7 +237,44 @@ class Reporte_resultado extends CI_Controller
             </tbody>
             </table>';
 
+            $footer='<div style="text-align:center">
+                       <p style="float:right;border-top:1px solid black;display:inline-block;width:250px;text-align:center;">Firma Encargada</p>
+                </div>
+                
+                <div style="border-top:0.6 solid #c2c2c2;margin-top:25px;padding:5px">
+                
+                   <table style="width:100%" >
+                    <tr>
+                        <td>
+                             <div>&nbsp;&nbsp;&nbsp;</div>
+                            
+                        </td>
+                        <td style="width:12%;text-align:center;" >
+                             <div><span>LaboPro</span></div>
+                        </td>
+                        <td style="width:12%;text-align:center;" >
+                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        
+                        <td style="text-align:center;width:70%" >'.
+                             "C/" . $datos_organizacion["CALLE"] . 'NO.' . $datos_organizacion["NUMERO"] . ',' .
+                    $datos_organizacion["SECTOR"] . ',' . $datos_organizacion["PROVINCIA"] . ',' . $datos_organizacion["PAIS"] . ',Telefono:' . $datos_organizacion["TELEFONOS_SUCURSALES"] . ',RNC' . $datos_organizacion["RNC"] . ',Correo:' . $datos_organizacion["CORREO_LABORATORIO"]
+
+                         .'</td>
+                    </tr>
+                    
+                   </table>
+                
+                </div>
+                
+
+
+
+
+        ';
+
         $pdf->SetHTMLHeader($HEADER);
+        $pdf->setHTMLFooter($footer);
 
         $thead = '
         <style>
@@ -256,9 +293,6 @@ class Reporte_resultado extends CI_Controller
                         text-align:center;
                     }
 
-                    .analisis{
-                        
-                    }
                     
                     
                 </style> 
@@ -330,11 +364,11 @@ class Reporte_resultado extends CI_Controller
 
             <tbody>
             <tr class="filas" style="border-bottom:0.5px solid #c2c2c2">
-            <th width="24%" style="font-size:15px;text-align:left;text-transform:uppercase">' . $value['NOMBRE_ANALISIS'] . '</th>
+            <th width="24%" style="font-size:18px;text-align:left;text-transform:uppercase">' . $value['NOMBRE_ANALISIS'] . '</th>
             <th>&nbsp;</th>
             <th></th>
             <th>&nbsp;</th>
-            <th style="font-size:12px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value["NOMBRE_AREA"] . '</th>
+            <th style="font-size:15px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value["NOMBRE_AREA"] . '</th>
 
         <tr>' . $lista_parametros . $analisis_comentario . '
             </tbody>
@@ -362,11 +396,11 @@ class Reporte_resultado extends CI_Controller
                     </thead>
         
                     <tbody><tr>
-                    <th width="24%" style="font-size:15px;text-align:left;text-align:left;text-transform:uppercase" >' . $value['NOMBRE_ANALISIS'] . '</th>
-                    <th style="font-size:12px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value_r['valor'] . '</th>
-                    <th  style="font-size:12px;font-weight:normal;text-align:center">' . $value_r['medida'] . '</th>
-                    <th  style="font-size:12px;font-weight:normal;text-align:center">' . $value_r['referencia'] . '</th>
-                    <th style="font-size:12px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value["NOMBRE_AREA"] . '</th>
+                    <th width="24%" style="font-size:18px;text-align:left;text-align:left;text-transform:uppercase" >' . $value['NOMBRE_ANALISIS'] . '</th>
+                    <th style="font-size:15px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value_r['valor'] . '</th>
+                    <th  style="font-size:15px;font-weight:normal;text-align:center">' . $value_r['medida'] . '</th>
+                    <th  style="font-size:15px;font-weight:normal;text-align:center">' . $value_r['referencia'] . '</th>
+                    <th style="font-size:15px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value["NOMBRE_AREA"] . '</th>
                 </tr>' .$analisis_comentario . '
                 </tbody>
                 </table>';
@@ -376,7 +410,7 @@ class Reporte_resultado extends CI_Controller
             }
         }
 
-
+        
       
 
 
@@ -399,7 +433,7 @@ class Reporte_resultado extends CI_Controller
 
 
 
-        $pdf->setHTMLFooter($footer);
+        
 
         $pdf->Output("prueba.pdf", "I");
 
