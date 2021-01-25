@@ -21,11 +21,7 @@
 
 
     <form action="ordenes/guardar_orden" id="frm_modficar_agregar_orden" name="frm_modficar_agregar_orden" class="form-horizontal " data-parsley-validate="true">
-        <?php
-
-
-
-        ?>
+        
         <input type="hidden" name="id_orden" id="id_orden" class="form-control" placeholder="" value="<?php echo  $datos_orden[0]['ID_ORDEN'] ?>">
 
         <legend>Informacion de usuario</legend>
@@ -82,27 +78,7 @@
 
         </div>
 
-        <!--<div class="row pl-2 pb-4 mb-1">
-            <div class="col-sm-10 pl-0">
-
-                <input type="text">
-                <select class="multiple-select2 form-control" id="listado_analisis" name="listado_analisis[]" multiple="multiple" required style="width: 100%;">
-                    <div class="form-group">
-
-
-                        <?php
-                        $lista_analisis_guardados = explode("|", $datos_orden[0]["LISTA_ANALISIS"]);
-                        foreach ($lista_analisis as $key => $value) :
-                        ?>
-
-                            <option value="<?php echo $value["ID"] ?>" <?php echo (in_array($value["ID"], $lista_analisis_guardados)) ? "selected" : "" ?>><?php echo $value["NOMBRE"] ?></option>
-                        <?php endforeach; ?>
-
-
-                </select>
-            </div>
-            
-        </div>-->
+      
 
 
         <div class="panel panel-inverse">
@@ -277,10 +253,7 @@
             })
             .then((cerrar_sesion) => {
                 if (cerrar_sesion) {
-                    /*$tblAnalisisOrdenes
-                        .row($(this).parents('tr'))
-                        .remove()
-                        .draw();*/
+                    
                     $(this).parents('tr').remove();
                 }
             });

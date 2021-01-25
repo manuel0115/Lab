@@ -1,12 +1,8 @@
 <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
 <link href="assets/admin/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/select2/dist/css/select2.min.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/switchery/switchery.min.css" rel="stylesheet" />
+
+
 <style>
     .modal {
         overflow-y: auto !important;
@@ -99,19 +95,12 @@
             $.getScript('assets/admin/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js'),
             $.getScript('assets/admin/plugins/datatables.net-buttons/js/dataTables.buttons.min.js'),
             $.getScript('assets/admin/plugins/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'),
-            $.getScript('assets/admin/plugins/croppie/croppie.js?<?php echo time(); ?>'),
-            $.getScript('assets/admin/plugins/moment/moment.js?<?php echo time(); ?>'),
-            $.getScript('assets/admin/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'),
-            $.getScript('assets/admin/plugins/jquery.maskedinput/src/jquery.maskedinput.js'),
-            $.getScript('assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js'),
-            $.getScript('assets/admin/plugins/select2/dist/js/select2.min.js'),
-            $.getScript('assets/admin/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'),
-            $.getScript('assets/admin/plugins/switchery/switchery.min.js'),
+        
             $.Deferred(function(deferred) {
                 $(deferred.resolve);
             })
         ).done(function() {
-            $.getScript('assets/admin/js/demo/table-manage-default.demo.js'),
+          
                 $.getScript('js/ordenes/ordenes.js?<?php echo time(); ?>'),
                 $.Deferred(function(deferred) {
                     $(deferred.resolve);

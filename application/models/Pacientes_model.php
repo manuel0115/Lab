@@ -146,7 +146,7 @@ class Pacientes_model extends CI_Model
         return $resultado;
     }
 
-    public function getDatosPorOrden($orden)
+    /*public function getDatosPorOrden($orden)
     {
         $query = "SELECT P.ID AS ID_PACIENTE, CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS NOMBRE,
         P.CEDULA AS CEDULA,O.ID AS NUMERO_ORDEN
@@ -160,7 +160,7 @@ class Pacientes_model extends CI_Model
         log_message('ERROR','getDatosPorCedula \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
-    }
+    }*/
     
 
    

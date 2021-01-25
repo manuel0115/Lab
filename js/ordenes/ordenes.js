@@ -235,9 +235,7 @@ $(".modal_resultado").on("click", "#btn_guardar_resultado", () => {
 
   var validation = $frm_guardar_resultado.parsley().validate();
   if (validation) {
-    //console.log(datos);
-    //let $datos =JSON.stringify(datos);
-    //console.log($datos);
+    
 
     $.post(
       url,

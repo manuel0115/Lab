@@ -114,13 +114,7 @@ class Pacientes extends CI_Controller
                 
                 $obj->fecha = str_replace('/', '-', $obj->fecha);
                 $obj->fecha= date("Y-m-d", strtotime($obj->fecha));
-                
-                /*   
-                echo "<pre>";
-                print_r($obj);
-                echo "</pre>";
-                die();*/
-
+               
 
 
                 if ($obj->id_paciente > 0) {

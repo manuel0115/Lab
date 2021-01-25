@@ -1,10 +1,3 @@
-<?php
-echo "<pre>";
-
-print_r($formulario);
-echo "</pre>";
-
-?>
 <style>
     .ui-autocomplete {
         z-index: 2147483647;
@@ -29,37 +22,6 @@ echo "</pre>";
 
 
     <form action="ordenes/guardar_resultado" id="frm_guardar_resultado" class="form-horizontal" data-parsley-validate="true" data-id-orden="<?php echo $id_orden; ?>">
-       
-        <?php
-
-        /*
-            Array
-(
-    [0] => Array
-        (
-            [ID] => 35
-            [ID_ANALISIS] => 53
-            [NOMBRE_ANALISIS] => HEMOGRAMA
-            [ID_PARAMETRO] => 15
-            [VALOR] => 
-            [COMENTARIO] => 
-            [PARAMETROS] => 1-15-(WBC) GB-NO TIENE VALOR,2-16-LYM%-NO TIENE VALOR,3-17-MID%-NO TIENE VALOR,4-46-GRANULITOS%-NO TIENE VALOR,5-48-NO. LINFOCITOS-NO TIENE VALOR,6-47-MIXTOS-NO TIENE VALOR,7-49-NO. GRANULITOS-NO TIENE VALOR,8-50-HGB-NO TIENE VALOR,9-51-(RBC) GR-NO TIENE VALOR,10-52-HCTO-NO TIENE VALOR,11-53-MVC-NO TIENE VALOR,12-54-MCH-NO TIENE VALOR,13-55-MCHC-NO TIENE VALOR,14-56-RWD-CV-NO TIENE VALOR
-        )
-
-    [1] => Array
-        (
-            [ID] => 36
-            [ID_ANALISIS] => 174
-            [NOMBRE_ANALISIS] => ORINA
-            [ID_PARAMETRO] => 1
-            [VALOR] => 
-            [COMENTARIO] => 
-            [PARAMETROS] => 1-1-COLOR-NO TIENE VALOR,2-4-OLOR-NO TIENE VALOR,3-3-ASPECTO-NO TIENE VALOR,4-5-P.H.-NO TIENE VALOR,5-6-DENSIDAD-NO TIENE VALOR,6-22-GLUCOSA EN ORINA-NO TIENE VALOR,7-24-PROTEINA-NO TIENE VALOR,8-27-UROBILINOGENOS-NO TIENE VALOR,9-26-BILIRRUBINA-NO TIENE VALOR,10-28-NITRITO-NO TIENE VALOR,11-23-ACETONA EN ORINA-NO TIENE VALOR,12-25-SANGRE OCULTA-NO TIENE VALOR,13-7-LEUCOCITOS.-NO TIENE VALOR,14-8-HEMATIES-NO TIENE VALOR,15-32-FIBRA-MUCOSA-NO TIENE VALOR,16-34-BACTERIAS-NO TIENE VALOR,17-33-EPITELIOS-NO TIENE VALOR,18-31-CILINDROS-NO TIENE VALOR,19-35-CRISTALES-NO TIENE VALOR,20-63-otros-NO TIENE VALOR
-        )
-
-         */
-        ?>
-
 
         <?php foreach ($formulario as $key => $value) : ?>
             <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID"] ?>">
@@ -106,14 +68,6 @@ echo "</pre>";
         <?php endforeach ?>
 
 
-
-
-
-
-
-
-
-
     </form>
 </div>
 
@@ -141,7 +95,6 @@ echo "</pre>";
                 item.children("textarea").prop("required", false);
             }
         });
-
 
 
     })

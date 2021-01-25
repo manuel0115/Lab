@@ -25,16 +25,7 @@ class Ordenes_model extends CI_Model
 
     public function cargarDatosOrdenes()
     {
-        /*$query = "SELECT 	O.ID AS ORDEN,
-        CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS PACIENTE,
-        R.NOMBRE AS REFERENCIA,
-        C.NOMBRE AS COBERTURA,
-        O.CREADO_EN AS FECHA_ENTRADA,
-        IF((SELECT count(id) FROM RESULTADO where ID_ORDEN =O.ID ) > 0,TRUE,FALSE) AS RESULATADO_EXISTENTES
-        FROM ORDEN AS O 
-        left JOIN PACIENTES AS P ON(P.ID = O.ID_PACIENTE)
-        JOIN REFERENCIA AS R ON (R.ID = O.REFERENCIA)
-        JOIN COBERTURA AS C ON (C.ID = P.ID) order by O.ID DESC;";*/
+       
 
         $query = "SELECT O.ID as ORDEN,
         CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS PACIENTE,
@@ -120,8 +111,7 @@ class Ordenes_model extends CI_Model
         $resultado = $this->db->trans_complete();
 
 
-        //$resultado=$resultado->result_array(); 
-
+    
 
         $resultado = ["RESULTADO" => $resultado, "ID_ORDEN" => $lastOreden];
         $arrayQuery = [$queryAnalisisResulatado, $query];
@@ -167,15 +157,7 @@ class Ordenes_model extends CI_Model
 
             $this->db->query($queryElimina);
         }
-
-        /*foreach($obj->valores_eliminar as $value){
-            $this->db->query("DELETE ANALISIS_RESULTADO,
-            PARAMEROS_TEMPORAL_RESULATDO 
-            FROM ANALISIS_RESULTADO 
-            LEFT JOIN PARAMEROS_TEMPORAL_RESULATDO ON ANALISIS_RESULTADO.ID = PARAMEROS_TEMPORAL_RESULATDO.ID_ANALSIS_RESULTADO
-            WHERE ANALISIS_RESULTADO.ID_ANALISIS = '$value' AND  ANALISIS_RESULTADO.ID_ORDEN ='$obj->id_orden'");
-        }*/
-
+      
         if (!empty($obj->valores_agregar)) {
             $queryAnalisisResulatado = "INSERT INTO ANALISIS_RESULTADO
         (
@@ -215,7 +197,6 @@ class Ordenes_model extends CI_Model
         log_message('ERROR', 'modificar_orden \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         log_message('ERROR', 'eliminar \n' . $queryElimina . '\n<pre> ' . print_r($resultado, true) . '</pre>');
-
 
         return $resultado;
     }
@@ -267,16 +248,7 @@ class Ordenes_model extends CI_Model
 
     public function buscarParametrosResulatdo($id_orden)
     {
-        /* $query = "SELECT 
-        CONCAT(CP.ID_PARAMETRO,'-',P.NOMBRE) AS NOMBRE_PARAMETRO,
-        CP.ORDEN_PARAMETRO AS ORDEN_PARAMETRO,
-        A.NOMBRE AS NOMBRE_ANALISIS,
-        CP.ID_ANALISISIS AS ID_ANALISIS
-        FROM CONFIGURACION_PAREMETROS AS CP 
-        JOIN ANALISIS AS A ON A.ID=CP.ID_ANALISISIS 
-        JOIN PARAMETROS AS P ON CP.ID_PARAMETRO = P.ID
-        WHERE CP.ID_ANALISISIS IN($analisis);
-";*/
+       
 
         $query = "SELECT AR.ID,
         AR.ID_ANALISIS,
@@ -293,11 +265,6 @@ class Ordenes_model extends CI_Model
         WHERE AR.ID_ORDEN='$id_orden'
         GROUP BY AR.ID_ANALISIS";
 
-
-
-
-
-
         $resultado = $this->db->query($query);
 
         $resultado = $resultado->result_array();
@@ -309,7 +276,6 @@ class Ordenes_model extends CI_Model
 
     public function insertar_resulatdo($obj)
     {
-
 
 
         $this->db->trans_start();
