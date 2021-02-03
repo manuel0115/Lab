@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
     <!-- begin #page-loader -->
     <div id="page-loader" class="fade show"><span class="spinner"></span></div>
     <!-- end #page-loader -->
@@ -28,16 +32,37 @@
         <!-- begin #header -->
         <div id="header" class="header navbar-default">
 
-            <div class="navbar-header">
-                <a href="inicio" class="navbar-brand"><img src="data/img/corporativo/logo_lara.png" style="margin-right:10px;width:150;height:100px"></img> </a>
-                <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <!-- end navbar-header -->
 
+            <!-- end navbar-header -->
+            <div id="header" class="header navbar-inverse">
+                <!-- begin navbar-header -->
+                <div class="navbar-header">
+                    <a href="inicio" class="navbar-brand"><img src="data/img/corporativo/logo_lara.jpeg" style="margin-right:10px;width:150;height:100px"></img> </a>
+                    <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- end navbar-header -->
+
+                <!-- begin header-nav -->
+                <ul class="navbar-nav navbar-right">
+
+
+                    <li class="dropdown navbar-user">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="data/img/sistema/no_imagen.png" alt="" />
+                            <span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="javascript:;" class="dropdown-item">Log Out</a>
+                        </div>
+                    </li>
+                </ul>
+                <!-- end header-nav -->
+            </div>
+            <!-- end #header -->
             <!-- begin header-nav -->
             <ul class="navbar-nav navbar-right">
 
@@ -63,30 +88,47 @@
             <!-- begin sidebar scrollbar -->
             <div data-scrollbar="true" data-height="100%">
                 <!-- begin sidebar user -->
-                <ul class="nav">
 
-                    <li>
-                        <ul class="nav nav-profile">
-                            <li><a href="javascript:;"><i class="fa fa-cog"></i> Settings</a></li>
-                            <li><a href="javascript:;"><i class="fa fa-pencil-alt"></i> Send Feedback</a></li>
-                            <li><a href="javascript:;"><i class="fa fa-question-circle"></i> Helps</a></li>
-                        </ul>
-                    </li>
-                </ul>
                 <!-- end sidebar user -->
                 <!-- begin sidebar nav -->
                 <ul class="nav">
                     <li class="nav-header">Navigation</li>
 
+                    <?php foreach ($menu as $value) { 
+                        $SUBMENUS= explode(",",$value["SUBMENUS"]);  
+                    ?>
+                        <li class="has-sub">
+                            <a href="javascript:;">
+                                <b class="caret"></b>
+                                <?php echo $value["ICONO_PADRE"]; ?>
+                                <span><?php echo $value["NOMBRE_MENU_PADRE"]; ?></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <?php foreach($SUBMENUS as $value_m){ 
+                                    $sub_menu_elementos=explode("|",$value_m);
+                                ?>
+                                    
+                                    <li><a href="<?php echo $sub_menu_elementos[3] ?>" data-toggle="ajax">
+                                   
+                                    <span><?php echo $sub_menu_elementos[2] ?></span>
+                                </a>
+                            </li>
+                                    
+                                <?php } ?>    
+
+                                }
+                            </ul>
+                        </li>
+                    <?php } ?>
 
 
 
 
-                    <li class="has-sub">
+                    <!--<li class="has-sub">
                         <a href="javascript:;">
                             <b class="caret"></b>
                             <i class="fa fa-flask" aria-hidden="true"></i>
-                            <span>Aanalsis</span>
+                            <span>Mantenimiento Aanalsis</span>
                         </a>
                         <ul class="sub-menu">
                             <li><a href="area_analitica/areas" data-toggle="ajax">
@@ -143,9 +185,24 @@
                             <span>Redes sociales</span>
                         </a>
                     </li>
+                    <li class="has-sub">
+                        <a href="javascript:;">
+                            <b class="caret"></b>
+                            <i class="fas fa-users"></i>
+                            <span>Mantenimiento Usuarios</span>
+                        </a>
 
-                    </li>
-                    </li>
+                        <ul class="sub-menu">
+                            <li> <a href="usuarios" data-toggle="ajax">
+                                    <i class="fas fa-users"></i>
+                                    <span> Usuarios</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>-->
+
+
+
                     <!-- begin sidebar minify button -->
 
                     <!-- end sidebar minify button -->

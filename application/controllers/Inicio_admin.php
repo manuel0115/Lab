@@ -20,17 +20,22 @@ class Inicio_admin extends CI_Controller
      * map to /index.php/welcome/<method_name>
      * @see https://codeigniter.com/user_guide/general/urls.html
      */
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model("Inicio_admin_model");
+    }
+
+
     public function index()
     {
 
-      
+            $data["menu"]=$this->Inicio_admin_model->cargarmenus();
 
-        if ($this->session->ID_USUARIO > 0) {
 
-            $this->load->view('inicio/inicio_admin');
-        }else{
-            header("location:".base_url());
-        }
+            $this->load->view('inicio/inicio_admin',$data);
+       
 
 
     }

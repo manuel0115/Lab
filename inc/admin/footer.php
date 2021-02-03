@@ -1,6 +1,6 @@
 <!-- ================== BEGIN BASE JS ================== -->
 <script src="assets/admin/js/app.min.js"></script>
-<script src="assets/admin/js/theme/default.min.js"></script>
+<script src="assets/admin/js/theme/facebook.min.js"></script>
 <script src="assets/admin/plugins/parsleyjs/dist/parsley.min.js"></script>
 <script src="assets/admin/plugins/parsleyjs/dist/i18n/es.js"></script>
 <script src="assets/admin/plugins/sweetalert/dist/sweetalert.min.js?<?php echo time(); ?>"></script>
