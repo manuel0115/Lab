@@ -9,6 +9,28 @@ class Grupos extends CI_Controller
     {
         parent::__construct();
         $this->load->model("Grupos_model");
+        $this->load->model("Inicio_admin_model");
+        $this->load->model("Permisos_model");
+        
+
+        if (!$this->ion_auth->logged_in()) {
+            redirect("Login_page");
+        } else {
+
+            $user_groups = $this->ion_auth->get_users_groups()->result();
+            $restrunciones=$this->Permisos_model->getRestrinciones($user_groups[0]->id);
+            $restrunciones=explode(",",$restrunciones[0]["Menus"]);
+            $controlador = $this->router->class;
+            $id_menu = $this->Inicio_admin_model->cargarmenusPorControlador($controlador);
+            $id_menu = $id_menu[0]["ID"];
+            //print_r($restrunciones);
+            
+            
+            
+            if(in_array($id_menu,$restrunciones)){
+                redirect("inicio_admin","refresh");
+            }
+        }
     }
 
 

@@ -1,7 +1,7 @@
 <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
 <link href="assets/admin/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
-<link href="assets/admin/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
+<link href="assets/admin/plugins/select2/dist/css/select2.min.css?"<?php echo time();?> rel="stylesheet" />
 
 
 <!-- ================== END PAGE LEVEL STYLE ================== -->
@@ -67,7 +67,7 @@
                 $.getScript('assets/admin/plugins/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js'),
                 $.getScript('assets/admin/plugins/datatables.net-buttons/js/dataTables.buttons.min.js'),
                 $.getScript('assets/admin/plugins/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'),
-                $.getScript('assets/admin/plugins/tag-it/js/tag-it.min.js'),
+                $.getScript('assets/admin/plugins/select2/dist/js/select2.min.js'),
                 $.Deferred(function (deferred) {
                     $(deferred.resolve);
                 })
@@ -86,3 +86,6 @@
 
 </script>
 <!-- ================== END PAGE LEVEL JS ================== -->
+
+
+

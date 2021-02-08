@@ -9,6 +9,28 @@ class Permisos extends CI_Controller
     {
         parent::__construct();
         $this->load->model("Permisos_model");
+        $this->load->model("Inicio_admin_model");
+        $this->load->model("Permisos_model");
+        
+
+        if (!$this->ion_auth->logged_in()) {
+            redirect("Login_page");
+        } else {
+
+            $user_groups = $this->ion_auth->get_users_groups()->result();
+            $restrunciones=$this->Permisos_model->getRestrinciones($user_groups[0]->id);
+            $restrunciones=explode(",",$restrunciones[0]["Menus"]);
+            $controlador = $this->router->class;
+            $id_menu = $this->Inicio_admin_model->cargarmenusPorControlador($controlador);
+            $id_menu = $id_menu[0]["ID"];
+            //print_r($restrunciones);
+            
+            
+            
+            if(in_array($id_menu,$restrunciones)){
+                redirect("inicio_admin","refresh");
+            }
+        }
     }
 
 
@@ -51,7 +73,7 @@ class Permisos extends CI_Controller
         $codigo = 500;
         $mensaje = 'error';
 
-        if($this->input->post("id_permisos")>0){
+        /*if($this->input->post("id_permisos")>0){
             $config = array(
                 array(
                     "field" => "id_permisos",
@@ -61,20 +83,25 @@ class Permisos extends CI_Controller
     
             );
         }else{
-            $config = array(
-                array(
-                    "field" => "roles",
-                    "label" => "Rol",
-                    "rules" => "required"
-                ),
-                array(
-                    "field" => "menu",
-                    "label" => "Menu",
-                    "rules" => "required"
-                )
-    
-            );
-        }
+            
+        }*/
+
+
+        
+
+        $config = array(
+            array(
+                "field" => "roles",
+                "label" => "Rol",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "restrinciones[]",
+                "label" => "Restrinciones",
+                "rules" => "required"
+            )
+
+        );
         
 
 
@@ -91,13 +118,13 @@ class Permisos extends CI_Controller
                 }
 
                 
-                $obj->borrar=($obj->borrar == "on")?"TRUE":"FALSE";
+               /* $obj->borrar=($obj->borrar == "on")?"TRUE":"FALSE";
                 $obj->ver=($obj->ver == "on")?"TRUE":"FALSE";
                 $obj->actualizar=($obj->actualizar == "on")?"TRUE":"FALSE";
-                $obj->crear=($obj->crear == "on")?"TRUE":"FALSE";
+                $obj->crear=($obj->crear == "on")?"TRUE":"FALSE";*/
 
-                
-               /* echo "<pre>";
+                $obj->restrinciones=implode(",",$obj->restrinciones);
+                /*echo "<pre>";
                 print_r($obj);
                 echo "</pre>";
                 die();*/

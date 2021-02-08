@@ -2,13 +2,13 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Analisis extends CI_Controller
+class Laboratorio extends CI_Controller
 {
 
     public function __construct()
-    {
+    {   
         parent::__construct();
-        $this->load->model("Analisis_model");
+        $this->load->model("Laboratorio_model");
         $this->load->model("Inicio_admin_model");
         $this->load->model("Permisos_model");
         
@@ -36,35 +36,35 @@ class Analisis extends CI_Controller
 
     public function index()
     {
-
-        $this->load->view("analisis/analisis");
+        
+        $this->load->view("laboratorio/laboratorio");
     }
 
-    public function cargarDatosAnalisis()
+    public function cargarDatoslaboratorio()
     {
-        $resultado["data"] = $this->Analisis_model->cargarDatosTablaAreaAnalisis();
+        $resultado["data"] = $this->Laboratorio_model->cargarDatosTablalaboratorio();
         echo json_encode($resultado);
     }
 
-    public function getModalanalisis($id = 0)
+    public function getModaLaboratorio($id = 0)
     {
-        $this->load->model("Area_analitica_model");
+       
 
         if ($id !== 0) {
             $id = base64_decode(base64_decode(base64_decode($id)));
-            $data["info"] = $this->Analisis_model->getModalAnalisis($id);
+            $data["info"] = $this->Laboratorio_model->getModallaboratorio($id);
         }
 
-        $data["areas"] = $this->Area_analitica_model->areasAnaliticas();
+        
 
-        $this->load->view("analisis/modal/analisis_crear_modificar", $data);
+        $this->load->view("laboratorio/modal/laboratorio", $data);
     }
 
 
 
 
 
-    public function guardar_analisis()
+    public function guardar_laboratorio()
     {
         $this->load->library('form_validation');
 
@@ -74,13 +74,18 @@ class Analisis extends CI_Controller
 
         $config = array(
             array(
-                "field" => "area",
-                "label" => "Area analitica",
+                "field" => "nombre",
+                "label" => "Nombre",
                 "rules" => "required"
             ),
             array(
-                "field" => "analisis[]",
-                "label" => "Nombre",
+                "field" => "correo",
+                "label" => "Correo",
+                "rules" => "required"
+            ),
+            array(
+                "field" => "rnc",
+                "label" => "RNC",
                 "rules" => "required"
             )
 
@@ -100,17 +105,19 @@ class Analisis extends CI_Controller
                     $obj->$key = $value;
                 }
 
-                if ($obj->id_analisis > 0) {
+                $obj->activo=($obj->activo == "on")?'TRUE':'FALSE';
 
-                    $resultado = $this->Analisis_model->modificar_analisis($obj);
+                if ($obj->id_laboratorio > 0) {
+
+                    $resultado = $this->Laboratorio_model->modificar_laboratorio($obj);
                 } else {
-                    $resultado = $this->Analisis_model->insertar_analisis($obj);
+                    $resultado = $this->Laboratorio_model->insertar_laboratorio($obj);
                 }
 
 
                 if ($resultado) {
                     $codigo = 0;
-                    $mensaje = "Evento guardarda con exito";
+                    $mensaje = "Laboratorio guardardo con exito";
                 }
             } else {
                 $mensaje = $this->form_validation->error_string();

@@ -2,13 +2,14 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Analisis extends CI_Controller
+class Sucursales extends CI_Controller
 {
+
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("Analisis_model");
+        $this->load->model("Sucursales_model");
         $this->load->model("Inicio_admin_model");
         $this->load->model("Permisos_model");
         
@@ -36,36 +37,39 @@ class Analisis extends CI_Controller
 
     public function index()
     {
-
-        $this->load->view("analisis/analisis");
+        
+        $this->load->view("sucursales/sucursales");
     }
 
-    public function cargarDatosAnalisis()
+    public function cargarDatosSucursales()
     {
-        $resultado["data"] = $this->Analisis_model->cargarDatosTablaAreaAnalisis();
+        $resultado["data"] = $this->Sucursales_model->cargarDatosTablaSucursales();
         echo json_encode($resultado);
     }
 
-    public function getModalanalisis($id = 0)
+    public function getModalsucursal($id = 0)
     {
-        $this->load->model("Area_analitica_model");
+        $this->load->model("Laboratorio_model");
 
         if ($id !== 0) {
             $id = base64_decode(base64_decode(base64_decode($id)));
-            $data["info"] = $this->Analisis_model->getModalAnalisis($id);
+            $data["info"] = $this->Sucursales_model->modalSucursales($id);
         }
 
-        $data["areas"] = $this->Area_analitica_model->areasAnaliticas();
+        $data["laboratorio"] = $this->Laboratorio_model->cargarDatosTablalaboratorio();
 
-        $this->load->view("analisis/modal/analisis_crear_modificar", $data);
+        $this->load->view("sucursales/modal/sucursales", $data);
     }
 
 
 
 
 
-    public function guardar_analisis()
+    public function guardar_sucursal()
     {
+
+
+  
         $this->load->library('form_validation');
 
         $codigo = 500;
@@ -74,14 +78,24 @@ class Analisis extends CI_Controller
 
         $config = array(
             array(
-                "field" => "area",
-                "label" => "Area analitica",
-                "rules" => "required"
+                "field" => "nombre",
+                "label" => "Nombre",
+                "rules" => "trim|required"
             ),
             array(
-                "field" => "analisis[]",
-                "label" => "Nombre",
-                "rules" => "required"
+                "field" => "laboratorio",
+                "label" => "Laboratorio",
+                "rules" => "trim|required"
+            ),
+            array(
+                "field" => "direcion",
+                "label" => "Direcion",
+                "rules" => "trim|required"
+            ),
+            array(
+                "field" => "telefono",
+                "label" => "Telefono",
+                "rules" => "trim|required"
             )
 
         );
@@ -92,7 +106,7 @@ class Analisis extends CI_Controller
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
             if ($this->form_validation->run() == TRUE) {
 
-
+               
 
                 $obj = new stdClass();
 
@@ -100,14 +114,18 @@ class Analisis extends CI_Controller
                     $obj->$key = $value;
                 }
 
-                if ($obj->id_analisis > 0) {
+                $obj->activo=($obj->activo == "on")?"TRUE":"FALSE";
 
-                    $resultado = $this->Analisis_model->modificar_analisis($obj);
+                
+
+                if ($obj->id_sucursal > 0) {
+
+                    $resultado = $this->Sucursales_model-> modificar_Sucursales($obj);
                 } else {
-                    $resultado = $this->Analisis_model->insertar_analisis($obj);
+                    $resultado = $this->Sucursales_model->insertar_Sucursales($obj);
                 }
 
-
+               
                 if ($resultado) {
                     $codigo = 0;
                     $mensaje = "Evento guardarda con exito";
@@ -120,7 +138,7 @@ class Analisis extends CI_Controller
 
         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
     }
-
+    
 
     public function autocompletadoAnalisis()
     {
@@ -132,5 +150,12 @@ class Analisis extends CI_Controller
 
 
         echo json_encode($resultado);
+    }
+
+    public function getModaTablaSucursales()
+    {
+        
+
+        $this->load->view("tablas/sucursales");
     }
 }

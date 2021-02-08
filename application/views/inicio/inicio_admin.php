@@ -1,10 +1,14 @@
 <?php include('inc/admin/head.php');
 
 
-
-
+/*echo "<pre>";
+print_r($menus);
+echo "</pre>";
+die();*/
 
 ?>
+
+
 <style>
     .MY_user-img {
         width: 2.25rem !important;
@@ -56,30 +60,15 @@
                             <span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="javascript:;" class="dropdown-item">Log Out</a>
+                            <a href="javascript:void(0);" id="cerrar_sesion" class="dropdown-item">Cerrar Sesion</a>
                         </div>
                     </li>
                 </ul>
                 <!-- end header-nav -->
             </div>
             <!-- end #header -->
-            <!-- begin header-nav -->
-            <ul class="navbar-nav navbar-right">
 
 
-                <li class="dropdown navbar-user">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <div class="image image-icon bg-black text-grey-darker">
-                            <img class="MY_user-img" src="<?php echo ($datos_sesion_usuario['img'] != FALSE) ? $datos_sesion_usuario['img'] : 'data/img/usuario/guest.png' ?>">
-                        </div>
-                        <span class="d-none d-md-inline"><?php echo ($datos_sesion_usuario['id'] > 0) ? $datos_sesion_usuario['nombre_completo'] . ' ' . $datos_sesion_usuario['apellido'] : "error a datos cargar session"; ?></span> <b class="caret"></b>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="javascript:void(0);" id="cerrar_sesion" class="dropdown-item">Cerrar Sesion</a>
-                    </div>
-                </li>
-            </ul>
-            <!-- end header navigation right -->
         </div>
         <!-- end #header -->
 
@@ -94,37 +83,49 @@
                 <ul class="nav">
                     <li class="nav-header">Navigation</li>
 
-                    <?php foreach ($menu as $value) { 
-                        $SUBMENUS= explode(",",$value["SUBMENUS"]);  
-                    ?>
-                        <li class="has-sub">
-                            <a href="javascript:;">
-                                <b class="caret"></b>
-                                <?php echo $value["ICONO_PADRE"]; ?>
-                                <span><?php echo $value["NOMBRE_MENU_PADRE"]; ?></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <?php foreach($SUBMENUS as $value_m){ 
-                                    $sub_menu_elementos=explode("|",$value_m);
-                                ?>
-                                    
-                                    <li><a href="<?php echo $sub_menu_elementos[3] ?>" data-toggle="ajax">
-                                   
-                                    <span><?php echo $sub_menu_elementos[2] ?></span>
-                                </a>
-                            </li>
-                                    
-                                <?php } ?>    
+                   
+                    <?php
+                    krsort($menus);
+                    foreach ($menus as $value_gruop) { ?>
 
-                                }
-                            </ul>
-                        </li>
+                        <?php if ($value_gruop["SUBMENU"]) { ?>
+                            <?php foreach ($value_gruop[0] as $value_menu) { ?>
+
+                                <li class="has-sub">
+                                    <a href="javascript:;">
+                                        <b class="caret"></b>
+                                        <?php echo $value_menu["ICONO"] ?>
+                                        <span><?php echo $value_menu["MENU_PADRE"] ?></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        <?php foreach ($value_menu["SUBMENU"] as  $value_submenu) { ?>
+
+
+                                            <li><a href="<?php echo $value_submenu["URL"] ?>" data-toggle="ajax">
+                                                    <?php echo $value_submenu["ICONO"] ?>
+                                                    <span><?php echo $value_submenu["NOMBRE"] ?></span>
+                                                </a>
+                                            </li>
+                                        <?php } ?>
+
+                                    </ul>
+                                </li>
+                            <?php }  ?>
+                        <?php } else { ?>
+
+                            <?php foreach ($value_gruop[0] as $value_menu) { ?>
+
+                                <li><a href="<?php echo $value_menu["URL"] ?>" data-toggle="ajax">
+                                        <?php echo $value_menu["ICONO"] ?>
+                                        <span><?php echo $value_menu["NOMBRE"] ?></span>
+                                    </a>
+                                </li>
+
+                            <?php } ?>
+                        <?php } ?>
                     <?php } ?>
 
-
-
-
-                    <!--<li class="has-sub">
+                    <!-- <li class="has-sub">
                         <a href="javascript:;">
                             <b class="caret"></b>
                             <i class="fa fa-flask" aria-hidden="true"></i>
@@ -199,7 +200,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>-->
+                    </li>
 
 
 

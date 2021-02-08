@@ -73,6 +73,33 @@ class Permisos_model extends CI_Model
         return $resultado;
     }
 
+    public function getRestrinciones($id)
+    {
+        $query = "SELECT ID_ROL,LISTA as Menus FROM RESTRINCIONES where  ID_ROL=$id;";
+
+        $resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();
+
+        log_message('ERROR', 'getRoles \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
+    }
+
+    public function getRestrincionesPor($id)
+    {
+        $query = "SELECT ID_ROL,LISTA as Menus FROM RESTRINCIONES where  ID_ROL=$id;";
+
+        $resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();
+
+        log_message('ERROR', 'getRoles \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
+    }
+
+
     public function existe_permisos($obj)
     {   
         $query = "SELECT ID FROM PERMISOS WHERE ROL='$obj->roles' AND MENU='$obj->menu'";
@@ -100,15 +127,15 @@ class Permisos_model extends CI_Model
     public function insertar_permisos($obj)
     {
 
-        if(!$this->existe_permisos($obj)){
+       /* if(!$this->existe_permisos($obj)){
             return array("status"=>false,"mensaje"=>"ya existen esos permiso");
-        }
+        }*/
 
         
          
         
         
-        $query = "INSERT INTO PERMISOS
+        /*$query = "INSERT INTO PERMISOS
         (
         ROL,
         MENU,
@@ -134,7 +161,16 @@ class Permisos_model extends CI_Model
        '$this->user_id',
         NOW(),
         TRUE,
-        $obj->crear);";
+        $obj->crear);";*/
+
+        $query="INSERT INTO RESTRINCIONES
+        (
+        ID_ROL,
+        LISTA)
+        VALUES
+        (
+        '$obj->roles',
+        '$obj->restrinciones');";
 
 
 

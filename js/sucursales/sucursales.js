@@ -1,49 +1,37 @@
-/**
- * 
- * 
- * [ID_USUARIO] => 6
-            [NOMBRE_USUARIO] => eliza guzman
-            [CORREO_USUARIO] => eliza@gmail.com
-            [CELULAR] => 8094186426
-            [CEDULA] => 00119194306
-            [GENERO] => M
-            [group_id] => 3
-            [ID_ORGANIZACION] => 2
-            [ROL] => CEO
 
- */
+
 var tablaAnalisis = $("#tblAnalisis").DataTable({
-  ajax: "usuarios/cargarDatosUSUARIOS",
+  ajax: "sucursales/cargarDatosSucursales",
   type: "POST",
   columns: [
-    { data: "ID_USUARIO", className: "text-center", orderable: false },
-    { data: "NOMBRE_USUARIO", className: "text-center", orderable: false },
-    { data: "CORREO_USUARIO", className: "text-center", orderable: false },
-    { data: "CELULAR", className: "text-center", orderable: false },
-    { data: "CEDULA", className: "text-center", orderable: false },
-    { data: "GENERO", className: "text-center", orderable: false },
-    { data: "ROL", className: "text-center", orderable: false },
+    { data: "ID", className: "text-center", orderable: false },
+    { data: "NOMBRE", className: "text-center", orderable: false },
+    { data: "LABORATORIO_NOMBRE", className: "text-center", orderable: false },
+    { data: "CORREO", className: "text-center", orderable: false },
+    { data: "DIRECCION", className: "text-center", orderable: false },
+    { data: "TELEFONOS", className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
+
   ],
   aoColumnDefs: [
     {
-      aTargets: [7],
+      aTargets: [6],
       mRender: function (data, type, full) {
         let activo =
-        full.ACTIVO == "0"
-          ? '<span class="label label-danger">Suspendido</span>'
-          : '<span class="label label-success">Activo</span>';
-      return activo;
+          full.ACTIVO == "0"
+            ? '<span class="label label-danger">Inactivo</span>'
+            : '<span class="label label-success">Activo</span>';
+        return activo;
       },
     },
     {
-      aTargets: [8],
+      aTargets: [7],
       mRender: function (data, type, full) {
         return (
           '<a href="javascript:void(0);" id="' +
-          full.ID_USUARIO +
-          '"  class="btn btn-primary btn_editar_usuario" ><i class="fa fa-edit"></a>'
+          full.ID +
+          '"  class="btn btn-primary btn_editar_analsis" ><i class="fa fa-edit"></a>'
         );
       },
     },
@@ -56,10 +44,10 @@ var tablaAnalisis = $("#tblAnalisis").DataTable({
       //                            "extend": "text",
       className: "btn btn-labeled btn-success",
       text:
-        '<span class="btn-label"><i class="fa fa-plus"></i></span>&nbsp;Agregar usuario',
+        '<span class="btn-label"><i class="fa fa-plus"></i></span>&nbsp;Agregar Sucursal',
       action: function (nButton, oConfig, oFlash) {
         $(".modal_usuarios .modal-content").load(
-          "usuarios/getModalUsuarios",
+          "sucursales/getModalsucursal",
           function () {
             $(".modal_usuarios").modal({
               backdrop: 'static', 
@@ -84,13 +72,12 @@ var tablaAnalisis = $("#tblAnalisis").DataTable({
     },
 });
 
-$(".modal_usuarios .modal-content").on("click","#btn_guardar_usuario",function(){
-  
+$(".modal_usuarios .modal-content").on("click","#btn_guardar_SUCURSAL",function(){
+
   var url = $frm_modficar_agregar_analisis .attr("action");
   var datos = $frm_modficar_agregar_analisis .serializeArray();
-  
+
   var validation = $frm_modficar_agregar_analisis .parsley().validate();
-  //alert();
   if (validation) {
     $.post(url,datos,function (data) {
         if (data.codigo == 0) {
@@ -114,11 +101,11 @@ $(".modal_usuarios .modal-content").on("click","#btn_guardar_usuario",function()
   }
 })
 
-$("#tblAnalisis").on("click", ".btn_editar_usuario", function () {
+$("#tblAnalisis").on("click", ".btn_editar_analsis", function () {
   
   id=btoa(btoa(btoa($(this).attr("id"))));
 
-  $(".modal_usuarios .modal-content").load("usuarios/getModalUsuarios/"+id,function () {
+  $(".modal_usuarios .modal-content").load("sucursales/getModalsucursal/"+id,function () {
    
       $(".modal_usuarios").modal({
         backdrop: 'static', 
@@ -130,14 +117,6 @@ $("#tblAnalisis").on("click", ".btn_editar_usuario", function () {
     })
 });
 
-$("#tblAnalisis thead th input[type=text]").on('keyup', function() {
-
-
-  tablaAnalisis
-      .column($(this).parent().index() + ':visible')
-      .search(this.value)
-      .draw();
-});
-
+sucursales
 
 

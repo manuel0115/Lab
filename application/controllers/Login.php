@@ -23,12 +23,23 @@ class Login extends CI_Controller {
         parent::__construct();
 
         $this->load->model('login_model');
+        $this->load->library("Ion_auth");
     }
 
     public function page_login() {
 
-        $this->load->view('login/login');
+        
+        if ($this->ion_auth->logged_in()) {
+
+            redirect("inicio_admin","refresh");
+        }else{
+            $this->load->view("login/login");
+        }
+
+        
     }
+
+    
 
     public function login_user() {
 
@@ -64,28 +75,26 @@ class Login extends CI_Controller {
                     $obj->$key = $value;
                 }
 
+                $remember = (bool)$this->input->post('remember');
 
-
-               
-               
-               $resultado = $this->login_model->loginUsuario($obj);
                 
+
+			if ($this->ion_auth->login($obj->email, $obj->pass, $remember))
+			{
+				
+                $user = $this->ion_auth->user()->row();
+                $user_groups = $this->ion_auth->get_users_groups()->result();
+
+                
+
                
 
-                if ($resultado) {
-                    $
-
-                    $datos_usuarios = array();
-
-                    foreach ($resultado[0] as $key => $value) {
-                        $datos_usuarios[$key] = $value;
-                    }
-
-                    
-
-                    $this->session->set_userdata($datos_usuarios);
-                    $codigo= 0;
-                }
+                $codigo=0;
+			}
+			
+               
+               
+              
 
 
 
@@ -97,11 +106,9 @@ class Login extends CI_Controller {
 
     public function logout() {
 
-        $this->session->sess_destroy();
+        $this->ion_auth->logout();
 
-       // header("location:".base_url());
-        
-        return base_url();
+        redirect(base_url(), 'refresh');
     }
 
 }

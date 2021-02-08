@@ -2,11 +2,7 @@
 <link href="assets/admin/plugins/datatables.net-bs4/css/dataTables.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css?<?php echo time(); ?>" rel="stylesheet" />
 <link href="assets/admin/plugins/tag-it/css/jquery.tagit.css" rel="stylesheet" />
-<style>
-    .modal {
-        overflow-y: auto !important;
-    }
-</style>
+
 
 <!-- ================== END PAGE LEVEL STYLE ================== -->
 
@@ -14,7 +10,7 @@
 
 <!-- end breadcrumb -->
 <!-- begin page-header -->
-<h1 class="page-header">Usuarios <small> > Lista de usuarios </small></h1>
+<h1 class="page-header">Sucursales <small> > Lista de sucursales </small></h1>
 <!-- end page-header -->
 <!-- begin panel -->
 <div class="panel panel-inverse">
@@ -29,26 +25,18 @@
         <table id="tblAnalisis" class="table table-striped table-bordered table-td-valign-middle" style="width:100%;">
             <thead>
                 <tr>
-                    <th width="5%" class="text-rap" class="text-center">ID</th>
+
+
+
+
+                    <th width="10%" class="text-rap" class="text-center">ID</th> 
                     <th width="10%" class="text-rap" class="text-center">NOMBRE</th>
+                    <th width="10%" class="text-rap" class="text-center">LABORTORIO</th>
                     <th width="10%" class="text-rap" class="text-center">CORREO</th>
-                    <th width="10%" class="text-rap" class="text-center">CELULAR</th>
-                    <th width="10%" class="text-rap" class="text-center">CEDULA</th>
-                    <th width="10%" class="text-rap" class="text-center">GENERO</th>
-                    <th width="10%" class="text-rap" class="text-center">ROL</th>
+                    <th width="10%" class="text-rap" class="text-center">DIRECCION</th>
+                    <th width="10%" class="text-rap" class="text-center">TELEFONO</th>
                     <th width="10%" class="text-rap" class="text-center">ESTADO</th>
                     <th width="1%" class="text-rap" class="text-center">OPCIONES</th>
-                </tr>
-                <tr>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
-                    <th width="1%" class="text-rap" class="text-center">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,14 +49,6 @@
 <!-- end panel -->
 <!-- #modal-alert -->
 <div class="modal fade modal_usuarios" >
-    <div class="modal-dialog" style="width: 100%;max-width: 650px;">
-        <div class="modal-content">
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade modal_tabla_sucursales" >
     <div class="modal-dialog" style="width: 100%;max-width: 650px;">
         <div class="modal-content">
 
@@ -93,7 +73,7 @@
                     $(deferred.resolve);
                 })
                 ).done(function () {
-            $.getScript('js/usuarios/usuarios.js?<?php echo time(); ?>'),
+            $.getScript('js/sucursales/sucursales.js?<?php echo time(); ?>'),
                     $.Deferred(function (deferred) {
                         $(deferred.resolve);
                     })

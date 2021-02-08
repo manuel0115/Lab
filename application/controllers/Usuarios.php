@@ -9,12 +9,34 @@ class Usuarios extends MY_Controller
     {
         parent::__construct();
         $this->load->model("Usuarios_model");
+        $this->load->model("Inicio_admin_model");
+        $this->load->model("Permisos_model");
+
+
+        if (!$this->ion_auth->logged_in()) {
+            redirect("Login_page");
+        } else {
+
+            $user_groups = $this->ion_auth->get_users_groups()->result();
+            $restrunciones = $this->Permisos_model->getRestrinciones($user_groups[0]->id);
+            $restrunciones = explode(",", $restrunciones[0]["Menus"]);
+            $controlador = $this->router->class;
+            $id_menu = $this->Inicio_admin_model->cargarmenusPorControlador($controlador);
+            $id_menu = $id_menu[0]["ID"];
+            //print_r($restrunciones);
+
+
+
+            if (in_array($id_menu, $restrunciones)) {
+                redirect("inicio_admin", "refresh");
+            }
+        }
     }
 
 
     public function index()
     {
-        
+
         $this->load->view("usuarios/usuarios");
     }
 
@@ -26,46 +48,31 @@ class Usuarios extends MY_Controller
 
     public function getModalUsuarios($id = 0)
     {
-       /* $this->load->model("Area_analitica_model");
+
+        $grupos = $this->ion_auth->groups()->result();
+
+        $data["grupos"] = json_decode(json_encode($grupos), true);
 
         if ($id !== 0) {
-            $id = base64_decode(base64_decode(base64_decode($id)));
-            $data["info"] = $this->Analisis_model->getModalAnalisis($id);
-        }*/
-        $grupos=$this->ion_auth->groups()->result();
 
-        $data["grupos"] =json_decode(json_encode($grupos),true); 
+            $id = base64_decode(base64_decode(base64_decode($id)));
+            $data["info"] = $this->Usuarios_model->getModalUsuarios($id);
+        }
+
 
         $this->load->view("usuarios/modal/usuarios", $data);
     }
 
-    /*public function guardarUsuarios()
-    {
-        $username = 'emguzman';
-        $password = '123456';
-        $email = 'emmanuel.011593@gmail.com';
-        $additional_data = array(
-                'first_name' => 'emmanuel',
-                'last_name' => 'guzman',
-                );
-        $group = array('1'); // Sets user to admin.
-
-        $this->ion_auth->register($username, $password, $email, $additional_data, $group);
-
-       
-    }*/
-
-
-
 
     public function guardarUsuarios()
     {
+
         $this->load->library('form_validation');
 
         $codigo = 500;
         $mensaje = 'error';
 
-       
+
         $config = array(
             array(
                 "field" => "nombre",
@@ -82,21 +89,7 @@ class Usuarios extends MY_Controller
                 "label" => "Correo",
                 "rules" => "required|trim"
             ),
-            array(
-                "field" => "conf_email",
-                "label" => "Confirmar correo",
-                "rules" => "required|trim"
-            ),
-            array(
-                "field" => "pass",
-                "label" => "Contraseña",
-                "rules" => "required|trim"
-            ),
-            array(
-                "field" => "conf_pass",
-                "label" => "Confirmar contraseña",
-                "rules" => "required|trim"
-            ),
+
             array(
                 "field" => "cedula",
                 "label" => "Cedula",
@@ -108,6 +101,11 @@ class Usuarios extends MY_Controller
                 "rules" => "required|trim"
             ),
             array(
+                "field" => "telefono",
+                "label" => "Telefono",
+                "rules" => "required|trim"
+            ),
+            array(
                 "field" => "grupo",
                 "label" => "Rol",
                 "rules" => "required"
@@ -115,35 +113,46 @@ class Usuarios extends MY_Controller
 
         );
 
+        if (!($this->input->post("grupo") == 1 || $this->input->post("grupo") == 2)) {
+            array_push($config, array("field" => "id_sucursal", "label" => "Sucursal", "rules" => "required|trim"), array("field" => "idlaboratorio", "label" => "Laboratroio", "rules" => "required|trim"));
+        }
+
+
+
+        if (!($this->input->post("id_usuario") > 0)) {
+            array_push(
+                $config,
+                array(
+                    "field" => "pass",
+                    "label" => "Contraseña",
+                    "rules" => "required|trim"
+                ),
+                array(
+                    "field" => "conf_pass",
+                    "label" => "Confirmar contraseña",
+                    "rules" => "required|trim"
+                )
+            );
+        }
+
+
 
         $this->form_validation->set_rules($config);
 
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
             if ($this->form_validation->run() == TRUE) {
 
-                 /*
-            id_usuario: 
-            nombre: manuel
-            apellido: guzman
-            email: emmanuel.011593@gmail.com
-            conf_email: emmanuel.011593@gmail.com
-            pass: 123456
-            conf_pass: 123456
-            cedula: 00119194306
-            genero: 1
-            genero: M
-        
-        
-        
-        */
 
-               
+
+
 
                 $obj = new stdClass();
 
                 foreach ($this->input->post() as $key => $value) {
                     $obj->$key = $value;
                 }
+
+                $obj->activo = ($obj->activo == "on") ? 'TRUE' : 'FALSE';
 
 
 
@@ -152,26 +161,37 @@ class Usuarios extends MY_Controller
                     $additional_data = array(
                         'first_name' => "$obj->nombre",
                         'last_name' => "$obj->apellido",
+                        'phone' => "$obj->telefono",
                     );
 
-                    $group = array("$obj->grupo"); 
-                    $id_usuario_creado=$this->ion_auth->register( $obj->nombre." ". $obj->apellido, $obj->pass, $obj->email, $additional_data, $group);
+                    $group = array("$obj->grupo");
 
-                    /*if($id_usuario_creado ){
+                    $id_usuario_creado = $this->ion_auth->register($obj->nombre . " " . $obj->apellido, $obj->pass, $obj->email, $additional_data, $group);
 
-                        //$obj->id_usuario_creado=
+                    if ($id_usuario_creado) {
 
-                        //$resultado = $this->Usuarios_model->InsertaUsarios($obj);
-                    }*/
+                        $obj->id_usuario_creado = $id_usuario_creado;
 
+                        $resultado = $this->Usuarios_model->InsertaUsarios($obj);
+                    }
                 } else {
-                    $resultado = $this->Analisis_model->modificar_analisis($obj);
+                    $id = $obj->id_usuario;
+                    $data = array(
+                        'first_name' => "$obj->nombre",
+                        'last_name' => "$obj->apellido",
+                        'phone' => "$obj->telefono",
+
+                    );
+                    if ($this->ion_auth->update($id, $data)) {
+
+                        $resultado = $this->Usuarios_model->modificarUsuarios($obj);
+                    }
                 }
 
 
-                if ($id_usuario_creado) {
+                if ($resultado) {
                     $codigo = 0;
-                    $mensaje = "Evento guardardo con exito";
+                    $mensaje = "Usuario guardardo con exito";
                 }
             } else {
                 $mensaje = $this->form_validation->error_string();
@@ -182,8 +202,8 @@ class Usuarios extends MY_Controller
         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
     }
 
-    
-    
+
+
 
     public function autocompletadoAnalisis()
     {
@@ -198,11 +218,9 @@ class Usuarios extends MY_Controller
     }
 
     public function emailCheck($email)
-    {   
-        $resultado=$this->ion_auth->email_check($email);
-        
+    {
+        $resultado = $this->ion_auth->email_check($email);
+
         return $resultado;
     }
-
-   
 }

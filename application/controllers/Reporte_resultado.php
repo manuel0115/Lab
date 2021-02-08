@@ -11,12 +11,30 @@ class Reporte_resultado extends CI_Controller
     {
         parent::__construct();
         $this->load->model("Reporte_resultado_model");
+        $this->load->model("Inicio_admin_model");
+        $this->load->model("Permisos_model");
+        
 
+        if (!$this->ion_auth->logged_in()) {
+            redirect("Login_page");
+        } else {
 
-        $this->datos_usuarios = $this->session->userdata();
-        if (!$this->datos_usuarios["ID_USUARIO"] > 0) {
-            redirect('login/page_login');
+            $user_groups = $this->ion_auth->get_users_groups()->result();
+            $restrunciones=$this->Permisos_model->getRestrinciones($user_groups[0]->id);
+            $restrunciones=explode(",",$restrunciones[0]["Menus"]);
+            $controlador = $this->router->class;
+            $id_menu = $this->Inicio_admin_model->cargarmenusPorControlador($controlador);
+            $id_menu = $id_menu[0]["ID"];
+            
+            
+            
+            
+            if(in_array($id_menu,$restrunciones)){
+                redirect("inicio_admin","refresh");
+            }
         }
+
+        
     }
 
     public function index()
