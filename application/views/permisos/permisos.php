@@ -27,15 +27,9 @@
                 <tr>
                     
                     <th width="10%" class="text-rap" class="text-center">ID</th>
-                    <th width="10%" class="text-rap" class="text-center">NOMBRE MODULO</th>
-                    <th width="10%" class="text-rap" class="text-center">ROL</th>
-                    <th width="1%" class="text-rap" class="text-center">VER</th>
-                    <th width="1%" class="text-rap" class="text-center">ACTUALIZAR</th>
-                    <th width="1%" class="text-rap" class="text-center">ELIMINAR</th>
-                    <th width="1%" class="text-rap" class="text-center">CREAR</th>
+                    <th width="10%" class="text-rap" class="text-center">NOMBRE ROL</th>
+                    <th width="10%" class="text-rap" class="text-center">DESCRIPCION</th>
                     <th width="1%" class="text-rap" class="text-center">OPCIONES</th>
-                    
-                  
                 </tr>
             </thead>
             <tbody>

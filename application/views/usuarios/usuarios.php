@@ -38,6 +38,7 @@
                     <th width="10%" class="text-rap" class="text-center">ROL</th>
                     <th width="10%" class="text-rap" class="text-center">ESTADO</th>
                     <th width="1%" class="text-rap" class="text-center">OPCIONES</th>
+                    <th width="10%" class="text-rap" class="text-center">ELIMINAR</th>
                 </tr>
                 <tr>
                     <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
@@ -48,6 +49,7 @@
                     <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
                     <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
                     <th width="10%" class="text-rap" class="text-center"><input type="text" style="width: 100%;" class="form-control"></th>
+                    <th width="1%" class="text-rap" class="text-center">&nbsp;</th>
                     <th width="1%" class="text-rap" class="text-center">&nbsp;</th>
                 </tr>
             </thead>

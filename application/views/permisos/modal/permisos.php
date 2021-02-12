@@ -1,11 +1,4 @@
-<?php
 
-echo "<pre>";
-print_r($info);
-echo "</pre>"
-
-
-?>
 <style>
     .ui-autocomplete {
         z-index: 2147483647;
@@ -40,9 +33,11 @@ echo "</pre>"
         <div class="form-group row m-b-15">
             <label class="col-md-2 col-sm-4 col-form-label" for="website">Roles <stron style="color:red"> *</stron></label>
             <div class="col-md-10 col-sm-8">
-                <select style="text-transform:capitalize;" class="form-control" id="roles" name="roles" data-parsley-required="true" data-parsley-noselectseleccion <?php echo ($info[0]["ID"] > 0) ? "disabled" : ""; ?>>
-                    <option value="0">Selecione un rol</option>
+                <select style="text-transform:capitalize;" class="form-control" id="roles" name="roles" data-parsley-required="true" data-parsley-noselectseleccion <?php echo ($info[0]["ID"] > 0) ? "readonly" : ""; ?>>
+
                     <?php foreach ($roles as $value) { ?>
+
+
                         <option style="text-transform:capitalize;" value="<?php echo $value["id"]; ?>" <?php echo ($info[0]["ROL"] == $value["id"]) ? "selected" : ""; ?>><?php echo $value["name"] ?></option>
                     <?php } ?>
                 </select>
@@ -53,11 +48,11 @@ echo "</pre>"
         <div class="form-group row m-b-15">
             <label class="col-md-2 col-sm-4 col-form-label" for="website">Restrinciones <stron style="color:red"> *</stron></label>
             <div class="col-md-10 col-sm-8">
-                <select class="multiple-select2 form-control" multiple="multiple" name="restrinciones[]" required  data-parsley-errors-container="#listFieldError" >
-                   
-
+                <?php $lista_de_restrinciones = explode(',', $info[0]["LISTA_RESTRICIONES"]); ?>
+                <select class="multiple-select2 form-control" multiple="multiple" name="restrinciones[]" required data-parsley-errors-container="#listFieldError">
+                    <option value="0">Sin restriciones</option>
                     <?php foreach ($menus as $value) { ?>
-                        <option style="text-transform:capitalize;" value="<?php echo $value["ID"]; ?>" <?php echo ($info[0]["MENU"] == $value["ID"]) ? "selected" : ""; ?>><?php echo $value["NOMBRE"] ?></option>
+                        <option style="text-transform:capitalize;" value="<?php echo $value["ID"]; ?>" <?php echo (in_array($value["ID"],$lista_de_restrinciones)) ? "selected" : ""; ?>><?php echo $value["NOMBRE"] ?></option>
                     <?php } ?>
                 </select>
                 <span id="listFieldError"></span>

@@ -1,12 +1,15 @@
 <?php
 
-class Login_model extends CI_Model {
+class Login_model extends CI_Model
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->load->database();
     }
 
-    public function loginUsuario($obj) {
+   /* public function loginUsuario($obj)
+    {
 
         $query = "SELECT U.ID AS ID_USUARIO,
         CONCAT(U.NOMBRE,' ',U.APELLIDO) AS NOMBRE_USUARIO,
@@ -34,25 +37,49 @@ class Login_model extends CI_Model {
 
         $result = $this->db->query($query);
 
-        
+
         log_message('ERROR', $query . "loginUsuario\n<pre>" . print_r($result, TRUE) . "</pre>");
-        
+
         $filas = $result->num_rows();
 
         //return $filas;
 
         if (!$filas > 0) {
-            return false ;
-        
+            return false;
         } else {
             $result = $result->result_array();
-            
+
             if (!password_verify($obj->pass, $result[0]['PASSWORD'])) {
                 return false;
             } else {
                 return $result;
             }
         }
-    }
+    }*/
 
+    public function getDataUsuario($id)
+    {
+        $query = "SELECT UL.id as Id,
+        concat(UL.first_name,' ',UL.last_name) as nombre,
+        UL.phone as Telefono,
+        UL.email AS Correo,
+        U.CEDULA AS Cedula,
+        U.GENERO AS Genero,
+        U.ACTIVO AS ESATADO,
+        U.ID_ORGANIZACION,
+        UG.group_id AS ID_ROL,
+        G.name as Nombre_rol
+        FROM users as UL 
+        LEFT JOIN USUARIO AS U ON UL.id = U.ID
+        JOIN users_groups AS UG ON UG.user_id = UL.id
+        JOIN groups AS G ON UG.group_id = G.id
+        WHERE UL.id = '$id'";
+
+        $result = $this->db->query($query);
+        $result = $result->result_array();
+
+        log_message('ERROR', $query . "loginUsuario\n<pre>" . print_r($result, TRUE) . "</pre>");
+
+        return $result;
+    }
 }

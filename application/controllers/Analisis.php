@@ -133,4 +133,18 @@ class Analisis extends CI_Controller
 
         echo json_encode($resultado);
     }
+
+    public function autocompletadoAnalisisConfiguracionParametros()
+    {
+        $this->load->model('Autocompletado_model');
+
+        $termino = trim(strtolower($_GET['term']));
+
+        $resultado = $this->Autocompletado_model->getAnalisisConfiguracionParametros($termino);
+
+
+        echo json_encode($resultado);
+    }
+
+    
 }

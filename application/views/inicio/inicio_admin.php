@@ -1,11 +1,6 @@
 <?php include('inc/admin/head.php');
 
 
-/*echo "<pre>";
-print_r($menus);
-echo "</pre>";
-die();*/
-
 ?>
 
 
@@ -20,8 +15,6 @@ die();*/
 </style>
 
 <body>
-
-
 
 
 
@@ -57,8 +50,9 @@ die();*/
                     <li class="dropdown navbar-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="data/img/sistema/no_imagen.png" alt="" />
-                            <span class="d-none d-md-inline">Adam Schwartz</span> <b class="caret"></b>
+                            <span class="d-none d-md-inline"><?php echo $user[0]["nombre"] ?></span>
                         </a>
+                        
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="javascript:void(0);" id="cerrar_sesion" class="dropdown-item">Cerrar Sesion</a>
                         </div>
@@ -87,7 +81,7 @@ die();*/
                     <?php
                     krsort($menus);
                     foreach ($menus as $value_gruop) { ?>
-
+                    
                         <?php if ($value_gruop["SUBMENU"]) { ?>
                             <?php foreach ($value_gruop[0] as $value_menu) { ?>
 

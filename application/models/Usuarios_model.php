@@ -218,4 +218,21 @@ class Usuarios_model extends CI_Model
 
         return $resultado;
     }
+
+
+    public function eliminarUsuario($id)
+    {
+
+
+        $query = "DELETE FROM USUARIO WHERE ID='$id';";
+
+        $resultado = $this->db->query($query);
+
+        log_message('ERROR', 'eliminarUsuario \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
+    }
+
+
+    
 }

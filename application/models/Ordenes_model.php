@@ -30,10 +30,14 @@ class Ordenes_model extends CI_Model
         $query = "SELECT O.ID as ORDEN,
         CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS PACIENTE,
         R.NOMBRE AS REFERENCIA,
-        O.CREADO_EN AS FECHA
-        FROM ORDEN AS O JOIN 
-        PACIENTES AS P ON O.ID_PACIENTE = P.ID JOIN
-        REFERENCIA AS R ON R.ID = O.REFERENCIA";
+        O.CREADO_EN AS FECHA,
+        P.ID as ID_PACIENTE,
+        P.CEDULA AS CEDULA_PACIENTE,
+        P.CORREO AS CORREO_PACIENTE,
+        P.TELEFONO AS TELEFONO_PACIENTE
+        FROM ORDEN AS O 
+        JOIN PACIENTES AS P ON O.ID_PACIENTE = P.ID 
+        JOIN REFERENCIA AS R ON R.ID = O.REFERENCIA";
 
         $resultado = $this->db->query($query);
 

@@ -1,8 +1,8 @@
 var tblordenes = $("#tblAnalisis").DataTable({
-  ajax: "ordenes/cargarDatosOrdenes",
-  type: "POST",
+  //ajax: "ordenes/cargarDatosOrdenes",
+  //type: "POST",
   order: [[0, "desc"]],
-  columns: [
+  /*columns: [
     { data: "ORDEN", className: "text-center", orderable: false },
     { data: "PACIENTE", className: "text-center", orderable: false },
     { data: "REFERENCIA", className: "text-center", orderable: false },
@@ -11,8 +11,8 @@ var tblordenes = $("#tblAnalisis").DataTable({
     { data: null, className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
-  ],
-  aoColumnDefs: [
+  ],*/
+  /*aoColumnDefs: [
     {
       aTargets: [4],
       mRender: function (data, type, full) {
@@ -71,7 +71,7 @@ var tblordenes = $("#tblAnalisis").DataTable({
         );
       },
     },
-  ],
+  ],*/
   language: {
     url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
   },
@@ -99,7 +99,7 @@ var tblordenes = $("#tblAnalisis").DataTable({
     },
   ],
   dom:
-    "<'row'<'col-sm-5'l><'col-sm-7 'Bfr>>" +
+    "<'row'<'col-sm-5'l><'col-sm-7 'r>>" +
     "t" +
     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
   preDrawCallback: function () {
@@ -350,3 +350,12 @@ $(".modal_imprimir_resultado").on(
       window.location.replace("reporte_resultado/imprimir_resultado/" + id);
   }
 );
+
+$("#tblAnalisis thead th input[type=text]").on('keyup', function() {
+
+
+  tblordenes
+      .column($(this).parent().index() + ':visible')
+      .search(this.value)
+      .draw();
+});

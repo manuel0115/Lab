@@ -9,6 +9,7 @@ class Pruebas extends CI_Controller
     {
         parent::__construct();
         $this->load->library("Ion_auth");
+        $this->load->model("Pruebas_model");
        
     }
 
@@ -17,7 +18,23 @@ class Pruebas extends CI_Controller
         
 
     public function index(){
-        $id = 2;
+        
+        echo "<pre>";
+        print_r($this->Pruebas_model->funcionPrueba());
+        echo "<pre>";
+        die();
+        /*$id = 2;
+        $data = array(
+              'first_name' => 'emmanuel',
+              'last_name' => 'guzman',
+              'password' => '123456',
+               );
+        $this->ion_auth->update($id, $data);*/
+
+    }
+
+    public function actualizar_usuarios(){
+        $id = 10;
         $data = array(
               'first_name' => 'emmanuel',
               'last_name' => 'guzman',

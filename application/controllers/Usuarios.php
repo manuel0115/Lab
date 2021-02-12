@@ -223,4 +223,40 @@ class Usuarios extends MY_Controller
 
         return $resultado;
     }
+
+    
+
+    public function eliminarUsuario($id)
+    {   
+        $codigo=13;
+        $mensaje="";
+        if ($id) {
+
+            $id = base64_decode(base64_decode(base64_decode($id)));
+
+            
+            if( $this->ion_auth->delete_user($id)){
+                $resultado=$this->Usuarios_model->eliminarUsuario($id);
+            }
+
+            if($resultado){
+                $codigo=0;
+                $mensaje="Usuario eliminado con exito";
+            }
+
+
+            echo json_encode(array("mensaje"=>$mensaje,"codigo"=>$codigo));
+            
+        }
+
+
+
+        
+
+        
+        
+    }
+
+
+    
 }

@@ -81,13 +81,6 @@ class Login extends CI_Controller {
 
 			if ($this->ion_auth->login($obj->email, $obj->pass, $remember))
 			{
-				
-                $user = $this->ion_auth->user()->row();
-                $user_groups = $this->ion_auth->get_users_groups()->result();
-
-                
-
-               
 
                 $codigo=0;
 			}
@@ -107,6 +100,7 @@ class Login extends CI_Controller {
     public function logout() {
 
         $this->ion_auth->logout();
+        $this->session->sess_destroy();
 
         redirect(base_url(), 'refresh');
     }

@@ -25,6 +25,8 @@ class Inicio_admin extends MY_Controller
     {
         parent::__construct();
         $this->load->model("Inicio_admin_model");
+        $this->load->model('login_model');
+        $this->load->library('session');
         if (!$this->ion_auth->logged_in()) {
             redirect("Login_page");
         }
@@ -33,6 +35,11 @@ class Inicio_admin extends MY_Controller
 
     public function index()
     {
+
+        $user = $this->ion_auth->user()->row();
+        $user=$user->id;
+
+        $data["user"]=$this->login_model->getDataUsuario($user);
 
         $data["menus"] = $this->Inicio_admin_model->cargarmenus();
         $data["menus"] = array_map("self::remapaerar_menu", $data["menus"]);

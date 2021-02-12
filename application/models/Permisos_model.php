@@ -23,18 +23,12 @@ class Permisos_model extends CI_Model
 
     public function cargarDatosTablaPermisos()
     {
-        $query = "SELECT P.ID,
-        P.ROL,
-        P.MENU,
-        P.LEER,
-        P.ACTUALIZAR,
-        P.ELIMINAR,
-        P.CREAR,
-        G.name AS NOMBRE_ROL,
-        SUBM.NOMBRE AS NOMBRE_MODULO
-        FROM PERMISOS AS P
-        JOIN groups as G on P.ROL=G.id
-        join SUBMENU AS SUBM ON SUBM.ID=P.MENU";
+        $query = "SELECT R.ID,
+        G.name as NOMBRE_ROL,
+        G.description as DESCRIPCION,
+        R.LISTA AS LISTA_RESTRICIONES
+        FROM RESTRINCIONES AS R 
+        LEFT JOIN groups AS G ON G.id = R.ID_ROL";
 
         $resultado = $this->db->query($query);
 
@@ -185,14 +179,9 @@ class Permisos_model extends CI_Model
 
     public function modificar_permisos($obj)
     {
-        $query = "UPDATE PERMISOS
+        $query = "UPDATE RESTRINCIONES
         SET
-        LEER = $obj->ver,
-        ACTUALIZAR = $obj->actualizar,
-        ELIMINAR = $obj->borrar,
-        MODIFICADO_POR = '$this->user_id',
-        MODIFICADO_EN = NOW(),
-        CREAR = $obj->crear
+        LISTA = '$obj->restrinciones'
         WHERE ID = $obj->id_permisos;";
 
 
@@ -213,16 +202,15 @@ class Permisos_model extends CI_Model
 
     public function getModalPermisos($id)
     {
-        $query = "SELECT ID,
-        ROL,
-        MENU,
-        LEER,
-        ACTUALIZAR,
-        ELIMINAR,
-        
-        CREAR
-        FROM PERMISOS 
-        WHERE ID= '$id'";
+        $query = "SELECT 
+        R.ID,
+        G.name AS NOMBRE_ROL,
+        G.description AS DESCRIPCION,
+        R.LISTA AS LISTA_RESTRICIONES
+    FROM
+        RESTRINCIONES AS R
+            LEFT JOIN
+        groups AS G ON G.id = R.ID_ROL WHERE R.ID='$id'";
 
         $resultado = $this->db->query($query);
 

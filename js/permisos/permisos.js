@@ -5,48 +5,12 @@ var tablaAnalisis = $("#tblAnalisis").DataTable({
   columns: [
     { data: "ID", className: "text-center", orderable: false },
     { data: "NOMBRE_ROL", className: "text-center", orderable: false },
-    { data: "NOMBRE_MODULO", className: "text-center", orderable: false },
-     { data: null, className: "text-center", orderable: false },
-      { data: null, className: "text-center", orderable: false },
-       { data: null, className: "text-center", orderable: false },
-        { data: null, className: "text-center", orderable: false },
-        { data: null, className: "text-center", orderable: false },
+    { data: "DESCRIPCION", className: "text-center", orderable: false },
+    { data: null, className: "text-center", orderable: false },
   ],
   aoColumnDefs: [
     {
       aTargets: [3],
-      mRender: function (data, type, full) {
-          let estado=(full.LEER == "1")?'<span class="label label-success"><i class="fas fa-check"></span>':'<span class="label label-danger"><i class="fa fa-times"></span>'
-
-        return estado;
-      },
-    },
-    {
-      aTargets: [4],
-      mRender: function (data, type, full) {
-          let estado=(full.ACTUALIZAR == "1")?'<span class="label label-success"><i class="fas fa-check"></span>':'<span class="label label-danger"><i class="fa fa-times"></span>'
-
-        return estado;
-      },
-    },
-    {
-      aTargets: [5],
-      mRender: function (data, type, full) {
-          let estado=(full.ELIMINAR == "1")?'<span class="label label-success"><i class="fas fa-check"></span>':'<span class="label label-danger"><i class="fa fa-times"></span>'
-
-        return estado;
-      },
-    },
-    {
-      aTargets: [6],
-      mRender: function (data, type, full) {
-          let estado=(full.CREAR =="1")?'<span class="label label-success"><i class="fas fa-check"></span>':'<span class="label label-danger"><i class="fa fa-times"></span>'
-
-        return estado;
-      },
-    }, 
-    {
-      aTargets: [7],
       mRender: function (data, type, full) {
         return (
           '<a href="javascript:void(0);" id="' +
@@ -54,7 +18,8 @@ var tablaAnalisis = $("#tblAnalisis").DataTable({
           '"  class="btn btn-primary btn_editar_permisos" ><i class="fa fa-edit"></a>'
         );
       },
-    },
+    }
+    
   ],
   language: {
     url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",

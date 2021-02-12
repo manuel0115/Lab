@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Ordenes extends CI_Controller
 {
-
+    
     public function __construct()
     {
         parent::__construct();
@@ -36,8 +36,10 @@ class Ordenes extends CI_Controller
 
     public function index()
     {
-
-        $this->load->view("ordenes/ordenes");
+        $data["datos_tabla"] = $this->Ordenes_model->cargarDatosOrdenes();
+        
+       
+        $this->load->view("ordenes/ordenes",$data);
     }
 
     public function cargarDatosOrdenes()
