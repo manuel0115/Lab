@@ -17,14 +17,22 @@ class Ordenes_model extends CI_Model
 
     public $user_id;
     public $id_laboratorio;
+    public $user;
     function __construct()
     {
-        $this->user_id = $this->session->userdata("ID_USUARIO");
-        $this->id_laboratorio = $this->session->userdata("LABORATORIO");
+        $this->load->model('login_model');
+        $user = $this->ion_auth->user()->row();
+        $user = $user->id;
+      
+
+        $this->user = $this->login_model->getDataUsuario($user);
+        $this->user_id=$this->user[0]["Id"];
+        $this->id_laboratorio  =$this->user[0]["ID_LABORATORIO"];
+
     }
 
     public function cargarDatosOrdenes()
-    {
+    {   
        
 
         $query = "SELECT O.ID as ORDEN,
@@ -34,11 +42,46 @@ class Ordenes_model extends CI_Model
         P.ID as ID_PACIENTE,
         P.CEDULA AS CEDULA_PACIENTE,
         P.CORREO AS CORREO_PACIENTE,
+        L.NOMBRE AS LABORATORIO,
+        S.NOMBRE AS SUCURSAL,
+        S.LABORATORIO AS ID_LABORATORIO,
+        O.SUCURSALES AS ID_SUCURSAL,
         P.TELEFONO AS TELEFONO_PACIENTE
         FROM ORDEN AS O 
         JOIN PACIENTES AS P ON O.ID_PACIENTE = P.ID 
-        JOIN REFERENCIA AS R ON R.ID = O.REFERENCIA";
+        JOIN REFERENCIA AS R ON R.ID = O.REFERENCIA
+        JOIN SUCURSALES AS S ON S.ID = O.SUCURSALES
+        JOIN LABORATORIO AS L ON L.ID = S.LABORATORIO";
 
+        
+        if ($this->ion_auth->in_group(array(3))){
+           /* echo "<pre>";
+            print_r(array("aa"));
+            echo "<pre>";
+            die();*/
+
+            $query .= " WHERE S.LABORATORIO ='". $this->user[0]["ID_LABORATORIO"]."'";
+        }
+
+        if ($this->ion_auth->in_group(array(5,6))){
+            $query .= " WHERE O.SUCURSALES ='". $this->user[0]["ID_SUCURSAL"]."'";
+
+           /* echo "<pre>";
+            print_r(array("bb"));
+            echo "<pre>";
+            die();*/
+        }
+
+        if ($this->ion_auth->in_group(array(4))){
+            $query .= " WHERE R.NOMBRE ='". $this->user[0]["ID_SUCURSAL"]."'";
+
+           /* echo "<pre>";
+            print_r(array("cc"));
+            echo "<pre>";
+            die();*/
+        }
+
+        
         $resultado = $this->db->query($query);
 
         $resultado = $resultado->result_array();
@@ -66,7 +109,7 @@ class Ordenes_model extends CI_Model
         `MODIFICADO_EN`,
         `ACTIVO`,
         `STATUS`,
-        `LABORATORIO`)
+        `SUCURSALES`)
         VALUES
         (
         '$obj->id_paciente',
@@ -236,7 +279,7 @@ class Ordenes_model extends CI_Model
         FROM ORDEN AS O
         JOIN ANALISIS_RESULTADO AS AR
         JOIN PERFIL_PRECIOS AS PP ON PP.ID_ANALISIS = AR.ID_ANALISIS AND O.REFERENCIA= PP.ID_REFERENCIA AND PP.ID_LABORATORIO = 1
-        JOIN ANALISIS AS A ON AR.ID_ANALISIS = A.ID
+        JOIN ANALISIS AS A ON AR.ID_ANALISIS = A.ID AND AR.ID_ORDEN = O.ID
         JOIN PACIENTES AS P ON O.ID_PACIENTE = P.ID
         WHERE O.ID ='$id'
         GROUP BY O.ID;";
@@ -254,7 +297,7 @@ class Ordenes_model extends CI_Model
     {
        
 
-        $query = "SELECT AR.ID,
+        /*$query = "SELECT AR.ID,
         AR.ID_ANALISIS,
         A.NOMBRE AS NOMBRE_ANALISIS,
         CP.ID_PARAMETRO,
@@ -267,13 +310,36 @@ class Ordenes_model extends CI_Model
         JOIN PARAMETROS AS P ON P.ID = CP.ID_PARAMETRO
         JOIN ANALISIS AS A ON AR.ID_ANALISIS = A.ID
         WHERE AR.ID_ORDEN='$id_orden'
+        GROUP BY AR.ID_ANALISIS";*/
+
+        $query="SELECT 	O.ID,
+        AR.ID,
+        AR.ID_ANALISIS,
+        O.SUCURSALES,
+        S.LABORATORIO,
+        A.NOMBRE AS NOMBRE_ANALISIS,
+        CA.ID  AS ID_CONFIGURACION_ANALISIS,
+        CP.ID AS ID_CONFIGURACION_PAREMETROS,
+        P.NOMBRE AS NOMBRE_PARAMETRO,
+        CP.ID_PARAMETRO AS ID_PARAMETRO,
+        GROUP_CONCAT(CONCAT(CP.ORDEN_PARAMETRO,'|',CP.ID_PARAMETRO,'|',P.NOMBRE,'|',IF(PTR.VALOR IS NULL,'NTV',PTR.VALOR ))) AS PARAMETROS
+        FROM ANALISIS_RESULTADO  AS AR
+        LEFT JOIN ANALISIS AS A ON AR.ID_ANALISIS = A.ID
+        LEFT JOIN ORDEN AS O ON O.ID = AR.ID_ORDEN
+        LEFT JOIN SUCURSALES AS S ON S.ID = O.SUCURSALES
+        LEFT JOIN LABORATORIO AS L ON L.ID = S.LABORATORIO
+        LEFT JOIN CONFIGURACION_ANALISIS AS CA ON CA.ID_ANALISIS = AR.ID_ANALISIS AND CA.LABORATORIO = S.LABORATORIO
+        LEFT JOIN CONFIGURACION_PAREMETROS AS CP ON CP.ID_CONFIGURACION_ANALISIS = CA.ID
+        LEFT JOIN PARAMETROS AS P ON P.ID = CP.ID_PARAMETRO
+        LEFT JOIN PARAMEROS_TEMPORAL_RESULATDO AS PTR ON PTR.ID_ANALSIS_RESULTADO = AR.ID
+        WHERE AR.ID_ORDEN = '$id_orden'
         GROUP BY AR.ID_ANALISIS";
 
         $resultado = $this->db->query($query);
 
         $resultado = $resultado->result_array();
 
-        log_message('ERROR', 'getDataOrden \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR', 'buscarParametrosResulatdo \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }
@@ -352,14 +418,19 @@ class Ordenes_model extends CI_Model
     }
 
     public function actulizarListaPrecios($obj)
-    {
+    {   
+        if (!$this->ion_auth->in_group(array(1,2))){
+        
+            $obj->id_laboratorio=$this->user[0]["ID_LABORATORIO"];
+        }
+
 
         $query = "SELECT PP.ID_ANALISIS,
         A.NOMBRE, 
         PP.PRECIO 
         FROM PERFIL_PRECIOS AS PP 
         JOIN ANALISIS AS A ON A.ID = PP.ID_ANALISIS
-        WHERE PP.ID_ANALISIS IN ($obj->lista_analisis) AND PP.ID_REFERENCIA ='$obj->id_referencia'  AND ID_LABORATORIO='$this->id_laboratorio'";
+        WHERE PP.ID_ANALISIS IN ($obj->lista_analisis) AND PP.ID_REFERENCIA ='$obj->id_referencia'  AND ID_LABORATORIO='".$obj->id_laboratorio."'";
 
         $resultado = $this->db->query($query);
 

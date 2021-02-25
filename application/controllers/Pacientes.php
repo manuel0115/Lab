@@ -161,14 +161,14 @@ class Pacientes extends MY_Controller
     }
 
 
-    public function datosPorCedula($cedula)
+    public function datosPorCedula()
     {
 
-        $cedula = base64_decode($cedula);
+        
 
         $termino = trim(strtolower($_GET['term']));
 
-        $resultado = $this->Pacientes_model->getDatosPorCedula($cedula);
+        $resultado = $this->Pacientes_model->getDatosPorCedula($termino);
 
 
         echo json_encode($resultado);

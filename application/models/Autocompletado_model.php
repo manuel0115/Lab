@@ -41,6 +41,59 @@ class Autocompletado_model extends CI_Model
         return $filas;
     }
 
+    public function getAnalisisConReferecia($param,$referencia)
+    {
+        $query = "SELECT  A.NOMBRE,
+        A.ID, 
+        PP.PRECIO
+        FROM ANALISIS AS A
+        JOIN PERFIL_PRECIOS AS PP ON PP.ID_ANALISIS = A.ID
+        WHERE A.NOMBRE LIKE '%$param%' AND  PP.ID_REFERENCIA = '$referencia';";
+
+        $resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();
+
+        log_message('ERROR', "completadoRecetas\n " . $query . "\n<pre>" . print_r($resultado, TRUE) . "</pre>");
+
+        foreach ($resultado as $value) {
+            $fila["label"] = $value['NOMBRE'];
+            $fila["value"] = $value['NOMBRE'];
+            $fila["ID"] = $value['ID'];
+            //$fila["parametros"] = $value['PARAMETROS'];
+
+            $filas[] = $fila;
+        }
+
+
+        return $filas;
+    }
+
+    
+
+    public function analsisConPrecio()
+    {
+        $query = "SELECT ID,NOMBRE,PARAMETROS FROM ANALISIS WHERE NOMBRE like '%$param%';";
+
+        $resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();
+
+        log_message('ERROR', "completadoRecetas\n " . $query . "\n<pre>" . print_r($resultado, TRUE) . "</pre>");
+
+        foreach ($resultado as $value) {
+            $fila["label"] = $value['NOMBRE'];
+            $fila["value"] = $value['NOMBRE'];
+            $fila["ID"] = $value['ID'];
+            $fila["parametros"] = $value['PARAMETROS'];
+
+            $filas[] = $fila;
+        }
+
+
+        return $filas;
+    }
+
     public function getAnalisisConfiguracionParametros($param)
     {
        

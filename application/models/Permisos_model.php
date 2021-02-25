@@ -16,9 +16,17 @@ class Permisos_model extends CI_Model
 
     public $user_id;
     public $id_laboratorio;
-    function __construct(){
-        $this->user_id = $this->session->userdata("ID_USUARIO");
-        $this->id_laboratorio = $this->session->userdata("LABORATORIO");
+    public $user;
+    function __construct()
+    {
+        $this->load->database();
+       
+        $user = $this->ion_auth->user()->row();
+        $user = $user->id;
+        $this->load->model('login_model');
+        $this->user = $this->login_model->getDataUsuario($user);
+        $this->user_id=$this->user[0]["Id"];
+
     }
 
     public function cargarDatosTablaPermisos()

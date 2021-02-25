@@ -16,11 +16,15 @@ class Perfil_precios_model extends CI_Model
 
     public $user_id;
     public $id_laboratorio;
-    function __construct(){
-        $this->user_id = $this->session->userdata("ID_USUARIO");
-        $this->id_laboratorio = $this->session->userdata("LABORATORIO");
+    public $user;
+    function __construct()
+    {
+        $this->load->model('login_model');
+        $user = $this->ion_auth->user()->row();
+        $user = $user->id;
+
+        $this->user = $this->login_model->getDataUsuario($user);
     }
-    
 
     public function cargarDatosTablaConfiguracion_analisis()
     {
@@ -44,7 +48,7 @@ class Perfil_precios_model extends CI_Model
     {
         $query = "SELECT PP.ID_ANALISIS, A.NOMBRE AS NOMBRE_ANALISIS, PP.PRECIO AS PRECIO 
         FROM  PERFIL_PRECIOS AS PP JOIN ANALISIS AS A ON A.ID = PP.ID_ANALISIS
-        WHERE PP.ID_ANALISIS IN ($obj->listaAnalisis) AND PP.ID_REFERENCIA = '$obj->id_referencia' and PP.ID_LABORATORIO ='$this->id_laboratorio'";
+        WHERE PP.ID_ANALISIS IN ($obj->listaAnalisis) AND PP.ID_REFERENCIA = '$obj->id_referencia' and PP.ID_LABORATORIO ='". $this->user[0]["ID_LABORATORIO"] ."'";
 
         $resultado = $this->db->query($query);
 

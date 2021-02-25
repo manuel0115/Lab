@@ -14,7 +14,20 @@
 class Sucursales_model extends CI_Model
 {
 
-    public $user_id=1;
+    public $user_id;
+    public $id_laboratorio;
+    public $user;
+    function __construct()
+    {
+        $this->load->model('login_model');
+        $user = $this->ion_auth->user()->row();
+        $user = $user->id;
+      
+
+        $this->user = $this->login_model->getDataUsuario($user);
+        $this->user_id=$this->user[0]["Id"];
+
+    }
 
     public function cargarDatosTablaSucursales()
     {
@@ -128,6 +141,29 @@ class Sucursales_model extends CI_Model
 
 
         log_message('ERROR', 'modificar_analisis \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
+    }
+
+    public function cargarDatosTablaSucursalesPorLaboratorio()
+    {
+        $query = "SELECT
+        S.ID, 
+        S.NOMBRE,
+        S.LABORATORIO AS ID_LABORATORIO
+        FROM SUCURSALES AS S";
+
+        if ($this->ion_auth->in_group(array(3))){
+            $query .= " WHERE  S.LABORATORIO ='". $this->user[0]["ID_LABORATORIO"]."'";
+        }
+
+       
+
+        $resultado = $this->db->query($query);
+
+        $resultado = $resultado->result_array();
+
+        log_message('ERROR', 'cargar_menus \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }

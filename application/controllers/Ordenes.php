@@ -57,6 +57,8 @@ class Ordenes extends CI_Controller
         $data["formulario"] = $analisis;
         $data["id_orden"] = $id_orden;
 
+        
+
         $this->load->view("ordenes/modal/resultados_crear_modificar", $data);
     }
 
@@ -149,6 +151,24 @@ class Ordenes extends CI_Controller
         if ($id !== 0) {
             $id = base64_decode(base64_decode(base64_decode($id)));
             $data["datos_orden"] = $this->Ordenes_model->getDataOrden($id);
+        }
+
+        $grupo = array(1,2,3);
+        /*if ($this->ion_auth->in_group($grupo)) {
+            
+            $this->load->model("Laboratorio_model");
+            $data["laboratrios"] = $this->Laboratorio_model->cargarDatosTablalaboratorio();
+
+          
+            
+        }*/
+
+       
+        if ($this->ion_auth->in_group($grupo)) {
+            
+            $this->load->model("Sucursales_model");
+            $data["sucursales"] = $this->Sucursales_model->cargarDatosTablaSucursalesPorLaboratorio();
+ 
         }
 
 

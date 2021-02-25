@@ -15,7 +15,19 @@ class Area_analitica_model extends CI_Model
 {
 
 
-    public $user_id=1;
+    public $user_id;
+    public $id_laboratorio;
+    public $user;
+    function __construct()
+    {
+        $this->load->model('login_model');
+        $user = $this->ion_auth->user()->row();
+        $user = $user->id;
+
+        $this->user = $this->login_model->getDataUsuario($user);
+        $this->user_id=$this->user[0]["Id"];
+
+    }
 
     public function cargarDatosTablaAreaAnalitica()
     {

@@ -25,7 +25,7 @@ class Inicio_admin extends MY_Controller
     {
         parent::__construct();
         $this->load->model("Inicio_admin_model");
-        $this->load->model('login_model');
+       
         $this->load->library('session');
         if (!$this->ion_auth->logged_in()) {
             redirect("Login_page");
@@ -35,7 +35,7 @@ class Inicio_admin extends MY_Controller
 
     public function index()
     {
-
+        $this->load->model('login_model');
         $user = $this->ion_auth->user()->row();
         $user=$user->id;
 

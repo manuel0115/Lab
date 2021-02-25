@@ -135,7 +135,7 @@ class Pacientes_model extends CI_Model
 
     public function getDatosPorCedula($cedula)
     {
-        $query = "SELECT * FROM PACIENTES WHERE CEDULA ='$cedula'";
+        $query = "SELECT ID,CONCAT(NOMBRE,' ',APELLIDOS) AS NOMBRE FROM PACIENTES WHERE CEDULA ='$cedula'";
 
         $resultado = $this->db->query($query);
 
@@ -143,7 +143,16 @@ class Pacientes_model extends CI_Model
 
         log_message('ERROR','getDatosPorCedula \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
-        return $resultado;
+        foreach ($resultado as $value) {
+            $fila["label"] = $value['NOMBRE'];
+            $fila["value"] = $value['NOMBRE'];
+            $fila["ID"] = $value['ID'];
+            $fila["parametros"] = $value['PARAMETROS'];
+
+            $filas[] = $fila;
+        }
+
+        return $filas;
     }
 
     /*public function getDatosPorOrden($orden)

@@ -134,6 +134,22 @@ class Analisis extends CI_Controller
         echo json_encode($resultado);
     }
 
+
+    public function autocompletadoAnalisisConReferecia()
+    {
+        $this->load->model('Autocompletado_model');
+
+        $termino = trim(strtolower($_GET['term']));
+
+        $referencia=$this->input->get("referencia");
+
+        $resultado = $this->Autocompletado_model->getAnalisisConReferecia($termino,$referencia);
+
+
+        echo json_encode($resultado);
+    }
+
+
     public function autocompletadoAnalisisConfiguracionParametros()
     {
         $this->load->model('Autocompletado_model');

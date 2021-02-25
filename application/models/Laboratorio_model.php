@@ -15,10 +15,16 @@ class Laboratorio_model extends CI_Model
 {
 
     public $user_id;
+    public $id_laboratorio;
+    public $user;
+    function __construct()
+    {
+        $this->load->model('login_model');
+        $user = $this->ion_auth->user()->row();
+        $user = $user->id;
 
-    public function __construct()
-    {   $user = $this->ion_auth->user()->row();
-        $this->user_id= $user->id;
+        $this->user = $this->login_model->getDataUsuario($user);
+        $this->user_id=$this->user[0]["Id"];
 
     }
 
@@ -86,7 +92,8 @@ class Laboratorio_model extends CI_Model
 
     public function modificar_laboratorio($obj)
     {
-        $query = "UPDATE LABORATORIO set NOMBRE='$obj->nombre', RNC = '$obj->rnc',CORREO='$obj->correo',ACTIVO=$obj->activo WHERE ID = '$obj->id_laboratorio'";
+        $query = "UPDATE LABORATORIO set NOMBRE='$obj->nombre', RNC = '$obj->rnc',CORREO='$obj->correo',MODIFICADO_POR = '$this->user_id',
+        MODIFICADO_EN=now(),ACTIVO=$obj->activo WHERE ID = '$obj->id_laboratorio'";
 
        
 
@@ -94,7 +101,7 @@ class Laboratorio_model extends CI_Model
 
 
 
-        log_message('ERROR', 'modificar_analisis \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+        log_message('ERROR', 'modificar_laboratorio \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }

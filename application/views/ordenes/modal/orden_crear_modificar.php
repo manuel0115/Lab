@@ -1,4 +1,11 @@
+<?php
 
+    /*echo "<pre>";
+    print_r($datos_orden);
+    echo "</pre>";
+    die();*/
+
+?>
 <style>
     .ui-autocomplete {
         z-index: 2147483647;
@@ -14,14 +21,14 @@
     }
 </style>
 <div class="modal-header">
-    <h4 class="modal-title"><?php echo ($datos_orden[0]["ID_ORDEN"] > 0) ? "Modificar orden " : "Crear orden"; ?></h4>
+    <h4 class="modal-title"><?php echo ($datos_orden[0]["ID_ORDEN"] > 0) ? "Modificar orden " : "Crear orden";  $precio= 0.0;?></h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 </div>
 <div class="modal-body">
 
 
     <form action="ordenes/guardar_orden" id="frm_modficar_agregar_orden" name="frm_modficar_agregar_orden" class="form-horizontal " data-parsley-validate="true">
-        
+
         <input type="hidden" name="id_orden" id="id_orden" class="form-control" placeholder="" value="<?php echo  $datos_orden[0]['ID_ORDEN'] ?>">
 
         <legend>Informacion de usuario</legend>
@@ -36,7 +43,7 @@
 
             <div class="form-group col-sm-5 pl-0 d-inline-block">
                 <label>Cedula</label>
-                <input type="text" name="cedula" id="cedula" class="form-control tabla_paciente " placeholder="Nombre el analisis" required value="<?php echo $datos_orden[0]['CEDULA'] ?>" />
+                <input type="text" name="cedula" id="cedula" class="form-control tabla_paciente " placeholder="Cedula" required value="<?php echo $datos_orden[0]['CEDULA'] ?>" />
 
 
             </div>
@@ -48,7 +55,7 @@
             </div>
 
         </div>
-        <div class="row pl-2 pb-4 mb-1">
+        <div class="row pl-2  ">
 
             <div class="form-group col-sm-12 pl-0 d-inline-block">
                 <label>Referencia</label>
@@ -65,6 +72,27 @@
 
 
         </div>
+
+
+
+        <?php
+        $grupo = array(1, 2, 3);
+        if ($this->ion_auth->in_group($grupo)) {
+        ?>
+            <div class="row pl-2 pb-4 mb-1">
+                <div class="form-group col-sm-12 pl-0 d-inline-block mb-1">
+                    <label>Sucursales</label>
+                    <select name="sucursal" id="sucursal" class="form-control">
+                        <?php foreach ($sucursales as $value) { ?>
+                            <option value="<?php echo $value['ID'] ?>"><?php echo $value['NOMBRE'] ?></option>
+                        <?php } ?>
+                    </select>
+
+
+                </div>
+            </div>
+
+        <?php } ?>
         <div class="row pl-2 pb-4 mb-1">
             <div class="form-group col-sm-10 pl-0 d-inline-block">
                 <label>Lista de analisis</label>
@@ -78,7 +106,7 @@
 
         </div>
 
-      
+
 
 
         <div class="panel panel-inverse">
@@ -116,30 +144,41 @@
                         </thead>
                         <tbody id="tbody_orden">
                             <?php if ($datos_orden[0]["ID_ORDEN"] > 0) { ?>
+                              
+                                
 
                                 <?php foreach ($LISTA_PRECIO as $key => $value) {
                                     $detalle = explode("-", $value);
+                                    $precio=$precio+$detalle[2];
                                 ?>
 
                                     <tr class="id-analisis" data-id-analisis="<?php echo $detalle[0] ?>">
                                         <td width="1%" class="text-rap text-center"><?php echo $detalle[0] ?></td>
                                         <td width="5%" class="text-rap text-center"><?php echo $detalle[1] ?></td>
-                                        <td width="10%" class="text-rap text-center"><?php echo $detalle[2] ?></td>
+                                        <td width="10%" class="text-rap text-center precio"><?php echo $detalle[2] ?></td>
                                         <td width="10%" class="text-rap text-center"><a href="javascript:;" class="btn btn-danger eliminar-analisis"><i class="fas fa-times"></i></a> </td>
                                     </tr>
 
 
 
                                 <?php } ?>
+
                             <?php } ?>
+
                         </tbody>
+
                     </form>
 
                 </table>
+
             </div>
 
         </div>
-
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="float-right"><span id="contededor-precio" class="label label-success ">Total: $RD <?php echo  $precio;?></span></h3>
+            </div>
+        </div>
 
 
 </div>
@@ -157,7 +196,18 @@
 <script>
     var $frm_modficar_agregar_orden = $("#frm_modficar_agregar_orden");
 
-    $('#analisis').autocomplete({
+    $('#cedula').autocomplete({
+        minLength: 1,
+        source: "pacientes/datosPorCedula",
+        select: function(event, ui) {
+            event.preventDefault();
+            $("#nombre").val(ui.item.value);
+            $("#id_paciente").val(ui.item.ID);
+
+        }
+    });
+
+   /* $('#analisis').autocomplete({
         minLength: 1,
         source: "analisis/autocompletadoAnalisis",
         select: function(event, ui) {
@@ -165,7 +215,32 @@
             $("#analisis").val(ui.item.value);
             $("#id_analisis").val(ui.item.ID);
 
-        }
+        },
+        
+    });*/
+
+    $('#analisis').autocomplete({
+        minLength: 1,
+        source: function(request, response) {
+        $.ajax({
+            url: 'analisis/autocompletadoAnalisisConReferecia',
+            dataType: "json",
+            data: {
+                term : request.term,
+                referencia : $("#referencia").val()
+            },
+            success: function(data) {
+                response(data);
+            }
+        });
+    },
+        select: function(event, ui) {
+            event.preventDefault();
+            $("#analisis").val(ui.item.value);
+            $("#id_analisis").val(ui.item.ID);
+
+        },
+        
     });
 
 
@@ -193,11 +268,17 @@
                     let row = ` <tr class="id-analisis" data-id-analisis="${value.ID_ANALISIS}">
                                 <td width="1%" class="text-rap text-center">${value.ID_ANALISIS}</td>
                                 <td width="5%" class="text-rap text-center">${value.NOMBRE_ANALISIS}</td>
-                                <td width="10%" class="text-rap text-center">${value.PRECIO}</td>
+                                <td width="10%" class="text-rap text-center precio">${value.PRECIO}</td>
                                 <td width="10%" class="text-rap text-center"><a href="javascript:;" class="btn btn-danger eliminar-analisis"><i class="fas fa-times"></i></a> </td>
                             </tr>`
 
                     tbody_orden.append(row);
+
+                    let total= totalPrecios("precio");
+
+                    $("#contededor-precio").html(total);
+
+
 
 
 
@@ -211,7 +292,7 @@
                 objs.push($(this).text());
             });
 
-            console.log(objs.includes(id_analisis));
+          
 
             let existe = objs.includes(id_analisis);
 
@@ -228,11 +309,15 @@
                         let row = ` <tr class="id-analisis" data-id-analisis="${value.ID_ANALISIS}">
                                 <td width="1%" class="text-rap text-center">${value.ID_ANALISIS}</td>
                                 <td width="5%" class="text-rap text-center">${value.NOMBRE_ANALISIS}</td>
-                                <td width="10%" class="text-rap text-center">${value.PRECIO}</td>
+                                <td width="10%" class="text-rap text-center precio">${value.PRECIO}</td>
                                 <td width="10%" class="text-rap text-center"><a href="javascript:;" class="btn btn-danger eliminar-analisis"><i class="fas fa-times"></i></a> </td>
                             </tr>`
 
                         tbody_orden.append(row);
+
+                        let total= totalPrecios("precio");
+
+                        $("#contededor-precio").html(total);
 
 
 
@@ -253,7 +338,7 @@
             })
             .then((cerrar_sesion) => {
                 if (cerrar_sesion) {
-                    
+
                     $(this).parents('tr').remove();
                 }
             });
@@ -267,7 +352,7 @@
         listaAnalisisOrdenes.push($(this).text());
     });
 
-   
+
 
     $("#referencia").change(function() {
         let lista_analisis = [];
@@ -281,7 +366,8 @@
 
         $.post("ordenes/actulizarLista_Precios", {
             id_referencia: id_referencia,
-            lista_analisis: lista_analisis
+            lista_analisis: lista_analisis,
+            id_laboratorio: $("#laboratorio").val()
         }, function(data) {
             $("#tbody_orden").html("");
 
@@ -306,4 +392,7 @@
                 return $("#tbody_orden").children().length != 0
             })
         .addMessage('es', 'addanalisis', 'Debe agregar un analisis');
+
+
+         
 </script>

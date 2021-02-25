@@ -31,7 +31,7 @@
         if ($this->ion_auth->in_group($grupo)) {
         ?>
 
-            <a href="javascript:;" class="btn btn-primary float-right">Agregar Orden <i class="fas fa-plus"></i></a>
+            <a href="javascript:;" id="btn_agregar_ordenes" class="btn btn-primary float-right">Agregar Orden <i class="fas fa-plus"></i></a>
         <?php } ?>
         <table id="tblAnalisis" class="table table-striped table-bordered table-td-valign-middle" style="width:100%;">
             <thead>

@@ -1,9 +1,12 @@
+
+
+
 var tblconfiguracionAnalisis = $("#tblAnalisis").DataTable({
   ajax: "configuracion_analisis/cargarDatosConfiguracion_analisis",
   type: "POST",
   columns: [
-    { data: "ID_ANALISISIS", className: "text-center", orderable: true },
-    { data: "NOMBRE", className: "text-center", orderable: false },
+    { data: "CONFIGURACION_ANALISIS", className: "text-center", orderable: true },
+    { data: "NOMBRE_ANALISIS", className: "text-center", orderable: false },
     { data: "NOMBRE_LABORATORIO", className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
     { data: null, className: "text-center", orderable: false },
@@ -14,8 +17,8 @@ var tblconfiguracionAnalisis = $("#tblAnalisis").DataTable({
       aTargets: [3],
       mRender: function (data, type, full) {
         return (
-          '<a href="javascript:void(0);" id="' +
-          full.ID_ANALISISIS +
+          '<a href="javascript:void(0);" data-id="' +
+          full.CONFIGURACION_ANALISIS +
           '" data-modo="E"  class="btn btn-primary btn_editar_configuracion" ><i class="fa fa-edit"></a>'
         );
       },
@@ -24,8 +27,8 @@ var tblconfiguracionAnalisis = $("#tblAnalisis").DataTable({
       aTargets: [4],
       mRender: function (data, type, full) {
         return (
-          '<a href="javascript:void(0);" data_id_configuracion="' +
-          full.ID_ANALISISIS +
+          '<a href="javascript:void(0);" data-id="' +
+          full.CONFIGURACION_ANALISIS +
           '"  class="btn btn-danger btn_eliminar_configuracion" ><i class="fa fa-times"></a>'
         );
       },
@@ -79,7 +82,8 @@ $(".modal_usuarios .modal-content").on(
     var url = $frm_modficar_agregar_analisis.attr("action");
     
     let id_analisis=$("#ID_ANALISIS").val();
-    let id_analisis_confifuracion=$("#modo").val();
+    let id_analisis_confifuracion=$("#id_configuracion_analsis").val();
+    let laboraorio =$("#laboratorio").val();
 
     var validation = $frm_modficar_agregar_analisis.parsley().validate();
     if (validation) {
@@ -102,6 +106,7 @@ $(".modal_usuarios .modal-content").on(
       let Madulto=$(this).find(".mujer").find(".adulto").val();
       let Manciano=$(this).find(".mujer").find(".anciano").val();
       let orden_parametro=$(this).find(".orden_parametro").val();
+     
 
 
       
@@ -133,7 +138,8 @@ $(".modal_usuarios .modal-content").on(
     let datos={
       "parametros":parametros,
       "id_analisis":id_analisis,
-      "id_analisis_confifuracion":id_analisis_confifuracion
+      "id_analisis_confifuracion":id_analisis_confifuracion,
+      "laboratorio":laboraorio
     };
 
     swal({
@@ -175,12 +181,12 @@ $(".modal_usuarios .modal-content").on(
 );
 
 $("#tblAnalisis").on("click", ".btn_editar_configuracion", function () {
-  id = btoa(btoa(btoa($(this).attr("id"))));
+  id = btoa(btoa(btoa($(this).attr("data-id"))));
   modo = btoa($(this).attr("data-modo"));
 
 
   $(".modal_usuarios .modal-content").load(
-    "configuracion_analisis/getModalConfiguracionanalisis/" + id +'/'+modo,
+    "configuracion_analisis/getModalConfiguracionanalisis/" + id,
     function () {
       $(".modal_usuarios").modal({
         
@@ -314,7 +320,7 @@ function agregarParametro(nombre, id, medida,numero_orden) {
 
 
 $("#tblAnalisis").on("click",".btn_eliminar_configuracion",function(){
-    let id=btoa(btoa(btoa($(this).attr("data_id_configuracion"))));
+    let id=btoa(btoa(btoa($(this).attr("data-id"))));
 
    
     swal({

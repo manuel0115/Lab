@@ -174,7 +174,9 @@ $(".modal_usuarios .modal-content").on(
               icon: "success",
             });
 
-            tblordenes.ajax.reload();
+            //tblordenes.ajax.reload();
+
+            location.reload();
             $(".modal_usuarios").modal("hide");
           } else {
             swal({
@@ -248,7 +250,9 @@ $(".modal_resultado").on("click", "#btn_guardar_resultado", () => {
             icon: "success",
           });
 
-          tblordenes.ajax.reload();
+          //tblordenes.ajax.reload();
+
+          location.reload();
           $(".modal_resultado").modal("hide");
         } else {
           swal({
@@ -304,7 +308,9 @@ $("#tblAnalisis").on("click", ".btn_eliminar_orden", function () {
               icon: "success",
             });
         
-            tblordenes.ajax.reload();
+            //tblordenes.ajax.reload();
+
+            location.reload();
             $(".modal_resultado").modal("hide");
           } else {
             swal({
@@ -359,3 +365,28 @@ $("#tblAnalisis thead th input[type=text]").on('keyup', function() {
       .search(this.value)
       .draw();
 });
+
+
+$("#btn_agregar_ordenes").click(function(){
+  $(".modal_usuarios .modal-content").load(
+    "ordenes/getModalOrden",
+    function () {
+      $(".modal_usuarios").modal({
+        backdrop: "static",
+        keyboard: false,
+        show: true,
+      });
+    }
+  );
+});
+
+function totalPrecios(claseName){
+  let total=0;
+  $(`.${claseName}`).each(function(){
+    total += parseFloat($(this).text());
+    
+  });
+
+  return `Total: $RD ${total}`
+ 
+};

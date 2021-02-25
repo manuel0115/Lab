@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Configuracion_analisis extends CI_Controller
+class configuracion_analisis extends CI_Controller
 {
 
     public function __construct()
@@ -11,24 +11,24 @@ class Configuracion_analisis extends CI_Controller
         $this->load->model("Configuracion_analisis_model");
         $this->load->model("Inicio_admin_model");
         $this->load->model("Permisos_model");
-        
+
 
         if (!$this->ion_auth->logged_in()) {
             redirect("Login_page");
         } else {
 
             $user_groups = $this->ion_auth->get_users_groups()->result();
-            $restrunciones=$this->Permisos_model->getRestrinciones($user_groups[0]->id);
-            $restrunciones=explode(",",$restrunciones[0]["Menus"]);
+            $restrunciones = $this->Permisos_model->getRestrinciones($user_groups[0]->id);
+            $restrunciones = explode(",", $restrunciones[0]["Menus"]);
             $controlador = $this->router->class;
             $id_menu = $this->Inicio_admin_model->cargarmenusPorControlador($controlador);
             $id_menu = $id_menu[0]["ID"];
             //print_r($restrunciones);
-            
-            
-            
-            if(in_array($id_menu,$restrunciones)){
-                redirect("inicio_admin","refresh");
+
+
+
+            if (in_array($id_menu, $restrunciones)) {
+                redirect("inicio_admin", "refresh");
             }
         }
     }
@@ -45,28 +45,39 @@ class Configuracion_analisis extends CI_Controller
         echo json_encode($resultado);
     }
 
-    public function getModalConfiguracionanalisis($id = 0,$modo=0)
+    public function getModalConfiguracionanalisis($id = 0)
     {
         $this->load->model("Parametros_model");
         $this->load->model("Medidas_model");
 
-        $data["lista_parametros"]=$this->Parametros_model->tablaParametros();
-        $data["lista_medidad"]=$this->Medidas_model->cargarDatosTablaMedida();
-        
 
-        if ($id !== 0) {
-            $modo=base64_decode($modo);
-            
-            $id = base64_decode(base64_decode(base64_decode($id)));
-            $data["info"] = $this->Configuracion_analisis_model->getConfiguracionesModal($id);
-            $data["modo"] = $modo;
+
+        $data["lista_parametros"] = $this->Parametros_model->tablaParametros();
+        $data["lista_medidad"] = $this->Medidas_model->cargarDatosTablaMedida();
+
+        $grupo = array(1, 2);
+        if ($this->ion_auth->in_group($grupo)) {
+            $this->load->model("Laboratorio_model");
+            $data["laboratrios"] = $this->Laboratorio_model->cargarDatosTablalaboratorio();
 
           
-
             
         }
 
-        
+
+        if ($id !== 0) {
+            
+
+            $id = base64_decode(base64_decode(base64_decode($id)));
+            $data["info"] = $this->Configuracion_analisis_model->getConfiguracionesModal($id);
+              /*echo "<pre>";
+            print_r($data["info"]);
+            echo "<pre>";
+            die();*/
+           
+        }
+
+
 
         $this->load->view("configuracion_analisis/modal/configuracion_analisis", $data);
     }
@@ -74,7 +85,7 @@ class Configuracion_analisis extends CI_Controller
     public function autocompletadoParametros()
     {
         $this->load->model("Autocompletado_model");
-        
+
 
         $parametros = trim(strtolower($_GET['term']));
 
@@ -94,16 +105,28 @@ class Configuracion_analisis extends CI_Controller
 
         $codigo = 500;
         $mensaje = 'error';
-       
+
         $config = array(
-            
+
             array(
                 "field" => "id_analisis",
-                "label" => "Nombre",
+                "label" => "Analisis",
                 "rules" => "required"
             )
 
         );
+
+        
+
+        $grupo = array(1, 2);
+        if ($this->ion_auth->in_group($grupo)) {
+            array_push($config, array(
+                "field" => "laboratorio",
+                "label" => "Laboratorio",
+                "rules" => "required"
+            ));
+        }
+
 
 
         $this->form_validation->set_rules($config);
@@ -112,20 +135,21 @@ class Configuracion_analisis extends CI_Controller
             if ($this->form_validation->run() == TRUE) {
 
 
-                
+
                 $obj = new stdClass();
 
                 foreach ($this->input->post() as $key => $value) {
                     $obj->$key = $value;
                 }
 
-               
 
 
-                if ($obj->id_analisis_confifuracion == "E") {
 
+                if ($obj->id_analisis_confifuracion > 0) {
+                    //die("m");
                     $resultado = $this->Configuracion_analisis_model->modificar_configuracion($obj);
                 } else {
+                    //die("a");
                     $resultado = $this->Configuracion_analisis_model->insertar_configuracion($obj);
                 }
 
@@ -143,29 +167,28 @@ class Configuracion_analisis extends CI_Controller
         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
     }
 
-    public function eliminarConfiguracion($id=0)
+    public function eliminarConfiguracion($id = 0)
     {
-        $codigo=500;
+        $codigo = 500;
 
-        $mensaje="";
-        
+        $mensaje = "";
+
         if ($id !== 0) {
             $id = base64_decode(base64_decode(base64_decode($id)));
 
-            
-            
-            $resultado=$this->Configuracion_analisis_model->eliminarConfiguracion($id);
 
-            if($resultado){
-                $codigo=0;
-                $mensaje=" configuracion elimianda con exito";
+
+            $resultado = $this->Configuracion_analisis_model->eliminarConfiguracion($id);
+
+            if ($resultado) {
+                $codigo = 0;
+                $mensaje = " configuracion elimianda con exito";
             }
-            
         }
 
         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
     }
-    
+
 
     public function autocompletadoAnalisis()
     {
@@ -177,5 +200,26 @@ class Configuracion_analisis extends CI_Controller
 
 
         echo json_encode($resultado);
+    }
+
+    public function chequeoAnalisis()
+    {
+        $obj= new stdClass();
+
+        foreach($this->input->post() as $key => $value){
+            $obj->$key=$value;
+        }
+        
+        $resultado = $this->Configuracion_analisis_model->checkAnalsis($obj);
+
+        
+        $resultado=count($resultado);
+
+
+
+        
+
+
+        echo json_encode(array("resultado"=>$resultado));
     }
 }
