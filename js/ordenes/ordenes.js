@@ -176,8 +176,8 @@ $(".modal_usuarios .modal-content").on(
 
             //tblordenes.ajax.reload();
 
-            location.reload();
-            $(".modal_usuarios").modal("hide");
+            //location.reload();
+            //$(".modal_usuarios").modal("hide");
           } else {
             swal({
               text: data.mensaje,
@@ -225,7 +225,7 @@ $(".modal_resultado").on("click", "#btn_guardar_resultado", () => {
       .val();
 
     objeto = {
-      id_analisis: id_analisis,
+      id_analisis_resultado: id_analisis,
       parametros: objetoParametro,
       comentario: comentario,
     };
@@ -252,8 +252,8 @@ $(".modal_resultado").on("click", "#btn_guardar_resultado", () => {
 
           //tblordenes.ajax.reload();
 
-          location.reload();
-          $(".modal_resultado").modal("hide");
+          /*location.reload();
+          $(".modal_resultado").modal("hide");*/
         } else {
           swal({
             text: data.mensaje,
@@ -310,8 +310,8 @@ $("#tblAnalisis").on("click", ".btn_eliminar_orden", function () {
         
             //tblordenes.ajax.reload();
 
-            location.reload();
-            $(".modal_resultado").modal("hide");
+            /*location.reload();
+            $(".modal_resultado").modal("hide");*/
           } else {
             swal({
               text: data.mensaje,

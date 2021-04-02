@@ -274,6 +274,7 @@ class Ordenes_model extends CI_Model
         O.ID,
         O.ID_PACIENTE,
         O.REFERENCIA,
+        O.REFERENCIA_DOCTOR,
         CONCAT(P.NOMBRE,' ',P.APELLIDOS) AS NOMBRE,
         P.CEDULA AS CEDULA
         FROM ORDEN AS O
@@ -312,28 +313,25 @@ class Ordenes_model extends CI_Model
         WHERE AR.ID_ORDEN='$id_orden'
         GROUP BY AR.ID_ANALISIS";*/
 
-        $query="SELECT 	O.ID,
-        AR.ID,
-        AR.ID_ANALISIS,
-        O.SUCURSALES,
-        S.LABORATORIO,
+        $query="SELECT AR.ID AS ID_ANALISIS_RESULATADO,
+        AR.ID_ANALISIS AS ID_ANALISIS,
+        IF(AR.COMENTARIO = '','NTC',AR.COMENTARIO) AS ANALISIS_COMENTARIO,
+        S.LABORATORIO AS ID_LABORATORIO,
+        CA.ID AS ID_CONFIGURACION_ANALISIS,
         A.NOMBRE AS NOMBRE_ANALISIS,
-        CA.ID  AS ID_CONFIGURACION_ANALISIS,
-        CP.ID AS ID_CONFIGURACION_PAREMETROS,
-        P.NOMBRE AS NOMBRE_PARAMETRO,
-        CP.ID_PARAMETRO AS ID_PARAMETRO,
+        IF(PTR.VALOR IS NULL,'NTV',PTR.VALOR) AS VALOR,
         GROUP_CONCAT(CONCAT(CP.ORDEN_PARAMETRO,'|',CP.ID_PARAMETRO,'|',P.NOMBRE,'|',IF(PTR.VALOR IS NULL,'NTV',PTR.VALOR ))) AS PARAMETROS
-        FROM ANALISIS_RESULTADO  AS AR
-        LEFT JOIN ANALISIS AS A ON AR.ID_ANALISIS = A.ID
-        LEFT JOIN ORDEN AS O ON O.ID = AR.ID_ORDEN
-        LEFT JOIN SUCURSALES AS S ON S.ID = O.SUCURSALES
-        LEFT JOIN LABORATORIO AS L ON L.ID = S.LABORATORIO
-        LEFT JOIN CONFIGURACION_ANALISIS AS CA ON CA.ID_ANALISIS = AR.ID_ANALISIS AND CA.LABORATORIO = S.LABORATORIO
-        LEFT JOIN CONFIGURACION_PAREMETROS AS CP ON CP.ID_CONFIGURACION_ANALISIS = CA.ID
-        LEFT JOIN PARAMETROS AS P ON P.ID = CP.ID_PARAMETRO
-        LEFT JOIN PARAMEROS_TEMPORAL_RESULATDO AS PTR ON PTR.ID_ANALSIS_RESULTADO = AR.ID
+        FROM ANALISIS_RESULTADO AS AR
+        JOIN ORDEN AS O ON AR.ID_ORDEN = O.ID
+        JOIN SUCURSALES AS S ON S.ID = O.SUCURSALES
+        JOIN CONFIGURACION_ANALISIS AS CA ON CA.ID_ANALISIS = AR.ID_ANALISIS AND CA.LABORATORIO=S.LABORATORIO
+        JOIN CONFIGURACION_PAREMETROS AS CP ON CP.ID_CONFIGURACION_ANALISIS = CA.ID 
+        LEFT JOIN PARAMEROS_TEMPORAL_RESULATDO AS PTR ON PTR.ID_ANALSIS_RESULTADO = AR.ID AND PTR.ID_PARAMETRO = CP.ID_PARAMETRO
+        JOIN PARAMETROS AS P ON P.ID = CP.ID_PARAMETRO
+        JOIN ANALISIS AS A ON A.ID = AR.ID_ANALISIS
         WHERE AR.ID_ORDEN = '$id_orden'
-        GROUP BY AR.ID_ANALISIS";
+        GROUP BY AR.ID_ANALISIS
+        ORDER BY FIELD(AR.ID_ANALISIS,'53') DESC;";
 
         $resultado = $this->db->query($query);
 
@@ -356,7 +354,7 @@ class Ordenes_model extends CI_Model
                 MODIFICADO_POR = '$this->user_id',
                 MODIFICADO_EN = NOW(),
                 COMENTARIO = '" . $value["comentario"] . "'
-                WHERE ID = '" . $value["id_analisis"] . "';";
+                WHERE ID = '" . $value["id_analisis_resultado"] . "';";
 
             $this->db->query($queryAnalisisResultados);
 
@@ -373,7 +371,7 @@ class Ordenes_model extends CI_Model
                         VALOR)
                         VALUES
                         (
-                        '" . $value["id_analisis"] . "',
+                        '" . $value["id_analisis_resultado"] . "',
                         '" . $value_r["id_paremetro"] . "',
                         '" . $value_r["valor"] . "');";
 
@@ -382,7 +380,7 @@ class Ordenes_model extends CI_Model
 
                     
                     $query_parametro_valor = "UPDATE  PARAMEROS_TEMPORAL_RESULATDO
-                       SET VALOR = '" . $value_r["valor"] . "' WHERE ID_ANALSIS_RESULTADO ='" . $value["id_analisis"] . "' AND  ID_PARAMETRO ='" . $value_r["id_paremetro"] . "';";
+                       SET VALOR = '" . $value_r["valor"] . "' WHERE ID_ANALSIS_RESULTADO ='" . $value["id_analisis_resultado"] . "' AND  ID_PARAMETRO ='" . $value_r["id_paremetro"] . "';";
 
 
                    
@@ -407,9 +405,10 @@ class Ordenes_model extends CI_Model
     {
 
         $query = "DELETE ORDEN,ANALISIS_RESULTADO,PARAMEROS_TEMPORAL_RESULATDO FROM ORDEN 
-        JOIN ANALISIS_RESULTADO ON ORDEN.ID = ANALISIS_RESULTADO.ID_ORDEN JOIN 
-        PARAMEROS_TEMPORAL_RESULATDO ON ANALISIS_RESULTADO.ID = PARAMEROS_TEMPORAL_RESULATDO.ID_ANALSIS_RESULTADO
-        WHERE ORDEN.ID = '$id'";
+        JOIN ANALISIS_RESULTADO ON ORDEN.ID = ANALISIS_RESULTADO.ID_ORDEN 
+        LEFT JOIN PARAMEROS_TEMPORAL_RESULATDO ON PARAMEROS_TEMPORAL_RESULATDO.ID_ANALSIS_RESULTADO = ANALISIS_RESULTADO.ID OR PARAMEROS_TEMPORAL_RESULATDO.ID_ANALSIS_RESULTADO IS NULL
+        WHERE ORDEN.ID ='$id'
+        ";
 
         $resultado = $this->db->query($query);
 

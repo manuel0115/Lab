@@ -13,28 +13,26 @@ class Reporte_resultado extends CI_Controller
         $this->load->model("Reporte_resultado_model");
         $this->load->model("Inicio_admin_model");
         $this->load->model("Permisos_model");
-        
+
 
         if (!$this->ion_auth->logged_in()) {
             redirect("Login_page");
         } else {
 
             $user_groups = $this->ion_auth->get_users_groups()->result();
-            $restrunciones=$this->Permisos_model->getRestrinciones($user_groups[0]->id);
-            $restrunciones=explode(",",$restrunciones[0]["Menus"]);
+            $restrunciones = $this->Permisos_model->getRestrinciones($user_groups[0]->id);
+            $restrunciones = explode(",", $restrunciones[0]["Menus"]);
             $controlador = $this->router->class;
             $id_menu = $this->Inicio_admin_model->cargarmenusPorControlador($controlador);
             $id_menu = $id_menu[0]["ID"];
-            
-            
-            
-            
-            if(in_array($id_menu,$restrunciones)){
-                redirect("inicio_admin","refresh");
+
+
+
+
+            if (in_array($id_menu, $restrunciones)) {
+                redirect("inicio_admin", "refresh");
             }
         }
-
-        
     }
 
     public function index()
@@ -59,10 +57,25 @@ class Reporte_resultado extends CI_Controller
 
         $data["info_resulatdo"] = $this->Reporte_resultado_model->getInfoResultados($id);
 
-        /*echo "<pre>";
-        print_r($data["info_resulatdo"]);
-        echo "</pre>";
-        die();*/
+
+
+        $this->load->view("reporte_resultado/modal/reporte_resultado_imprimir", $data);
+    }
+
+    /*public function getModalImprimir($id)
+    {
+
+
+        $id = base64_decode(base64_decode(base64_decode($id)));
+
+
+
+        $data["info_resulatdo"] = $this->Reporte_resultado_model->getInfoResultados($id);
+
+        //echo "<pre>";
+        //print_r($data["info_resulatdo"]);
+        //echo "</pre>";
+        //die();
 
         $data["orden"] = $id;
 
@@ -72,21 +85,17 @@ class Reporte_resultado extends CI_Controller
 
 
 
-        /* echo "<pre>";
-          print_r($formulario);
-          echo "<pre>";
-          die();
 
 
-          //die("s"); */
+          //die("s"); 
 
         $data["resultado"] = $formulario;
         $data["datos_organizacion"] = $this->datos_usuarios;
 
         $this->load->view("reporte_resultado/modal/reporte_resultado_imprimir", $data);
-    }
+    }*/
 
-    public function generarDatosResultado($id)
+    /*  public function generarDatosResultado($id)
     {
 
         $parametros = $this->Reporte_resultado_model->getModalresultados($id);
@@ -117,7 +126,7 @@ class Reporte_resultado extends CI_Controller
             } else {
                 if (!$this->in_multi_array($value["ID_ANALISIS"], $formulario)) {
 
-                    /*$parametros = ($value["TIENE_PARAMETROS"]) ? [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"], "medida" => $value["MEDIDA"], "referencia" => $value["REFERENCIA"]]] : [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"]]];*/
+                    /*$parametros = ($value["TIENE_PARAMETROS"]) ? [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"], "medida" => $value["MEDIDA"], "referencia" => $value["REFERENCIA"]]] : [["nombre" => $value["NOMBRE_PARAMETRO"], "valor" => $value["VALOR"]]];
 
                     $formulario[] = [
                         "NOMBRE_AREA" => $value["NOMBRE_AREA"],
@@ -138,11 +147,6 @@ class Reporte_resultado extends CI_Controller
         }
 
 
-        /*echo "<pre>";
-        print_r($formulario);
-        echo "</pre>";
-        die();*/
-
 
         return $formulario;
     }
@@ -155,9 +159,9 @@ class Reporte_resultado extends CI_Controller
             }
         }
         return false;
-    }
+    }*/
 
-    public function bucarKey($id, $array)
+    /*public function bucarKey($id, $array)
     {
         foreach ($array as $key => $val) {
             if ($val['ID_ANALISIS'] == $id) {
@@ -166,14 +170,13 @@ class Reporte_resultado extends CI_Controller
         }
 
         return null;
-    }
+    }*/
 
     public function imprimir_resultado($id)
     {
         $id = base64_decode(base64_decode(base64_decode($id)));
         $info_resulatdo = $this->Reporte_resultado_model->getInfoResultados($id);
-        $formulario = $this->generarDatosResultado($id);
-        $datos_organizacion = $this->session->get_userdata();
+      
 
 
         /*$mpdf=new mPDF('utf-8', 'Letter', 0, '', 200, 0, 0, 0, 0, 0);
@@ -184,8 +187,11 @@ class Reporte_resultado extends CI_Controller
 /*
 class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])*/
         $this->load->library('Pdf');
-        $pdf = new PDF("c", "letter",0,'',200,0,0,0,0,0);
+        $pdf = new PDF("c", "letter", 0, '', 200, 0, 0, 0, 0, 0);
         $pdf->setAutoTopMargin = 'stretch';
+        $pdf->setAutoBottomMargin = 'stretch';
+
+
 
         $HEADER = '<div style="100%">
         
@@ -224,7 +230,7 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
                         <span style="font-weight:bold">Paciente:</span>&nbsp;<span>' . $info_resulatdo[0]["NOMBRE_PACIENTE"] . '</span>
                     </td>
                     <td>
-                    <span style="font-weight:bold">Medico:</span></span>&nbsp;<span>' . $info_resulatdo[0]["MEDICO"] . '</span>
+                    <span style="font-weight:bold">Medico:</span></span>&nbsp;<span>' . $info_resulatdo[0]["REFERENCIA_DOCTOR"] . '</span>
                     </td>
                 </tr>
                 <tr>
@@ -232,7 +238,7 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
                         <span style="font-weight:bold">Cedula:</span>&nbsp;<span>' . $info_resulatdo[0]["PACIENTE_CEDULA"] . '</span>
                     </td>
                     <td>
-                        <span style="font-weight:bold">Cobertura :</span></span>&nbsp;<span>' . $info_resulatdo[0]["NOMBRE_REFERENCIA"] . '</span>
+                        <span style="font-weight:bold">Cobertura :</span></span>&nbsp;<span>' . $info_resulatdo[0]["COBERTURA"] . '</span>
                     </td>
                 </tr>
         <tr>
@@ -263,7 +269,7 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
             </tbody>
             </table>';
 
-            $footer='<div style="text-align:center">
+        $footer = '<div style="text-align:center">
                        <p style="float:right;border-top:1px solid black;display:inline-block;width:250px;text-align:center;">Firma Encargada</p>
                 </div>
                 
@@ -282,11 +288,11 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                         
-                        <td style="text-align:center;width:70%" >'.
-                             "C/" . $datos_organizacion["CALLE"] . 'NO.' . $datos_organizacion["NUMERO"] . ',' .
-                    $datos_organizacion["SECTOR"] . ',' . $datos_organizacion["PROVINCIA"] . ',' . $datos_organizacion["PAIS"] . ',Telefono:' . $datos_organizacion["TELEFONOS_SUCURSALES"] . ',RNC' . $datos_organizacion["RNC"] . ',Correo:' . $datos_organizacion["CORREO_LABORATORIO"]
+                        <td style="text-align:center;width:70%" >' .
+            "C/" . $info_resulatdo["CALLE"] . 'NO.' . $info_resulatdo["NUMERO"] . ',' .
+            $info_resulatdo["SECTOR"] . ',' . $info_resulatdo["PROVINCIA"] . ',' . $info_resulatdo["PAIS"] . ',Telefono:' . $info_resulatdo["TELEFONOS_SUCURSALES"] . ',RNC' . $info_resulatdo["RNC"] . ',Correo:' . $info_resulatdo["CORREO_LABORATORIO"]
 
-                         .'</td>
+            . '</td>
                     </tr>
                     
                    </table>
@@ -352,7 +358,10 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
         $pdf->WriteHTML($thead);
         //$pdf->WriteHTML($table_header);
         //$pdf->WriteHTML("<pagebreak />");
-        foreach ($formulario as $value) {
+        foreach ($info_resulatdo as $value) {
+
+            $value["PARAMETROS"] = explode(",",$value["PARAMETROS"] );
+
             $pagina_sola = array(53, 43, 174);
             $lista_parametros = "";
             $analisis_comentario = ($value['COMENTARIO']) ? '
@@ -363,20 +372,21 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
                             </th>
                         </tr>' : "";
 
-            $cantidad_parametros = count($value["PARAMETROS"]);
-            if ($cantidad_parametros > 1) {
+          
+           if ($value["ID_PARAMETRO"] != 11) {
 
-                foreach ($value["PARAMETROS"] as $value_r) {
-                    $nombre_parametro_id = explode("-", $value_r['nombre']);
+                foreach ($value["PARAMETROS"] as $value_p) {
+                   
+                        $valoresDetalles=explode("|",$value_p);
+                        $unidad_medida=$valoresDetalles[2]=="SUM"?"":$valoresDetalles[2];
                     $lista_parametros .= '<tr>
-                    <th width="24%" style="font-size:18px;font-weight:normal;text-align:left;text-transform:uppercase">' .  $nombre_parametro_id[1] . '</th>
-                    <th style="font-size:18px;font-weight:normal;text-align:center;ext-align:left;text-transform:uppercase">' . $value_r['valor'] . '</th>
-                    <th style="font-size:18px;font-weight:normal;text-align:center;">' . $value_r['medida'] . '</th>
-                    <th style="font-size:18px;font-weight:normal;text-align:center;">' . $value_r['referencia'] . '</th>
+                    <th width="24%" style="font-size:18px;font-weight:normal;text-align:left;text-transform:uppercase">' .  $valoresDetalles[0] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;ext-align:left;text-transform:uppercase">' . $valoresDetalles[1] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;">' . $unidad_medida . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;">' . $valoresDetalles[3] . '</th>
                     <th style="font-size:18px;font-weight:normal;text-align:center;">&nbsp;</th>
                 <tr>';
                 }
-
                 $tabla_Analsisi_parametro = ' <table class="analisis" style="width:100%;">
             <thead>
                 <tr style="">
@@ -402,12 +412,14 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
 
                 $pdf->WriteHTML($tabla_Analsisi_parametro);
 
-                if (in_array($value["ANALISIS_SISTEMA"], $pagina_sola)) {
+                if (in_array($value["ID_ANALAISIS"], $pagina_sola)) {
                     $pdf->WriteHTML("<pagebreak />");
                 }
             } else {
-                foreach ($value['PARAMETROS'] as $value_r) {
-
+                foreach ($value["PARAMETROS"] as $value_p) {
+                   
+                    $valoresDetalles=explode("|",$value_p);
+                    $unidad_medida=$valoresDetalles[2]=="SUM"?"":$valoresDetalles[2];
 
 
                     $tabla_Analsis_sin_parametro = '<table class="analisis" style="width:100%; ">
@@ -423,21 +435,20 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
         
                     <tbody><tr>
                     <th width="24%" style="font-size:18px;text-align:left;text-align:left;text-transform:uppercase" >' . $value['NOMBRE_ANALISIS'] . '</th>
-                    <th style="font-size:18px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value_r['valor'] . '</th>
-                    <th  style="font-size:18px;font-weight:normal;text-align:center">' . $value_r['medida'] . '</th>
-                    <th  style="font-size:18px;font-weight:normal;text-align:center">' . $value_r['referencia'] . '</th>
+                    <th style="font-size:18px;font-weight:normal;text-align:center;text-transform:uppercase">' . $valoresDetalles[1] . '</th>
+                    <th  style="font-size:18px;font-weight:normal;text-align:center">' . $unidad_medida. '</th>
+                    <th  style="font-size:18px;font-weight:normal;text-align:center">' . $valoresDetalles[3] . '</th>
                     <th style="font-size:18px;font-weight:normal;text-align:center;text-transform:uppercase">' . $value["NOMBRE_AREA"] . '</th>
-                </tr>' .$analisis_comentario . '
+                </tr>' . $analisis_comentario . '
                 </tbody>
                 </table>';
 
-                $pdf->WriteHTML($tabla_Analsis_sin_parametro);
+                    $pdf->WriteHTML($tabla_Analsis_sin_parametro);
                 }
             }
         }
 
-        
-      
+       
 
 
 
@@ -452,31 +463,33 @@ class mPDF ([ string $mode [, mixed $format [, float $default_font_size [, strin
 
 
 
-  
-
-    
-        
 
 
 
-        
+
+
+
+
+
+
+
 
         $pdf->Output("prueba.pdf", "I");
 
-        die();
-
-        $contenido_tabla = "";
-
-
-
-
-
-
-
-
-
-
        
+
+        
+
+
+
+
+
+
+
+
+
+
+
 
 
 

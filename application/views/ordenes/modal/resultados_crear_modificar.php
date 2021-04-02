@@ -1,3 +1,10 @@
+<?php
+
+echo "<pre>";
+print_r($formulario);
+echo "</pre>";
+
+?>
 <style>
     .ui-autocomplete {
         z-index: 2147483647;
@@ -24,10 +31,10 @@
     <form action="ordenes/guardar_resultado" id="frm_guardar_resultado" class="form-horizontal" data-parsley-validate="true" data-id-orden="<?php echo $id_orden; ?>">
 
         <?php foreach ($formulario as $key => $value) : ?>
-            <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID"] ?>">
+            <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID_ANALISIS_RESULATADO"] ?>">
                 <span style="font-size:12px;font-weight:bold"><?php echo $value["NOMBRE_ANALISIS"] ?></span>
                 <div class="custom-control custom-switch mt-2 mb-2">
-                    <input type="checkbox" class="custom-control-input acti_com" id="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>" <?php echo $value["COMENTARIO"]?"checked":""  ?>>
+                    <input type="checkbox" class="custom-control-input acti_com" id="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>" <?php echo $value["ANALISIS_COMENTARIO"] !== "NTC"?"checked":""  ?>>
                     <label class="custom-control-label" for="<?php echo "ac_coment_" . $value['ID_ANALISIS'] ?>"> Activar Comentarios</label>
                 </div>
                 <div class="agrupar-parametros">
@@ -55,9 +62,9 @@
                     <?php } ?>
                 </div>
 
-                <div class="form-group contenedor-comentario-parametros <?php echo $value["COMENTARIO"]?"":"d-none"  ?>" id="<?php echo "cj_coment_" . $value['ID_ANALISIS']; ?>">
+                <div class="form-group contenedor-comentario-parametros <?php echo $value["ANALISIS_COMENTARIO"] !== "NTC"?"":"d-none"  ?>" id="<?php echo "cj_coment_" . $value['ID_ANALISIS']; ?>">
                     <label>Observaciones</label>
-                    <textarea class="form-control" rows="3" data-parsley-errors-container="<?php echo "#errorcm_" . $value["ID_ANALISIS"]; ?>"><?php echo $value["COMENTARIO"]; ?></textarea>
+                    <textarea class="form-control" rows="3" data-parsley-errors-container="<?php echo "#errorcm_" . $value["ID_ANALISIS"]; ?>"><?php echo  $value["ANALISIS_COMENTARIO"] === "NTC"?"":$value["ANALISIS_COMENTARIO"]; ?></textarea>
                     <small id="<?php echo "errorcm_" . $value["ID_ANALISIS"]; ?>">
 
                     </small>

@@ -48,16 +48,11 @@ class Ordenes extends CI_Controller
         echo json_encode($resultado);
     }
 
-    public function getModalResultado( $id_orden)
-    {
-        
-
+    public function getModalResultado($id_orden)
+    {   
         $analisis = $this->Ordenes_model->buscarParametrosResulatdo($id_orden);
-
         $data["formulario"] = $analisis;
         $data["id_orden"] = $id_orden;
-
-        
 
         $this->load->view("ordenes/modal/resultados_crear_modificar", $data);
     }
@@ -209,6 +204,12 @@ class Ordenes extends CI_Controller
             $obj->$key = $value;
         }
 
+        /*echo "<pre>";
+        print_r($obj);
+        echo "</pre>";
+
+        die();*/
+
        
 
         $resultado = $this->Ordenes_model->insertar_resulatdo($obj);
@@ -217,7 +218,7 @@ class Ordenes extends CI_Controller
 
         if ($resultado) {
             $codigo = 0;
-            $mensaje = "orden guardarda con exito";
+            $mensaje = "resultados guardardos con exito";
         }
 
         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
@@ -244,7 +245,7 @@ class Ordenes extends CI_Controller
         echo json_encode($datos);
     }
 
-   public function eliminarOrdenes($id){
+    public function eliminarOrdenes($id){
         $id = base64_decode(base64_decode(base64_decode($id)));
 
         $resultado=$this->Ordenes_model->eliminar_Ordenes($id);
@@ -258,7 +259,7 @@ class Ordenes extends CI_Controller
             $mensaje = "orden eliminada con exito";
         }
 
-         echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
+        echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
         
    }
 

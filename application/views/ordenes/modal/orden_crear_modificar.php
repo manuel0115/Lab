@@ -58,7 +58,7 @@
         <div class="row pl-2  ">
 
             <div class="form-group col-sm-12 pl-0 d-inline-block">
-                <label>Referencia</label>
+                <label>Cobertura</label>
                 <select type="text" name="referencia" id="referencia" class="form-control">
 
                     <?php foreach ($referencias as $key => $value) : ?>
@@ -66,6 +66,18 @@
                     <?php endforeach; ?>
                 </select>
 
+
+            </div>
+
+
+
+        </div>
+        <div class="row pl-2  ">
+
+            <div class="form-group col-sm-12 pl-0 d-inline-block">
+                <label>Referencia</label>
+                
+                <input type="text" name="referencia_doctor" value="<?php echo $datos_orden[0]['REFERENCIA_DOCTOR'] ?>" id="referencia_doctor" class="form-control" placeholder="referencia" required />
 
             </div>
 
