@@ -320,7 +320,9 @@ class Ordenes_model extends CI_Model
         CA.ID AS ID_CONFIGURACION_ANALISIS,
         A.NOMBRE AS NOMBRE_ANALISIS,
         IF(PTR.VALOR IS NULL,'NTV',PTR.VALOR) AS VALOR,
-        GROUP_CONCAT(CONCAT(CP.ORDEN_PARAMETRO,'|',CP.ID_PARAMETRO,'|',P.NOMBRE,'|',IF(PTR.VALOR IS NULL,'NTV',PTR.VALOR ))) AS PARAMETROS
+        GROUP_CONCAT(CONCAT(CP.ORDEN_PARAMETRO,'|',CP.ID_PARAMETRO,'|',P.NOMBRE,'|',IF(PTR.VALOR IS NULL,'NTV',PTR.VALOR ))) AS PARAMETROS,
+        O.ID AS ID_ORDEN,
+        O.STATUS AS STATUS_ORDEN
         FROM ANALISIS_RESULTADO AS AR
         JOIN ORDEN AS O ON AR.ID_ORDEN = O.ID
         JOIN SUCURSALES AS S ON S.ID = O.SUCURSALES
@@ -436,6 +438,19 @@ class Ordenes_model extends CI_Model
         $resultado = $resultado->result_array();
 
         log_message('ERROR', 'actulizarListaPrecios \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
+
+        return $resultado;
+    }
+
+    public function validar_orden_resultado($id_orden){
+
+        $query = "UPDATE ORDEN SET STATUS='1' WHERE ID='$id_orden'";
+
+        $resultado = $this->db->query($query);
+
+        
+
+        log_message('ERROR', 'validar_orden_resultado \n' . $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 
         return $resultado;
     }

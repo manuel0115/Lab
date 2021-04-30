@@ -281,4 +281,27 @@ class Ordenes extends CI_Controller
 
 
    }
+
+   public function validar_orden_resultado(){
+    
+    $codigo = 500;
+    $mensaje = 'error';
+
+    $obj = new stdClass();
+
+    foreach ($this->input->post() as $key => $value) {
+        $obj->$key = $value;
+    }
+    $resultado=$this->Ordenes_model->validar_orden_resultado($obj->id_orden);
+
+
+    
+
+    if ($resultado) {
+        $codigo = 0;
+        $mensaje = "orden eliminada con exito";
+    }
+
+    echo json_encode(array('mensaje' => $mensaje, 'codigo' => $codigo));
+   }
 }

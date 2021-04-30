@@ -30,7 +30,10 @@ echo "</pre>";
 
     <form action="ordenes/guardar_resultado" id="frm_guardar_resultado" class="form-horizontal" data-parsley-validate="true" data-id-orden="<?php echo $id_orden; ?>">
 
-        <?php foreach ($formulario as $key => $value) : ?>
+        <?php foreach ($formulario as $key => $value) : 
+                $orden =   $value["ID_ORDEN"];
+                $estatus_orden=$value["STATUS_ORDEN"];
+            ?>
             <div style="padding:15px" class="padre-maestro" data-analisis="<?php echo $value["ID_ANALISIS_RESULATADO"] ?>">
                 <span style="font-size:12px;font-weight:bold"><?php echo $value["NOMBRE_ANALISIS"] ?></span>
                 <div class="custom-control custom-switch mt-2 mb-2">
@@ -80,9 +83,12 @@ echo "</pre>";
 
 
 <div class="modal-footer">
+    <a href="javascript:;" class="btn btn-primary" data-id-orden="<?php echo $orden?>" id="btn_validar_resultados">Validar Resultados &nbsp; <i class="fa fa-check"></i></a>
     <a href="javascript:;" class="btn btn-success" id="btn_guardar_resultado">Guardar Cambios <i class="fa fa-save"></i></a>
     <a href="javascript:;" class="btn btn-danger" data-dismiss="modal">Cancelar <i class="fa fa-times"></i></a>
 </div>
+
+
 
 <script>
     var $frm_guardar_resultado = $("#frm_guardar_resultado");

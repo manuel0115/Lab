@@ -39,8 +39,15 @@ class Pacientes_model extends CI_Model
 
     public function getModalPacientes($id)
     {
-        $query = "SELECT  PACI.ID,PACI.NOMBRE,PACI.APELLIDOS,PACI.ID_PACIENTE_FACTURACION,PACI.FECHA_NACIMIENTO,
-        PACI.CEDULA,PACI.GENERO,PACI.REFERIDO_POR,PACI.COBERTURA,PACI.MEDICO
+        $query = "SELECT  
+        PACI.ID,
+        PACI.NOMBRE,
+        PACI.APELLIDOS,
+        PACI.ID_PACIENTE_FACTURACION,
+        PACI.FECHA_NACIMIENTO,
+        PACI.CEDULA,
+        PACI.GENERO,
+        YEAR(CURDATE())-YEAR(PACI.FECHA_NACIMIENTO) + IF(DATE_FORMAT(CURDATE(),'%m-%d') > DATE_FORMAT(PACI.FECHA_NACIMIENTO,'%m-%d'), 0 , -1 ) AS EDAD
         FROM PACIENTES AS PACI WHERE PACI.ID= '$id'";
 
         $resultado = $this->db->query($query);
@@ -65,14 +72,11 @@ class Pacientes_model extends CI_Model
         GENERO,
         CEDULA,
         FECHA_NACIMIENTO,
-        REFERIDO_POR,
-        COBERTURA,
         CREADO_POR,
         CREADO_EN,
         MODIFICADO_POR,
         MODIFCADO_EN,
         ACTIVO,
-        MEDICO,
         LABORATORIO)
         VALUES
         (
@@ -82,14 +86,11 @@ class Pacientes_model extends CI_Model
         '$obj->genero',
         '$obj->cedula',
         '$obj->fecha',
-        '$obj->referencia',
-        '$obj->cobertura',
         '$this->user_id',
         now(),
         '$this->user_id',
         now(),
         TRUE,
-        '$obj->medico',
         '$this->id_laboratorio');";
 
         $resultado = $this->db->query($query);
@@ -113,20 +114,15 @@ class Pacientes_model extends CI_Model
         GENERO = '$obj->genero',
         CEDULA = '$obj->cedula',
         FECHA_NACIMIENTO = '$obj->fecha',
-        REFERIDO_POR =  '$obj->referencia',
-        COBERTURA = '$obj->cobertura',
         CREADO_POR = '$this->user_id',
         CREADO_EN = now(),
         MODIFICADO_POR = '$this->user_id',
         MODIFCADO_EN = now(),
         ACTIVO = TRUE,
-        MEDICO = '$obj->medico',
         LABORATORIO='$this->id_laboratorio'
         WHERE ID = $obj->id_paciente;";
 
         $resultado = $this->db->query($query);
-
-        
 
         log_message('ERROR','modificar_analisis \n'. $query . '\n<pre> ' . print_r($resultado, true) . '</pre>');
 

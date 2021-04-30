@@ -70,7 +70,7 @@ echo "</pre>";
             <div class="col-md-3">
                 <div class="form-group">
                     <label>Id facturacion <strong style="color: red;">*</strong></label>
-                    <input type="number" name="id_facturacion" id="id_facturacion" class="form-control" required value="<?php echo $info[0]["ID_PACIENTE_FACTURACION"] ?>" />
+                    <input type="number" name="id_facturacion" id="id_facturacion" class="form-control"  value="<?php echo $info[0]["ID_PACIENTE_FACTURACION"] ?>" />
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@ echo "</pre>";
                 <div class="input-group date" id="fecha">
                     <input type="text" name="fecha" class="form-control" data-parsley-errors-container="#error_fecha" required value="<?php echo $info[0]["FECHA_NACIMIENTO"]; ?>"/>
                     <div class="input-group-addon">
-                        <span id="edad">Edad</span>
+                        <span id="edad"><?php echo $info[0]["FECHA_NACIMIENTO"]?$info[0]["EDAD"]:"Edad";?> </span>
                         
                     </div>
                 </div>
@@ -106,7 +106,7 @@ echo "</pre>";
 
             </div>
         </div>
-        <div class="row">
+        <!--<div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Referido por<strong style="color: red;">*</strong></label>
@@ -135,13 +135,13 @@ echo "</pre>";
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label>Medico <strong style="color: red;">*</strong></label>
                     <input type="text" name="medico" id="medico" class="form-control" value="<?php echo $info[0]["MEDICO"] ?>" />
                 </div>
 
             </div>
-        </div>
+        </div>-->
 
 
 

@@ -100,8 +100,8 @@ class Pacientes extends MY_Controller
                 "field" => "genero",
                 "label" => "Genero",
                 "rules" => "required"
-            ),
-            array(
+            )
+            /*array(
                 "field" => "referencia",
                 "label" => "Referencia",
                 "rules" => "required"
@@ -110,7 +110,7 @@ class Pacientes extends MY_Controller
                 "field" => "cobertura",
                 "label" => "Cobertura",
                 "rules" => "required"
-            )
+            )*/
 
         );
 

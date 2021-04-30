@@ -390,3 +390,41 @@ function totalPrecios(claseName){
   return `Total: $RD ${total}`
  
 };
+
+
+$(".modal_resultado").on("click","#btn_validar_resultados",function(){
+  swal({
+    title: "¿Esta seguro que desea dar estoas analisis como validados?Recuerde revisar bien los resulatdos antes de validar",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+})
+        .then((validar) => {
+            if (validar) {
+              $.post(
+                "ordenes/validar_orden_resultado",
+                {id_orden:$(this).attr("data-id-orden")},
+                function (data) {
+                  if (data.codigo == 0) {
+                    swal({
+                      text: data.mensaje,
+                      title: "Petfecto!",
+                      icon: "success",
+                    });
+                    tblconfiguracionAnalisis.ajax.reload();
+                    $(".modal_usuarios").modal("hide");
+                  } else {
+                    swal({
+                      text: data.mensaje,
+                      title: "Error!",
+                      icon: "error",
+                    });
+                  }
+                },
+                "json"
+              );
+            }
+        });
+
+});
+
